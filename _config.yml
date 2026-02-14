@@ -1,0 +1,13 @@
+title: Ashfaque Thonikkadavan
+description: Data Scientist | Computational Problem Solver
+theme: jekyll-theme-minimal
+show_downloads: false
+
+author:
+  name: Ashfaque Thonikkadavan
+  email: ashfaquesalmantk@gmail.com
+  github: ashfaque-tk
+  linkedin: tk-ashfaque
+
+plugins:
+  - jekyll-seo-tag
