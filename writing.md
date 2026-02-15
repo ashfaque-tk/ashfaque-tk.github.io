@@ -31,8 +31,10 @@ Step-by-step walkthrough of formulating and solving a constraint optimization pr
 ---
 ### Sentiment Classification on Imbalanced Dataset
 *December 2025*
+
 Step-by-step walkthrough of approaching a heavily imbalanced Dataset.
-[Read on Medium](https://medium.com/@cmtwsktb) | **Topics:** Imbalanced dataset, TF-IDF, Embdeddings, Data augmentation
+
+[Read on Medium](https://medium.com/@cmtwskb) | **Topics:** Imbalanced dataset, TF-IDF, Embdeddings, Data augmentation
 
 ## Topics I Write About
 
