@@ -4,18 +4,14 @@ layout: default
 
 # About Me
 
-I build forecasting systems and optimization solutions for complex business problems.
+Hi, I’m Ashfaque. I’m transitioning from computational physics into data science, with a focus on demand forecasting and operations research.
 
-Currently transitioning from computational physics research to industry data science. I spent three years solving large-scale computational problems—processing millions of data points, building optimization algorithms, and developing automated analysis pipelines. Now I apply these skills to demand forecasting, operations research, and production ML systems.
+Right now, I’m building depth in time-series forecasting (ARIMA, Prophet), optimization (MILP, routing, inventory problems), and production-oriented ML workflows. I’m particularly interested in systems where predictions directly inform decisions — forecasting demand, allocating inventory, and planning logistics.
 
-I enjoy solving problems with data, whether that's forecasting demand to optimize inventory, building constraint-based optimization for resource allocation, or deploying production ML systems. My approach combines mathematical rigor with practical business impact.
+During my PhD at IPCMS (University of Strasbourg), I worked on micromagnetic simulations of complex 3D curved structures — including Möbius-strip-like geometries — to study how spin waves behave in unconventional shapes. Spin waves are being explored for next-generation spintronic and low-energy computing technologies, and our goal was to understand whether geometry alone could be used to control them.
 
-My current work typically includes time series forecasting, operations research (MILP, routing, inventory optimization), and production ML deployment. I also enjoy mentoring and knowledge sharing with others transitioning into data science.
+I ran large finite element simulations and built tools to extract high-dimensional magnetization data from FEM meshes, turning raw simulation outputs into interpretable dispersion plots. You can find the published work [here]https://doi.org/10.1038/s44306-025-00118-8.
 
-**What I bring:**
-- Strong foundation in mathematical modeling and optimization
-- Experience with large-scale data processing and analysis
-- Production-ready Python development (Docker, FastAPI, automated pipelines)
-- Scientific rigor in problem-solving and experimentation
+I write about forecasting, optimization, and navigating the shift from academia to industry — sharing what I’m learning along the way.
 
-**Currently learning:** Advanced time series methods, supply chain analytics, and MLOps best practices.
+Outside of work, I enjoy cooking and playing football
