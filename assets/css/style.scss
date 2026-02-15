@@ -1,0 +1,424 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* ===== Base Typography ===== */
+body {
+  padding: 50px;
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #333;
+  background: #fff;
+}
+
+/* ===== Headings ===== */
+h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a1a;
+}
+
+/* ===== Profile Photo ===== */
+.profile-photo {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.profile-photo img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e8e8e8;
+}
+
+/* ===== Header/Sidebar Styling ===== */
+header h1 {
+  margin: 10px 0 5px 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+header h1 a {
+  color: #1a1a1a;
+  text-decoration: none;
+}
+
+header .title {
+  margin: 0 0 15px 0;
+  font-size: 15px;
+  color: #666;
+  font-weight: normal;
+  text-align: center;
+}
+
+header .location {
+  margin: 15px 0 20px 0;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+/* ===== Social Links in Sidebar ===== */
+.social-links {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.social-links p {
+  margin: 8px 0;
+  text-align: center;
+}
+
+.social-links a {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+.social-links a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Horizontal Navigation ===== */
+.horizontal-nav {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e8e8e8;
+  flex-wrap: wrap;
+}
+
+.horizontal-nav a {
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.horizontal-nav a:hover {
+  color: #2980b9;
+  border-bottom-color: #2980b9;
+}
+
+.horizontal-nav a.active {
+  color: #2980b9;
+  border-bottom-color: #2980b9;
+}
+
+/* ===== Content Headings ===== */
+section h1 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+h2 {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 2px solid #e8e8e8;
+  padding-bottom: 8px;
+}
+
+h3 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #34495e;
+}
+
+h4 {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* ===== Links ===== */
+a {
+  color: #2980b9;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #1a5490;
+  text-decoration: underline;
+}
+
+/* ===== Paragraphs & Text ===== */
+p {
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+em {
+  font-style: italic;
+  color: #666;
+}
+
+strong {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* ===== Lists ===== */
+ul, ol {
+  margin-left: 0;
+  padding-left: 25px;
+  margin-bottom: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+/* ===== Horizontal Rules ===== */
+hr {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 40px 0;
+}
+
+/* ===== Code ===== */
+code {
+  padding: 2px 6px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 3px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 14px;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  border: 1px solid #e1e4e8;
+  margin-bottom: 20px;
+}
+
+pre code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* ===== Blockquotes ===== */
+blockquote {
+  padding: 10px 20px;
+  margin: 20px 0;
+  border-left: 4px solid #2980b9;
+  background-color: #f8f9fa;
+  color: #555;
+}
+
+blockquote p {
+  margin-bottom: 10px;
+}
+
+/* ===== Tables ===== */
+table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+th {
+  font-weight: 600;
+  background-color: #f6f8fa;
+  color: #2c3e50;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* ===== Contact Info ===== */
+.contact-info {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #2980b9;
+}
+
+/* ===== Project Cards ===== */
+.project {
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.project:last-child {
+  border-bottom: none;
+}
+
+.project h3 {
+  margin-top: 0;
+}
+
+.project em {
+  display: block;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+/* ===== Skills & Tags ===== */
+.skill-category {
+  margin-bottom: 15px;
+}
+
+.skill-category strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #2c3e50;
+}
+
+/* ===== Work Experience ===== */
+.job {
+  margin-bottom: 35px;
+}
+
+.job h3 {
+  margin-bottom: 5px;
+}
+
+.job-meta {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* ===== Responsive Design ===== */
+@media print, screen and (max-width: 960px) {
+  body {
+    padding: 20px;
+  }
+
+  .horizontal-nav {
+    gap: 15px;
+  }
+
+  section h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+}
+
+@media print, screen and (max-width: 720px) {
+  body {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .profile-photo img {
+    width: 120px;
+    height: 120px;
+  }
+
+  header h1 {
+    font-size: 20px;
+  }
+
+  .horizontal-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .horizontal-nav a {
+    display: block;
+    padding: 8px 0;
+  }
+
+  section h1 {
+    font-size: 22px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}
+
+/* ===== Utility Classes ===== */
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #7f8c8d;
+}
+
+.mb-small {
+  margin-bottom: 10px;
+}
+
+.mb-medium {
+  margin-bottom: 20px;
+}
+
+.mb-large {
+  margin-bottom: 40px;
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  body {
+    padding: 0;
+    color: #000;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .horizontal-nav,
+  .social-links {
+    display: none;
+  }
+
+  .profile-photo img {
+    width: 100px;
+    height: 100px;
+  }
+}

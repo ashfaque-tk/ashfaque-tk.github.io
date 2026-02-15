@@ -1,0 +1,20 @@
+title: Ashfaque Thonikkadavan
+description: Data Scientist specializing in Forecasting & Optimization
+theme: jekyll-theme-minimal
+
+# Author info - appears in sidebar
+author:
+  name: Ashfaque Thonikkadavan
+  title: Data Scientist | Optimization Specialist  # Shows under your name
+  location: Strasbourg, France
+  email: ashfaquesalmantk@gmail.com
+  github: ashfaque-tk          # Just username, not full URL
+  linkedin: tk-ashfaque        # Just ID from linkedin.com/in/YOUR-ID
+  medium: cmtwskb              # Just handle from medium.com/@YOUR-HANDLE
+
+# Don't edit below this line unless you know what you're doing
+plugins:
+  - jekyll-seo-tag
+
+markdown: kramdown
+permalink: pretty
