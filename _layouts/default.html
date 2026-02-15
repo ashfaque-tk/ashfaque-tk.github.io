@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% seo %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
   </head>
   <body>
@@ -27,17 +28,23 @@
         <!-- Social Links with Icons -->
         <div class="social-links">
           {% if site.author.linkedin %}
-            <p><a href="https://linkedin.com/in/{{ site.author.linkedin }}" target="_blank">🔗 LinkedIn</a></p>
+            <p><a href="https://linkedin.com/in/{{ site.author.linkedin }}" target="_blank" aria-label="LinkedIn">
+              <i class="fab fa-linkedin fa-lg"></i>
+            </a></p>
           {% endif %}
           
           {% if site.author.github %}
-            <p><a href="https://github.com/{{ site.author.github }}" target="_blank">💻 GitHub</a></p>
+            <p><a href="https://github.com/{{ site.author.github }}" target="_blank" aria-label="GitHub">
+              <i class="fab fa-github fa-lg"></i>
+            </a></p>
           {% endif %}
           
           {% if site.author.medium %}
-            <p><a href="https://medium.com/@{{ site.author.medium }}" target="_blank">✍️ Blog</a></p>
+            <p><a href="https://medium.com/@{{ site.author.medium }}" target="_blank" aria-label="Blog">
+              <i class="fab fa-medium fa-lg"></i>
+            </a></p>
           {% endif %}
-        </div>
+      </div>
       </header>
 
       <section>
