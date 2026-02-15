@@ -20,23 +20,6 @@ How I built a multi-product demand forecasting system, compared statistical vs M
 
 ---
 
-### Why I Chose Forecasting + Optimization Over LLMs
-*February 2026*
-
-The strategic decision to specialize in a less crowded niche as a career changer, and why depth beats breadth in your first data science role.
-
-[Read on Medium](https://medium.com/@cmtwskb) | **Topics:** Career, strategy, specialization
-
----
-
-### Transitioning from Physics PhD to Data Science
-*January 2026*
-
-Lessons learned in the first two months: what transfers, what doesn't, and how to build a portfolio that gets interviews.
-
-[Read on Medium](https://medium.com/@cmtwskb) | **Topics:** Career transition, portfolio building
-
----
 
 ### MILP for Team Optimization: A Practical Guide
 *January 2026*
@@ -46,6 +29,10 @@ Step-by-step walkthrough of formulating and solving a constraint optimization pr
 [Read on Medium](https://medium.com/@cmtwskb) | **Topics:** Optimization, MILP, operations research
 
 ---
+### Sentiment Classification on Imbalanced Dataset
+*December 2025*
+Step-by-step walkthrough of approaching a heavily imbalanced Dataset.
+[Read on Medium](https://medium.com/@cmtwsktb) | **Topics:** Imbalanced dataset, TF-IDF, Embdeddings, Data augmentation
 
 ## Topics I Write About
 
