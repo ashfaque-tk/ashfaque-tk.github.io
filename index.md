@@ -12,6 +12,6 @@ During my PhD at IPCMS (University of Strasbourg), I conducted micromagnetic sim
 
 I ran large finite element simulations and built tools to extract high-dimensional magnetization data from FEM meshes, turning raw simulation outputs into interpretable dispersion plots. You can find the published work on [Rotating spin wave modes in nanoscale Möbius strips.](https://doi.org/10.1038/s44306-025-00118-8)
 
-I write about forecasting, optimization, and navigating the shift from academia to industry — sharing what I’m learning along the way.
+Outside of project work, I write about forecasting, optimization, and the transition from research to data science. Always happy to connect with others making the same jump—it's a weird path, and it helps to compare notes.
 
-Outside of work, I enjoy cooking and playing football
+In my personal time, I enjoy cooking and playing football.
