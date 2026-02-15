@@ -1,13 +1,30 @@
 title: Ashfaque Thonikkadavan
-description: Data Scientist | Computational Problem Solver
-theme: jekyll-theme-architect
-show_downloads: false
+description: Data Scientist specializing in Forecasting & Optimization
+theme: jekyll-theme-minimal
 
 author:
   name: Ashfaque Thonikkadavan
+  title: Data Scientist | Optimization Specialist
+  location: Strasbourg, France
   email: ashfaquesalmantk@gmail.com
   github: ashfaque-tk
   linkedin: tk-ashfaque
+  medium: cmtwskb
+
+# Navigation
+navigation:
+  - title: Start Here
+    url: /
+  - title: Projects
+    url: /projects
+  - title: CV/Resume
+    url: /cv
+  - title: Writing
+    url: /writing
 
 plugins:
   - jekyll-seo-tag
+
+# Settings
+markdown: kramdown
+permalink: pretty

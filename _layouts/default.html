@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% seo %}
+    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1><a href="{{ "/" | relative_url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
+        
+        {% if site.description or site.github.project_tagline %}
+          <p>{{ site.description | default: site.github.project_tagline }}</p>
+        {% endif %}
+
+        <nav style="margin-top: 30px;">
+          <a href="{{ "/" | relative_url }}">Start Here</a>
+          <a href="{{ "/projects" | relative_url }}">Projects</a>
+          <a href="{{ "/cv" | relative_url }}">CV/Resume</a>
+          <a href="{{ "/writing" | relative_url }}">Writing</a>
+        </nav>
+
+        <div style="margin-top: 30px; font-size: 14px;">
+          {% if site.author.location %}
+            <p>📍 {{ site.author.location }}</p>
+          {% endif %}
+          
+          {% if site.author.github %}
+            <p><a href="https://github.com/{{ site.author.github }}" target="_blank">GitHub</a></p>
+          {% endif %}
+          
+          {% if site.author.linkedin %}
+            <p><a href="https://linkedin.com/in/{{ site.author.linkedin }}" target="_blank">LinkedIn</a></p>
+          {% endif %}
+          
+          {% if site.author.medium %}
+            <p><a href="https://medium.com/@{{ site.author.medium }}" target="_blank">Blog</a></p>
+          {% endif %}
+        </div>
+      </header>
+
+      <section>
+        {{ content }}
+      </section>
+
+      <footer>
+        <p style="text-align: center; color: #999; font-size: 14px; margin-top: 50px;">
+          © 2026 Ashfaque Thonikkadavan
+        </p>
+      </footer>
+    </div>
+    <script src="{{ "/assets/js/scale.fix.js" | relative_url }}"></script>
+  </body>
+</html>
