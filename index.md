@@ -4,9 +4,9 @@ layout: default
 
 # About Me
 
-Hi, I’m Ashfaque. I’m transitioning from computational physics into data science, with a focus on demand forecasting and operations research.
+I'm Ashfaque, a data scientist focusing on demand forecasting and operations research. My background is a physics PhD (IPCMS, University of Strasbourg), where I ran large-scale simulations and built the data pipelines to make sense of them — the same rigor I now apply to forecasting and optimization problems.
 
-Right now, I’m building depth in time-series forecasting (ARIMA, Prophet), optimization (MILP, routing, inventory problems), and production-oriented ML workflows. I’m particularly interested in systems where predictions directly inform decisions — forecasting demand, allocating inventory, and planning logistics.
+I build systems where predictions drive decisions directly: time-series forecasting (ARIMA, Prophet, LightGBM) to predict demand, and optimization (MILP, routing, inventory policy) to act on it — stock levels, delivery routes, safety stock under uncertainty.
 
 During my PhD at IPCMS (University of Strasbourg), I conducted micromagnetic simulations of complex 3D curved structures — including Möbius-strip-like geometries — to study how spin waves behave in such unconventional shapes. Spin waves are being explored for next-generation spintronic and low-energy computing technologies, and our goal was to understand whether geometry alone could be used to control them.
 
