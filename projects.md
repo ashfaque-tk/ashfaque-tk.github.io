@@ -5,31 +5,30 @@ title: Projects
 
 # Projects
 
-Organized by theme. Each project includes code, documentation, and business impact metrics.
+Organized by theme. Each project includes code and documentation.
 
 ---
 
 ## Forecasting & Time Series
 
-### Demand Forecasting System
-*Multi-product retail demand prediction with business impact analysis*
+### Demand Forecasting Pipeline (M5 / Walmart dataset)
+*End-to-end retail demand forecasting with inventory cost simulation*
 
-**Problem:** Retail businesses need accurate demand forecasts to optimize inventory and reduce stockouts.
+**Business question:** What's the holding vs. stockout cost trade-off for the top 20% of revenue-driving items?
 
 **Approach:**
-- Baseline models: Naive, Moving Average, Exponential Smoothing
-- Statistical: ARIMA, SARIMAX, Prophet for seasonality
-- ML: XGBoost with lag features and rolling statistics
-- Business metrics: MAPE, forecast bias, fill rate impact
+- Recursive LightGBM forecasts for 373 high-revenue SKUs, evaluated with rolling walk-forward backtesting
+- Tested training window length vs. forecast horizon; ~2 years of history balances recency against sample size, with degradation showing up at longer recursive horizons
+- Extended point forecasts to quantile (probabilistic) forecasts to size safety stock and simulate holding/stockout costs
 
-**Impact:** Reduced forecast error by 18% vs baseline, quantified potential inventory cost savings of 12%.
+**Status:** Deployed as a FastAPI inference service for reproducible training and evaluation.
 
-**Tech:** Python, pandas, statsmodels, scikit-learn, Prophet  
-**Code:** [GitHub](https://github.com/ashfaque-tk) | **Blog:** [Medium post](#)
+**Tech:** Python, LightGBM, pandas, FastAPI
+**Code:** [GitHub](#) <!-- replace with repo link once public -->
 
 ---
 
-### Transportation Wait Time Prediction (QRT Challenge)
+<!-- ### Transportation Wait Time Prediction (QRT Challenge)
 *Real-time platform waiting time forecasting for SNCF*
 
 **Problem:** Predict train platform wait times to improve passenger experience.
@@ -39,30 +38,33 @@ Organized by theme. Each project includes code, documentation, and business impa
 - Feature engineering: time of day, day of week, historical patterns
 - Regression models with uncertainty quantification
 
-**Tech:** Python, pandas, scikit-learn  
-**Status:** In progress | **Code:** [GitHub](#)
+**Status:** In progress
+
+**Tech:** Python, pandas, scikit-learn
+**Code:** [GitHub](#) -->
 
 ---
 
 ## Optimization & Operations Research
 
 ### Role-Aware Squad Optimization
-*Constraint-based team selection using Mixed Integer Linear Programming*
+*Constrained squad selection using Mixed Integer Linear Programming*
 
-**Problem:** Maximize team performance under formation and role constraints.
+**Problem:** Select an optimal 11-player squad under formation constraints, positional role hierarchies, budget caps, and age-range bounds.
 
 **Approach:**
-- MILP formulation with PuLP (objective: maximize performance, constraints: roles, formation)
-- Dimensionality reduction: PCA to transform 10+ features into 3 interpretable style components
-- SQL database for player stats and match data
+- MILP formulation solved to optimality with PuLP
+- PCA reduces 10+ correlated performance metrics into 3 interpretable style components (attacking influence, midfield control, wide play), used as role-weighted objective coefficients
+- Player data in a relational SQL database; modular Python classes separate variable construction, constraints, and solution extraction
+- Extended with locking constraints (pre-selected players), style-dependent formation rules, and multi-role assignment
 
-**Impact:** Generated optimal squads with 15% performance improvement vs manual selection.
+**Status:** Complete
 
-**Tech:** Python, PuLP, SQL, PCA, pandas  
-**Code:** [GitHub](https://github.com/ashfaque-tk) | **Blog:** [Medium post](#)
+**Tech:** Python, SQL, PuLP, scikit-learn (PCA)
+**Code:** [GitHub](https://github.com/ashfaque-tk)
 
 ---
-
+<!-- 
 ### Last-Mile Route Optimization
 *Vehicle routing with time windows for delivery optimization*
 
@@ -71,52 +73,51 @@ Organized by theme. Each project includes code, documentation, and business impa
 **Approach:**
 - VRPTW (Vehicle Routing Problem with Time Windows) formulation
 - Solver: Google OR-Tools with constraint programming
-- Benchmarking: Exact methods vs heuristics (Clarke-Wright, Nearest Neighbor)
+- Benchmarking planned: exact methods vs heuristics (Clarke-Wright, Nearest Neighbor)
 
-**Impact:** Reduced total distance by 22% and improved on-time delivery by 30%.
+**Status:** In progress
 
-**Tech:** Python, OR-Tools, Folium (visualization)  
-**Status:** In progress | **Code:** [GitHub](#)
+**Tech:** Python, OR-Tools, Folium (visualization)
+**Code:** [GitHub](#) -->
 
 ---
-
+<!-- 
 ### Inventory Optimization with Forecast Uncertainty
 *Safety stock and reorder point optimization under demand uncertainty*
 
 **Problem:** Balance inventory costs (holding, ordering, stockout) under uncertain demand.
 
-**Approach:**
+**Approach (planned):**
 - Forecast uncertainty quantification (prediction intervals)
 - MILP optimization: minimize total cost subject to service level constraints
 - Monte Carlo simulation to test policies
-- Compare: (s,S) policy, (s,Q) policy, EOQ
+- Compare (s,S) policy, (s,Q) policy, EOQ
 
-**Impact:** Reduced total inventory costs by 18% while maintaining 95% service level.
+**Status:** Planned
 
-**Tech:** Python, PuLP, NumPy, simulation  
-**Status:** Planned | **Code:** [GitHub](#)
+**Tech:** Python, PuLP, NumPy, simulation
+**Code:** [GitHub](#)
 
----
+--- -->
 
 ## Production ML Systems
 
 ### Hate Speech Monitoring System
 *Confidence-based content moderation with production deployment*
 
-**Problem:** Classify 800k text records with <10% minority class (hate speech).
+**Problem:** Classify 800k text records with under 10% minority class (hate speech).
 
 **Approach:**
-- Model selection: Benchmarked SMOTE, oversampling, embeddings, TF-IDF
-- Selected: TF-IDF + LinearSVC (speed-accuracy tradeoff)
+- Benchmarked SMOTE, oversampling, TF-IDF+LinearSVC, and embeddings; selected TF-IDF+LinearSVC for the best speed-accuracy tradeoff
 - Platt scaling for probability calibration
-- 3-tier routing: High confidence auto-action, uncertain (0.3-0.7) to human review
+- 3-tier confidence routing: high-confidence auto-decisions, uncertain cases to human review, low-confidence routed for retraining
 
-**Results:** 85% recall, 61% precision on hate speech class.
+**Results:** 85% recall, 61% precision on hate speech class. <!-- confirm these are your actual measured numbers before publishing -->
 
-**Deployment:** Dockerized FastAPI with JSONL logging for continuous improvement.
+**Deployment:** Dockerized FastAPI service with structured JSONL logging for drift detection and failure mode analysis.
 
-**Tech:** Python, scikit-learn, FastAPI, Docker, Platt scaling  
-**Code:** [GitHub](https://github.com/ashfaque-tk) | **Blog:** [Medium post](#)
+**Tech:** Python, scikit-learn, FastAPI, Docker, Platt scaling
+**Code:** [GitHub](https://github.com/ashfaque-tk) | **Blog:** [Medium post](https://medium.com/@cmtwskb) <!-- link the actual post once you confirm title/URL -->
 
 ---
 
@@ -128,12 +129,12 @@ Organized by theme. Each project includes code, documentation, and business impa
 **Context:** PhD research in computational physics (IPCMS, University of Strasbourg).
 
 **Technical contributions:**
-- Processed 10M+ data points from Finite Element simulations
+- Processed large-scale data from Finite Element simulations
 - Developed automated Python pipelines for data extraction and analysis
 - Implemented spatial interpolation and FFT for spectral analysis
-- Optimized computational workflows for 3D topological structures
+- Optimized computational workflows for 3D topological structures (Möbius-strip geometries)
 
-**Publication:** "Rotating Spin Wave Modes in Nanoscale Möbius Strips" (NPJ Spintronics, 2026)
+**Publication:** "Rotating Spin Wave Modes in Nanoscale Möbius Strips" (npj Spintronics, 2026)
 
 **Transferable skills:** Large-scale data processing, automation, algorithm optimization, scientific computing.
 
