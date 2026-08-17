@@ -61,7 +61,7 @@ Organized by theme. Each project includes code and documentation.
 **Status:** Complete
 
 **Tech:** Python, SQL, PuLP, scikit-learn (PCA)
-**Code:** [GitHub](https://github.com/ashfaque-tk)
+**Code:** [GitHub](https://github.com/ashfaque-tk/role-aware-squad-optimization/)
 
 ---
 <!-- 
@@ -117,7 +117,7 @@ Organized by theme. Each project includes code and documentation.
 **Deployment:** Dockerized FastAPI service with structured JSONL logging for drift detection and failure mode analysis.
 
 **Tech:** Python, scikit-learn, FastAPI, Docker, Platt scaling
-**Code:** [GitHub](https://github.com/ashfaque-tk) | **Blog:** [Medium post](https://medium.com/@cmtwskb) <!-- link the actual post once you confirm title/URL -->
+**Code:** [GitHub](https://github.com/ashfaque-tk/hate-speech-api) | **Blog:** [Medium post](https://medium.com/@cmtwskb) <!-- link the actual post once you confirm title/URL -->
 
 ---
 
