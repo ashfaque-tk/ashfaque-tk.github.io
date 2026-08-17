@@ -11,20 +11,20 @@ Organized by theme. Each project includes code and documentation.
 
 ## Forecasting & Time Series
 
-### Demand Forecasting Pipeline (M5 / Walmart dataset)
+### Demand Forecasting & Inventory Risk (Walmart M5 casestudy)
 *End-to-end retail demand forecasting with inventory cost simulation*
 
-**Business question:** What's the holding vs. stockout cost trade-off for the top 20% of revenue-driving items?
+**Business questions:** How can large-scale retailers accurately forecast item-level demand without data leakage—and handle the cold-start problem for newly launching SKUs—while translating probabilistic quantiles (Q10/Q90) into optimal safety stock buffers?
 
 **Approach:**
-- Recursive LightGBM forecasts for 373 high-revenue SKUs, evaluated with rolling walk-forward backtesting
+- Recursive LightGBM forecasts evaluated with rolling walk-forward backtesting
 - Tested training window length vs. forecast horizon; ~2 years of history balances recency against sample size, with degradation showing up at longer recursive horizons
 - Extended point forecasts to quantile (probabilistic) forecasts to size safety stock and simulate holding/stockout costs
 
 **Status:** Deployed as a FastAPI inference service for reproducible training and evaluation.
 
 **Tech:** Python, LightGBM, pandas, FastAPI
-**Code:** [GitHub](#) <!-- replace with repo link once public -->
+**Code:** [GitHub](https://github.com/ashfaque-tk/retail-demand-forecast/tree/master) <!-- replace with repo link once public -->
 
 ---
 
