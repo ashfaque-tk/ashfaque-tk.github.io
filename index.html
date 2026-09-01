@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashfaque Thonikkadavan, PhD | Demand Forecaster & Optimization Scientist</title>
+  
+  <meta name="description" content="Portfolio of Ashfaque Thonikkadavan, PhD. Specialized in Demand Forecasting, Mathematical Optimization (OR/MILP), Supply Chain Analytics, and Applied Machine Learning.">
+  <meta name="author" content="Ashfaque Thonikkadavan">
+  
+  <!-- Open Graph / Social Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Ashfaque Thonikkadavan, PhD | Demand Forecaster & Optimization Scientist">
+  <meta property="og:description" content="Bridging mathematical physics, operations research, and probabilistic machine learning for supply chain, forecasting, and optimization challenges.">
+  <meta property="og:url" content="https://ashfaque-tk.github.io/">
+  
+  <!-- Google Fonts: Plus Jakarta Sans, Newsreader, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen text-slate-100 selection:bg-cyan-500 selection:text-white">
+  
+  <!-- Ambient background glow for visual depth -->
+  <div class="ambient-glow"></div>
+
+  <!-- =========================================================================
+       1. NAVIGATION HEADER
+       ========================================================================= -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-opacity-80 border-b border-subtle transition-colors duration-200" style="background-color: var(--bg-surface-elevated); border-color: var(--border-subtle);">
+    <div class="container-custom py-3.5 flex items-center justify-between">
+      
+      <!-- Brand Logo / Monogram -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm tracking-wider shadow-sm transition-transform group-hover:scale-105" style="background: linear-gradient(135deg, #0284c7, #4f46e5); color: #ffffff;">
+          AT
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-sm tracking-tight transition-colors" style="color: var(--text-primary);">
+            Ashfaque Thonikkadavan
+          </span>
+          <span class="text-xs font-mono" style="color: var(--text-muted);">
+            PhD • Forecaster & Optimization Scientist
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium" style="color: var(--text-secondary);">
+        <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+        <a href="#simulators" class="hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping inline-block"></span>
+          Simulators
+        </a>
+        <a href="#services" class="hover:text-cyan-400 transition-colors">Services</a>
+        <a href="#works" class="hover:text-cyan-400 transition-colors">Selected Works</a>
+        <a href="#research" class="hover:text-cyan-400 transition-colors">Research & Articles</a>
+        <a href="#contact" class="hover:text-cyan-400 transition-colors">Contact</a>
+      </nav>
+
+      <!-- Right Action Group -->
+      <div class="flex items-center gap-3">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" type="button" class="p-2 rounded-lg border transition-colors flex items-center justify-center" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle);" aria-label="Toggle theme">
+          <span id="themeIcon">
+            <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+          </span>
+        </button>
+
+        <!-- CTA Button -->
+        <button class="open-inquiry-modal hidden sm:inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-lg shadow-sm transition-all hover:opacity-90 active:scale-95" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+          <span>Work With Me</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" type="button" class="md:hidden p-2 rounded-lg border transition-colors" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle);" aria-label="Open menu">
+          <svg class="w-5 h-5" style="color: var(--text-primary);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Dropdown -->
+    <div id="mobileNavMenu" class="hidden md:hidden border-t px-6 py-4 space-y-3" style="background-color: var(--bg-surface-elevated); border-color: var(--border-subtle);">
+      <a href="#about" class="block text-sm font-medium py-1" style="color: var(--text-primary);">About</a>
+      <a href="#simulators" class="block text-sm font-medium py-1 text-cyan-400">Interactive Simulators</a>
+      <a href="#services" class="block text-sm font-medium py-1" style="color: var(--text-primary);">Consulting Services</a>
+      <a href="#works" class="block text-sm font-medium py-1" style="color: var(--text-primary);">Selected Works</a>
+      <a href="#research" class="block text-sm font-medium py-1" style="color: var(--text-primary);">Research & Publications</a>
+      <a href="#contact" class="block text-sm font-medium py-1" style="color: var(--text-primary);">Contact & Inquiries</a>
+      <div class="pt-2">
+        <button class="open-inquiry-modal w-full py-2.5 rounded-lg text-xs font-semibold text-center" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+          Start a Project Inquiry
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- =========================================================================
+         2. HERO / INTRODUCTION
+         ========================================================================= -->
+    <section id="about" class="relative pt-16 pb-20 md:pt-24 md:pb-28">
+      <div class="container-custom">
+        
+        <!-- Status availability badge -->
+        <div class="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border mb-6 text-xs font-medium" style="background-color: var(--accent-emerald-bg); border-color: var(--accent-emerald-border); color: var(--accent-emerald);">
+          <span class="status-dot"></span>
+          <span>Available for Freelance Consulting & Advisory</span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          <!-- Left Column: Bio & Core Philosophy -->
+          <div class="lg:col-span-8 space-y-6">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight" style="color: var(--text-primary);">
+              Ashfaque Thonikkadavan<span class="text-cyan-400 font-serif font-normal italic">, PhD</span>
+            </h1>
+
+            <p class="text-xl sm:text-2xl font-medium" style="color: var(--text-secondary);">
+              Demand Forecaster &amp; Optimization Scientist
+            </p>
+
+            <p class="text-base sm:text-lg leading-relaxed max-w-2xl" style="color: var(--text-secondary);">
+              I apply computational physics, mathematical programming (MILP), and probabilistic machine learning to tackle high-complexity supply chain forecasting, inventory optimization, and decision-making problems under uncertainty.
+            </p>
+
+            <!-- Key pillars badges -->
+            <div class="flex flex-wrap gap-2 pt-2">
+              <span class="badge badge-outline">📍 Strasbourg, France</span>
+              <span class="badge badge-outline">🎓 PhD in Condensed Matter Physics (IPCMS)</span>
+              <span class="badge badge-outline">📈 Probabilistic Time Series AI</span>
+              <span class="badge badge-outline">⚡ Mixed-Integer Linear Programming (MILP)</span>
+              <span class="badge badge-outline">📦 Multi-Echelon Inventory Policies</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center gap-4 pt-4">
+              <button class="open-inquiry-modal px-5 py-3 rounded-lg text-sm font-semibold shadow-md transition-all hover:opacity-90 active:scale-95 flex items-center gap-2" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+                <span>Discuss a Project</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+              </button>
+
+              <a href="#simulators" class="px-5 py-3 rounded-lg text-sm font-semibold border transition-all hover:bg-opacity-50 flex items-center gap-2" style="background-color: var(--bg-surface); border-color: var(--border-medium); color: var(--text-primary);">
+                <span>Explore Live Simulators</span>
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
+              </a>
+
+              <button class="copy-email-btn px-4 py-3 rounded-lg text-sm font-medium border transition-all flex items-center gap-2" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle); color: var(--text-secondary);" data-email="ashfaquetk.dev@gmail.com" title="Copy email address">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                </svg>
+                <span>Copy Email</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Rigor & Quick Links Card -->
+          <div class="lg:col-span-4">
+            <div class="card p-6 space-y-5">
+              <div class="flex items-center justify-between border-b pb-4" style="border-color: var(--border-subtle);">
+                <span class="text-xs font-mono uppercase tracking-wider" style="color: var(--text-muted);">Scientific Foundations</span>
+                <span class="badge-mono">Quantitative Rigor</span>
+              </div>
+
+              <div class="space-y-3.5 text-xs">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded flex items-center justify-center bg-cyan-500/10 text-cyan-400 font-mono font-bold shrink-0 text-xs">01</div>
+                  <div>
+                    <h4 class="font-semibold" style="color: var(--text-primary);">Probabilistic Forecasting</h4>
+                    <p style="color: var(--text-muted);">Uncertainty bounds (P10/P50/P90), hierarchical reconciliation, and promotional uplift.</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded flex items-center justify-center bg-indigo-500/10 text-indigo-400 font-mono font-bold shrink-0 text-xs">02</div>
+                  <div>
+                    <h4 class="font-semibold" style="color: var(--text-primary);">Mathematical Optimization</h4>
+                    <p style="color: var(--text-muted);">Exact MILP formulations, stochastic inventory lot-sizing, and network flow optimization.</p>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded flex items-center justify-center bg-emerald-500/10 text-emerald-400 font-mono font-bold shrink-0 text-xs">03</div>
+                  <div>
+                    <h4 class="font-semibold" style="color: var(--text-primary);">Computational Modeling</h4>
+                    <p style="color: var(--text-muted);">Finite element methods, PDEs, simulation models, and production-grade Python/C++ architectures.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t pt-4 flex items-center justify-between" style="border-color: var(--border-subtle);">
+                <span class="text-xs font-medium" style="color: var(--text-muted);">Profiles &amp; Code:</span>
+                <div class="flex items-center gap-3">
+                  <a href="https://github.com/ashfaque-tk" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors p-1" title="GitHub Profile" style="color: var(--text-secondary);">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                  </a>
+                  <a href="https://medium.com/@ashfaquetk" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors p-1" title="Medium Publications" style="color: var(--text-secondary);">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                  </a>
+                  <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors p-1" title="Google Scholar" style="color: var(--text-secondary);">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 24a7 7 0 110-14 7 7 0 010 14zm0-24L0 9.5l4.838 3.94A8 8 0 0112 12a8 8 0 017.162 1.44L24 9.5 12 0z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         3. INTERACTIVE SIMULATION LAB (VISUAL PROOF OF COMPETENCE)
+         ========================================================================= -->
+    <section id="simulators" class="py-20 border-t border-b" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle);">
+      <div class="container-custom space-y-10">
+        
+        <!-- Section Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-cyan-400">
+              <span>Interactive Decision Engines</span>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight" style="color: var(--text-primary);">
+              Live Computational Simulators
+            </h2>
+            <p class="text-sm max-w-xl" style="color: var(--text-muted);">
+              Explore how probabilistic forecasting bounds and mathematical cost frontiers react to operational volatility in real time.
+            </p>
+          </div>
+
+          <!-- Simulator Tab Switcher -->
+          <div class="flex p-1 rounded-lg border shrink-0" style="background-color: var(--bg-surface); border-color: var(--border-subtle);">
+            <button id="simTabForecast" type="button" class="tab-btn active">
+              1. Demand &amp; Safety Stock
+            </button>
+            <button id="simTabOpt" type="button" class="tab-btn">
+              2. Cost Frontier (EOQ/MILP)
+            </button>
+          </div>
+        </div>
+
+        <!-- PANEL 1: Demand Forecaster & Safety Stock Simulator -->
+        <div id="panelForecast" class="simulator-container p-6 sm:p-8 space-y-8">
+          
+          <!-- Simulator KPI Bar -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Expected Horizon Demand</span>
+              <span id="kpiExpectedDemand" class="text-lg font-bold font-mono text-cyan-400">-- units</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Dynamic Safety Stock (SS)</span>
+              <span id="kpiSafetyStock" class="text-lg font-bold font-mono text-emerald-400">-- units</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Calculated Reorder Point (ROP)</span>
+              <span id="kpiReorderPoint" class="text-lg font-bold font-mono" style="color: var(--text-primary);">-- units</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Service Factor &amp; Z-Score</span>
+              <span id="kpiServiceLevelZ" class="text-lg font-bold font-mono text-indigo-400">z = --</span>
+            </div>
+          </div>
+
+          <!-- Canvas Chart -->
+          <div class="canvas-wrapper">
+            <canvas id="forecastCanvas"></canvas>
+          </div>
+
+          <!-- Interactive Parameter Sliders -->
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 pt-2">
+            
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderVolatility" style="color: var(--text-secondary);">Demand Volatility (σ)</label>
+                <span id="valVolatility" class="font-mono text-cyan-400">18%</span>
+              </div>
+              <input id="sliderVolatility" type="range" min="5" max="50" step="1" value="18" aria-label="Demand Volatility">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Coefficient of variation</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderTrend" style="color: var(--text-secondary);">Underlying Trend</label>
+                <span id="valTrend" class="font-mono text-cyan-400">+5%/mo</span>
+              </div>
+              <input id="sliderTrend" type="range" min="-25" max="35" step="1" value="8" aria-label="Underlying Trend">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Monthly drift component</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderPromo" style="color: var(--text-secondary);">Promo Lift Shock</label>
+                <span id="valPromo" class="font-mono text-cyan-400">+25%</span>
+              </div>
+              <input id="sliderPromo" type="range" min="0" max="80" step="5" value="25" aria-label="Promo Lift Shock">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Intervention uplift event</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderServiceLevel" style="color: var(--text-secondary);">Target Service Level</label>
+                <span id="valServiceLevel" class="font-mono text-emerald-400">95%</span>
+              </div>
+              <input id="sliderServiceLevel" type="range" min="80" max="99" step="1" value="95" aria-label="Target Service Level">
+              <span class="text-[11px] block" style="color: var(--text-faint);">No-stockout probability</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderLeadTime" style="color: var(--text-secondary);">Replenishment Lead Time</label>
+                <span id="valLeadTime" class="font-mono" style="color: var(--text-primary);">7 days</span>
+              </div>
+              <input id="sliderLeadTime" type="range" min="2" max="30" step="1" value="7" aria-label="Replenishment Lead Time">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Supplier lead time</span>
+            </div>
+
+          </div>
+
+          <!-- Formula Snippet -->
+          <div class="math-block">
+            <strong>Safety Stock Formulation:</strong> \(SS = z_{\text{SL}} \cdot \sigma_d \sqrt{L}\) &nbsp;|&nbsp; 
+            <strong>Reorder Point:</strong> \(\text{ROP} = \bar{d} \cdot L + SS\)
+          </div>
+
+        </div>
+
+        <!-- PANEL 2: Inventory Optimization & Cost Frontier Simulator -->
+        <div id="panelOpt" class="simulator-container p-6 sm:p-8 space-y-8 hidden">
+          
+          <!-- Simulator KPI Bar -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Optimal Batch Size (Q*)</span>
+              <span id="kpiOptimalBatch" class="text-lg font-bold font-mono text-emerald-400">-- units</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Minimized Annual Cost</span>
+              <span id="kpiAnnualCost" class="text-lg font-bold font-mono text-indigo-400">$--</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Optimized Fill Rate</span>
+              <span id="kpiFillRate" class="text-lg font-bold font-mono text-cyan-400">--%</span>
+            </div>
+
+            <div class="p-4 rounded-lg border" style="background-color: var(--bg-canvas); border-color: var(--border-subtle);">
+              <span class="text-xs font-mono block mb-1" style="color: var(--text-muted);">Order Cycle / Frequency</span>
+              <span id="kpiOrderCycle" class="text-lg font-bold font-mono" style="color: var(--text-primary);">-- days</span>
+            </div>
+          </div>
+
+          <!-- Canvas Chart -->
+          <div class="canvas-wrapper">
+            <canvas id="optCanvas"></canvas>
+          </div>
+
+          <!-- Interactive Parameter Sliders -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6 pt-2">
+            
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderDemandRate" style="color: var(--text-secondary);">Annual SKU Demand (D)</label>
+                <span id="valDemandRate" class="font-mono text-cyan-400">12,000 units/yr</span>
+              </div>
+              <input id="sliderDemandRate" type="range" min="2000" max="50000" step="1000" value="12000" aria-label="Annual Demand">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Annual throughput volume</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderOrderCost" style="color: var(--text-secondary);">Order Setup Cost (S)</label>
+                <span id="valOrderCost" class="font-mono text-indigo-400">$120 / order</span>
+              </div>
+              <input id="sliderOrderCost" type="range" min="20" max="500" step="10" value="120" aria-label="Order Setup Cost">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Fixed procurement expense</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderHoldingCost" style="color: var(--text-secondary);">Unit Holding Cost (H)</label>
+                <span id="valHoldingCost" class="font-mono text-cyan-400">$3.50 / unit</span>
+              </div>
+              <input id="sliderHoldingCost" type="range" min="0.5" max="15" step="0.25" value="3.50" aria-label="Holding Cost">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Capital cost + warehouse storage</span>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-xs font-medium">
+                <label for="sliderPenaltyCost" style="color: var(--text-secondary);">Stockout Penalty (P)</label>
+                <span id="valPenaltyCost" class="font-mono text-emerald-400">$15 / unit</span>
+              </div>
+              <input id="sliderPenaltyCost" type="range" min="5" max="60" step="1" value="15" aria-label="Stockout Penalty">
+              <span class="text-[11px] block" style="color: var(--text-faint);">Backorder &amp; lost margin penalty</span>
+            </div>
+
+          </div>
+
+          <!-- Formula Snippet -->
+          <div class="math-block">
+            <strong>Optimal Lot Size with Shortage:</strong> \(Q^* = \sqrt{\frac{2 D S}{H}} \cdot \sqrt{\frac{P + H}{P}}\) &nbsp;|&nbsp; 
+            <strong>Total Cost:</strong> \(TC(Q) = \frac{D}{Q}S + \frac{Q P^2}{2(P+H)^2}H + \frac{D}{Q}\frac{Q H^2}{2(P+H)^2}P\)
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         4. CONSULTING & FREELANCE SERVICES
+         ========================================================================= -->
+    <section id="services" class="py-20">
+      <div class="container-custom space-y-12">
+        
+        <div class="max-w-2xl space-y-3">
+          <div class="text-xs font-mono uppercase tracking-widest text-cyan-400">Consulting Offerings</div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight" style="color: var(--text-primary);">
+            Specialized Services &amp; Mathematical Solutions
+          </h2>
+          <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-muted);">
+            Helping companies transform messy transactional and inventory data into automated, cost-optimal operational decisions.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Service 1 -->
+          <div class="card card-hover p-7 space-y-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-cyan-500/10 text-cyan-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+              </svg>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">Probabilistic Demand Forecasting</h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                Move beyond single-point estimates. I develop hierarchical, multi-horizon probabilistic models (P10, P50, P90) that account for seasonality, promotional uplifts, cannibalization, and intermittent SKU demand.
+              </p>
+            </div>
+            <ul class="space-y-2 text-xs" style="color: var(--text-secondary);">
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400">✔</span>
+                <span>Hierarchical reconciliation across product trees &amp; regions</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400">✔</span>
+                <span>Promotional &amp; holiday feature engineering pipelines</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-cyan-400">✔</span>
+                <span>Cold-start item forecasting with transfer learning &amp; embeddings</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service 2 -->
+          <div class="card card-hover p-7 space-y-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-emerald-500/10 text-emerald-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+              </svg>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">Inventory &amp; Multi-Echelon Policy Optimization</h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                Formulating stochastic inventory policies $(s, S)$ and $(R, s, S)$ to balance working capital with strict service level targets under supplier lead-time uncertainty.
+              </p>
+            </div>
+            <ul class="space-y-2 text-xs" style="color: var(--text-secondary);">
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400">✔</span>
+                <span>Dynamic safety stock sizing based on empirical lead-time variance</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400">✔</span>
+                <span>Multi-echelon inventory allocation (Central DC to local nodes)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-emerald-400">✔</span>
+                <span>MOQ (Minimum Order Quantity) and tiered bracket optimization</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service 3 -->
+          <div class="card card-hover p-7 space-y-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-indigo-500/10 text-indigo-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+              </svg>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">Operations Research &amp; MILP Formulations</h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                Custom Mixed-Integer Linear Programming (MILP) solvers for resource scheduling, production lot-sizing, facility location, and network flow optimization using Gurobi, PuLP, and Pyomo.
+              </p>
+            </div>
+            <ul class="space-y-2 text-xs" style="color: var(--text-secondary);">
+              <li class="flex items-center gap-2">
+                <span class="text-indigo-400">✔</span>
+                <span>Rigorous mathematical formulations with explicit constraints</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-indigo-400">✔</span>
+                <span>Scalable solver integration (Gurobi, HiGHS, CBC, OR-Tools)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-indigo-400">✔</span>
+                <span>Warm-starting and custom heuristic speed-ups for NP-hard models</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Service 4 -->
+          <div class="card card-hover p-7 space-y-5">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center bg-amber-500/10 text-amber-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+              </svg>
+            </div>
+            <div class="space-y-2">
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">End-to-End Decision Engines &amp; APIs</h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-muted);">
+                Packaging optimization solvers and ML models into production-ready FastAPI microservices, containerized Docker deployments, and interactive decision dashboards for executive planning.
+              </p>
+            </div>
+            <ul class="space-y-2 text-xs" style="color: var(--text-secondary);">
+              <li class="flex items-center gap-2">
+                <span class="text-amber-400">✔</span>
+                <span>Automated batch inference &amp; solver scheduling (Airflow/Cron)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-amber-400">✔</span>
+                <span>Scenario simulation &amp; executive "what-if" planning tools</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="text-amber-400">✔</span>
+                <span>Comprehensive documentation and code handover for in-house teams</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         5. SELECTED WORKS & CASE STUDIES
+         ========================================================================= -->
+    <section id="works" class="py-20 border-t" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle);">
+      <div class="container-custom space-y-10">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div class="space-y-2">
+            <div class="text-xs font-mono uppercase tracking-widest text-cyan-400">Portfolio &amp; Case Studies</div>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight" style="color: var(--text-primary);">
+              Selected Technical Works
+            </h2>
+            <p class="text-sm max-w-xl" style="color: var(--text-muted);">
+              Representative problems, mathematical formulations, and engineering implementations across forecasting, operations research, and scientific computing.
+            </p>
+          </div>
+
+          <!-- Category Filter Buttons -->
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="tab-btn filter-btn active" data-filter="all">All</button>
+            <button type="button" class="tab-btn filter-btn" data-filter="forecasting">Forecasting</button>
+            <button type="button" class="tab-btn filter-btn" data-filter="optimization">Optimization (MILP)</button>
+            <button type="button" class="tab-btn filter-btn" data-filter="research">Research &amp; ML</button>
+          </div>
+        </div>
+
+        <!-- Project Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Project 1 -->
+          <div class="card card-hover p-6 flex flex-col justify-between project-card" data-category="forecasting">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="badge badge-emerald">Demand Forecasting</span>
+                <span class="font-mono text-xs" style="color: var(--text-faint);">Python • PyTorch • LightGBM</span>
+              </div>
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">
+                Multi-Echelon Hierarchical Demand Forecasting
+              </h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                Coherent probabilistic forecast reconciliation across 10,000+ SKUs with seasonal decomposition, holiday calendar shifts, and quantile uncertainty loss.
+              </p>
+              <div class="p-3 rounded-lg font-mono text-xs overflow-x-auto" style="background-color: var(--bg-canvas); border: 1px solid var(--border-subtle); color: var(--text-secondary);">
+                MinT Reconciliation: ŷ = S (Sᵀ W⁻¹ S)⁻¹ Sᵀ W⁻¹ ỹ
+              </div>
+            </div>
+
+            <div class="pt-6 border-t mt-6 flex items-center justify-between" style="border-color: var(--border-subtle);">
+              <span class="text-xs" style="color: var(--text-muted);">Method: Gradient Boosting + MinT</span>
+              <button type="button" class="open-case-study text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1" data-study-id="retail-hierarchical">
+                <span>View Details &amp; Math</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Project 2 -->
+          <div class="card card-hover p-6 flex flex-col justify-between project-card" data-category="optimization">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="badge badge-outline">Operations Research</span>
+                <span class="font-mono text-xs" style="color: var(--text-faint);">Gurobi • PuLP • Pyomo</span>
+              </div>
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">
+                Stochastic Inventory Optimization &amp; Reordering
+              </h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                Dynamic (s, S) policy parameterization with mixed-integer linear programming under non-stationary demand and vendor MOQ tier constraints.
+              </p>
+              <div class="p-3 rounded-lg font-mono text-xs overflow-x-auto" style="background-color: var(--bg-canvas); border: 1px solid var(--border-subtle); color: var(--text-secondary);">
+                min Σ (h·I⁺ + p·I⁻ + K·Y + c·X) s.t. Lead-time bounds
+              </div>
+            </div>
+
+            <div class="pt-6 border-t mt-6 flex items-center justify-between" style="border-color: var(--border-subtle);">
+              <span class="text-xs" style="color: var(--text-muted);">Method: Mixed-Integer Programming</span>
+              <button type="button" class="open-case-study text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1" data-study-id="inventory-milp">
+                <span>View Details &amp; Math</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Project 3 -->
+          <div class="card card-hover p-6 flex flex-col justify-between project-card" data-category="research">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="badge badge-outline">Computational Physics</span>
+                <span class="font-mono text-xs" style="color: var(--text-faint);">C++ • NumPy • FEM</span>
+              </div>
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">
+                Finite-Element Modal Methods &amp; Spintronics Dynamics
+              </h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                PhD research at IPCMS: developing numerical solvers to predict spin-wave resonance modes in geometrically curved nanoscale structures.
+              </p>
+              <div class="p-3 rounded-lg font-mono text-xs overflow-x-auto" style="background-color: var(--bg-canvas); border: 1px solid var(--border-subtle); color: var(--text-secondary);">
+                ∂m/∂t = -γ (m × H_eff) + α (m × ∂m/∂t)
+              </div>
+            </div>
+
+            <div class="pt-6 border-t mt-6 flex items-center justify-between" style="border-color: var(--border-subtle);">
+              <span class="text-xs" style="color: var(--text-muted);">Published: npj Spintronics / ACS</span>
+              <button type="button" class="open-case-study text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1" data-study-id="spintronics-simulation">
+                <span>View Research Abstract</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Project 4 -->
+          <div class="card card-hover p-6 flex flex-col justify-between project-card" data-category="research">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="badge badge-outline">Applied ML / NLP</span>
+                <span class="font-mono text-xs" style="color: var(--text-faint);">Scikit-learn • Transformers</span>
+              </div>
+              <h3 class="text-lg font-bold" style="color: var(--text-primary);">
+                Classification Benchmarks on Highly Imbalanced Data
+              </h3>
+              <p class="text-sm leading-relaxed" style="color: var(--text-secondary);">
+                Comparative study and technical publication evaluating embedding methods, focal loss calibration, and synthetic data augmentation under heavy class skew.
+              </p>
+              <div class="p-3 rounded-lg font-mono text-xs overflow-x-auto" style="background-color: var(--bg-canvas); border: 1px solid var(--border-subtle); color: var(--text-secondary);">
+                L_Focal = -α_t (1 - p_t)^γ log(p_t)
+              </div>
+            </div>
+
+            <div class="pt-6 border-t mt-6 flex items-center justify-between" style="border-color: var(--border-subtle);">
+              <span class="text-xs" style="color: var(--text-muted);">Published on Medium &amp; GitHub</span>
+              <button type="button" class="open-case-study text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1" data-study-id="nlp-imbalanced">
+                <span>View Details</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         6. HOW I WORK (ENGAGEMENT PROCESS)
+         ========================================================================= -->
+    <section class="py-20">
+      <div class="container-custom space-y-12">
+        
+        <div class="max-w-2xl space-y-3">
+          <div class="text-xs font-mono uppercase tracking-widest text-cyan-400">Collaboration Process</div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight" style="color: var(--text-primary);">
+            How I Engage With Clients
+          </h2>
+          <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-muted);">
+            A structured, low-risk approach ensuring mathematical precision translates into measurable operational value.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <div class="p-6 rounded-xl border relative" style="background-color: var(--bg-surface); border-color: var(--border-subtle);">
+            <div class="text-3xl font-mono font-extrabold text-cyan-500/20 mb-3">01</div>
+            <h3 class="text-base font-bold mb-2" style="color: var(--text-primary);">Discovery &amp; Data Audit</h3>
+            <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+              Mapping your supply chain topology, understanding real-world constraints (lead-time variance, MOQs, seasonality), and evaluating data hygiene.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl border relative" style="background-color: var(--bg-surface); border-color: var(--border-subtle);">
+            <div class="text-3xl font-mono font-extrabold text-indigo-500/20 mb-3">02</div>
+            <h3 class="text-base font-bold mb-2" style="color: var(--text-primary);">Mathematical Modeling</h3>
+            <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+              Formulating objective functions, decision variables, and constraint matrices (MILP or probabilistic time series forecasting architectures).
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl border relative" style="background-color: var(--bg-surface); border-color: var(--border-subtle);">
+            <div class="text-3xl font-mono font-extrabold text-emerald-500/20 mb-3">03</div>
+            <h3 class="text-base font-bold mb-2" style="color: var(--text-primary);">Backtesting &amp; Validation</h3>
+            <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+              Stress-testing models on historical data through rolling-origin evaluation to quantify stockout prevention and inventory reduction against current baselines.
+            </p>
+          </div>
+
+          <div class="p-6 rounded-xl border relative" style="background-color: var(--bg-surface); border-color: var(--border-subtle);">
+            <div class="text-3xl font-mono font-extrabold text-amber-500/20 mb-3">04</div>
+            <h3 class="text-base font-bold mb-2" style="color: var(--text-primary);">Deployment &amp; Handover</h3>
+            <p class="text-xs leading-relaxed" style="color: var(--text-secondary);">
+              Delivering containerized Python APIs, scheduled batch scripts, interactive dashboards, and complete documentation for your engineering team.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         7. RESEARCH, PUBLICATIONS & WRITING
+         ========================================================================= -->
+    <section id="research" class="py-20 border-t" style="background-color: var(--bg-surface-subtle); border-color: var(--border-subtle);">
+      <div class="container-custom space-y-12">
+        
+        <div class="max-w-2xl space-y-3">
+          <div class="text-xs font-mono uppercase tracking-widest text-cyan-400">Publications &amp; Articles</div>
+          <h2 class="text-2xl sm:text-3xl font-bold tracking-tight" style="color: var(--text-primary);">
+            Research &amp; Technical Writing
+          </h2>
+          <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-muted);">
+            Scientific contributions in computational physics along with hands-on guides for data science practitioners.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <!-- Academic Publications -->
+          <div class="space-y-4">
+            <h3 class="text-sm font-mono uppercase tracking-wider text-cyan-400">Peer-Reviewed Papers &amp; Preprints</h3>
+            
+            <div class="card p-5 space-y-3">
+              <span class="badge-mono text-[11px]">Journal Article • Spintronics</span>
+              <h4 class="font-bold text-sm" style="color: var(--text-primary);">
+                Finite-Element Modal Methods for Spin-Wave Dynamics in Curved Magnetic Nanostructures
+              </h4>
+              <p class="text-xs" style="color: var(--text-muted);">
+                A. Thonikkadavan, et al. • Research on efficient frequency-domain eigensolvers for predicting resonance behavior in topologically non-trivial geometries.
+              </p>
+              <div class="pt-2 flex items-center gap-3 text-xs">
+                <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline flex items-center gap-1 font-medium">
+                  <span>View on Google Scholar</span>
+                  <span>↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="card p-5 space-y-3">
+              <span class="badge-mono text-[11px]">PhD Dissertation • IPCMS</span>
+              <h4 class="font-bold text-sm" style="color: var(--text-primary);">
+                Computational Magnetism &amp; Topological Dynamics in Nanoscale Systems
+              </h4>
+              <p class="text-xs" style="color: var(--text-muted);">
+                Institut de Physique et Chimie des Matériaux de Strasbourg (IPCMS), Université de Strasbourg.
+              </p>
+              <div class="pt-2 flex items-center gap-3 text-xs">
+                <span style="color: var(--text-faint);">Strasbourg, France</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medium Technical Articles -->
+          <div class="space-y-4">
+            <h3 class="text-sm font-mono uppercase tracking-wider text-indigo-400">Technical Articles on Medium</h3>
+
+            <a href="https://medium.com/@ashfaquetk" target="_blank" rel="noopener noreferrer" class="card card-hover p-5 block space-y-2 group">
+              <div class="flex items-center justify-between">
+                <span class="badge-mono text-[11px]">Machine Learning Series</span>
+                <span class="text-xs text-cyan-400 group-hover:translate-x-1 transition-transform">Read on Medium ↗</span>
+              </div>
+              <h4 class="font-bold text-sm group-hover:text-cyan-400 transition-colors" style="color: var(--text-primary);">
+                Tackling Severe Class Imbalance: Beginner to Advanced Approaches
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--text-muted);">
+                Practical strategies for handling skewed distribution datasets, threshold tuning, focal loss calibration, and evaluation metrics.
+              </p>
+            </a>
+
+            <a href="https://medium.com/@ashfaquetk" target="_blank" rel="noopener noreferrer" class="card card-hover p-5 block space-y-2 group">
+              <div class="flex items-center justify-between">
+                <span class="badge-mono text-[11px]">NLP &amp; Embeddings</span>
+                <span class="text-xs text-cyan-400 group-hover:translate-x-1 transition-transform">Read on Medium ↗</span>
+              </div>
+              <h4 class="font-bold text-sm group-hover:text-cyan-400 transition-colors" style="color: var(--text-primary);">
+                TF-IDF vs Modern Dense Embeddings in Real-World Text Classification
+              </h4>
+              <p class="text-xs leading-relaxed" style="color: var(--text-muted);">
+                Benchmarking computational efficiency, sparse matrices vs transformer vectors, and production latency tradeoffs.
+              </p>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         8. CONTACT & INQUIRY SECTION
+         ========================================================================= -->
+    <section id="contact" class="py-24">
+      <div class="container-custom">
+        <div class="card p-8 sm:p-12 relative overflow-hidden" style="background: linear-gradient(135deg, var(--bg-surface), var(--bg-surface-elevated));">
+          
+          <div class="max-w-2xl space-y-6 relative z-10">
+            <div class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-emerald-400">
+              <span class="status-dot"></span>
+              <span>Available for Client Engagements</span>
+            </div>
+
+            <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight" style="color: var(--text-primary);">
+              Let's build reliable forecasting &amp; optimization systems.
+            </h2>
+
+            <p class="text-sm sm:text-base leading-relaxed" style="color: var(--text-secondary);">
+              Whether you need to overhaul your demand planning pipeline, calibrate safety stocks, solve an integer programming challenge, or build a custom decision engine—I'm open to freelance and advisory engagements.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button class="open-inquiry-modal px-6 py-3.5 rounded-lg text-sm font-semibold shadow-md transition-all hover:opacity-90 active:scale-95 flex items-center gap-2" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+                <span>Start a Project Inquiry</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+              </button>
+
+              <button class="copy-email-btn px-5 py-3.5 rounded-lg text-sm font-medium border transition-all flex items-center gap-2" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);" data-email="ashfaquetk.dev@gmail.com">
+                <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                <span>ashfaquetk.dev@gmail.com</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Subtle watermark icon in corner -->
+          <div class="absolute -bottom-10 -right-10 opacity-5 pointer-events-none text-cyan-400">
+            <svg class="w-80 h-80" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =========================================================================
+       9. FOOTER
+       ========================================================================= -->
+  <footer class="border-t py-12 text-xs" style="background-color: var(--bg-surface); border-color: var(--border-subtle); color: var(--text-muted);">
+    <div class="container-custom flex flex-col sm:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3">
+        <div class="w-7 h-7 rounded flex items-center justify-center font-bold text-xs bg-slate-800 text-white">
+          AT
+        </div>
+        <div>
+          <span class="font-semibold" style="color: var(--text-primary);">Ashfaque Thonikkadavan, PhD</span>
+          <p class="text-[11px]" style="color: var(--text-faint);">Demand Forecaster &amp; Optimization Scientist</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <a href="https://github.com/ashfaque-tk" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">GitHub</a>
+        <a href="https://medium.com/@ashfaquetk" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">Medium</a>
+        <a href="https://scholar.google.com" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors">Google Scholar</a>
+        <a href="mailto:ashfaquetk.dev@gmail.com" class="hover:text-cyan-400 transition-colors">Email</a>
+      </div>
+
+      <div class="text-[11px]" style="color: var(--text-faint);">
+        Designed with quantitative precision • Hosted on GitHub Pages
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================================
+       10. CASE STUDY DETAIL MODAL
+       ========================================================================= -->
+  <div id="caseStudyModal" class="modal-backdrop">
+    <div class="modal-content p-6 sm:p-8 space-y-6">
+      
+      <div class="flex items-start justify-between border-b pb-4" style="border-color: var(--border-subtle);">
+        <div class="space-y-1">
+          <span id="modalBadge" class="badge badge-emerald">Category</span>
+          <h3 id="modalTitle" class="text-xl font-bold" style="color: var(--text-primary);">Project Title</h3>
+        </div>
+        <button id="modalCloseBtn" type="button" class="p-2 rounded-lg hover:bg-slate-700/30 text-slate-400 hover:text-white transition-colors" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <p id="modalTagline" class="text-sm font-medium italic" style="color: var(--text-secondary);"></p>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <div class="space-y-1">
+          <h4 class="font-mono text-xs uppercase tracking-wider text-cyan-400">Context &amp; Operational Challenge</h4>
+          <p id="modalContext" style="color: var(--text-muted);"></p>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="font-mono text-xs uppercase tracking-wider text-indigo-400">Mathematical Formulation</h4>
+          <pre id="modalFormulation" class="font-mono text-xs"></pre>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="font-mono text-xs uppercase tracking-wider text-emerald-400">Methodology &amp; Architecture</h4>
+          <ul id="modalMethodology" class="space-y-2" style="color: var(--text-secondary);"></ul>
+        </div>
+
+        <div class="space-y-1">
+          <h4 class="font-mono text-xs uppercase tracking-wider text-amber-400">Deliverables &amp; Outcomes</h4>
+          <ul id="modalDeliverables" class="space-y-2" style="color: var(--text-secondary);"></ul>
+        </div>
+
+        <div class="pt-2">
+          <h4 class="font-mono text-xs uppercase tracking-wider mb-2" style="color: var(--text-muted);">Technologies Used</h4>
+          <div id="modalTechStack" class="flex flex-wrap gap-1.5"></div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t flex justify-end" style="border-color: var(--border-subtle);">
+        <button class="open-inquiry-modal px-4 py-2 rounded-lg text-xs font-semibold" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+          Inquire About Similar Project
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       11. CLIENT INQUIRY MODAL
+       ========================================================================= -->
+  <div id="inquiryModal" class="modal-backdrop">
+    <div class="modal-content p-6 sm:p-8 space-y-6">
+      
+      <div class="flex items-start justify-between border-b pb-4" style="border-color: var(--border-subtle);">
+        <div class="space-y-1">
+          <span class="badge badge-emerald">Consulting &amp; Advisory</span>
+          <h3 class="text-xl font-bold" style="color: var(--text-primary);">Start a Project Inquiry</h3>
+        </div>
+        <button id="inquiryCloseBtn" type="button" class="p-2 rounded-lg hover:bg-slate-700/30 text-slate-400 hover:text-white transition-colors" aria-label="Close modal">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <form id="inquiryForm" class="space-y-4 text-xs sm:text-sm">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label for="inqName" class="block font-medium" style="color: var(--text-secondary);">Your Name *</label>
+            <input id="inqName" type="text" required placeholder="e.g. Jane Doe" class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);">
+          </div>
+
+          <div class="space-y-1">
+            <label for="inqOrg" class="block font-medium" style="color: var(--text-secondary);">Company / Organization</label>
+            <input id="inqOrg" type="text" placeholder="e.g. Supply Chain Corp" class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);">
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="inqEmail" class="block font-medium" style="color: var(--text-secondary);">Email Address *</label>
+          <input id="inqEmail" type="email" required placeholder="jane@company.com" class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label for="inqService" class="block font-medium" style="color: var(--text-secondary);">Primary Focus Area</label>
+            <select id="inqService" class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);">
+              <option value="Demand Forecasting">Demand Forecasting &amp; Time Series AI</option>
+              <option value="Inventory Optimization">Inventory &amp; Safety Stock Optimization</option>
+              <option value="Operations Research & MILP">Operations Research &amp; MILP Modeling</option>
+              <option value="Decision Engine Development">Decision Engine / API Architecture</option>
+              <option value="Scientific Advisory">Scientific Advisory &amp; Fractional Lead</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label for="inqTimeline" class="block font-medium" style="color: var(--text-secondary);">Expected Timeline</label>
+            <select id="inqTimeline" class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);">
+              <option value="Immediate (Within 2 weeks)">Immediate (Within 2 weeks)</option>
+              <option value="Next 1-2 months">Next 1–2 months</option>
+              <option value="Exploratory / Q4 Planning">Exploratory / Future Planning</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label for="inqDetails" class="block font-medium" style="color: var(--text-secondary);">Project Summary &amp; Current Bottlenecks</label>
+          <textarea id="inqDetails" rows="4" placeholder="Briefly describe your dataset, current tools, and what mathematical problem you are aiming to solve..." class="w-full px-3 py-2 rounded-lg border focus:outline-none" style="background-color: var(--bg-surface-subtle); border-color: var(--border-medium); color: var(--text-primary);"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between">
+          <span class="text-xs" style="color: var(--text-muted);">Direct email: ashfaquetk.dev@gmail.com</span>
+          <button type="submit" class="px-5 py-2.5 rounded-lg text-xs font-semibold shadow-md transition-all hover:opacity-90 active:scale-95" style="background-color: var(--accent-primary); color: var(--accent-primary-fg);">
+            Generate Inquiry Email →
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       12. COPIED TO CLIPBOARD TOAST NOTIFICATION
+       ========================================================================= -->
+  <div id="toast" class="toast">
+    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <span class="toast-msg">Copied to clipboard!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/simulators.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

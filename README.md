@@ -1,313 +1,86 @@
-# Portfolio Website v2.0 - Maggie Wolff Layout
+# Ashfaque Thonikkadavan, PhD — Portfolio Website
 
-Clean, professional portfolio with sidebar layout inspired by Maggie Wolff's design.
-
-## Layout Features
-
-**Sidebar (Left):**
-- Circular profile photo
-- Name and title
-- Location
-- Social links (LinkedIn, GitHub, Blog) with icons
-
-**Main Content:**
-- Horizontal navigation (About | Projects | CV/Resume | Writing)
-- Clean, focused content pages
-
-✅ **Mobile responsive** - Sidebar collapses on small screens  
-✅ **Fast & minimal** - No JavaScript, loads instantly  
-✅ **Easy to update** - Just edit markdown files  
-✅ **Professional** - Matches industry-standard DS portfolio layouts  
+A clean, aesthetic, and quantitative portfolio website tailored for freelance consulting in **Demand Forecasting**, **Mathematical Optimization (OR/MILP)**, and **Computational Science**.
 
 ---
 
-## Quick Deploy (5 Minutes)
+## 🌟 Key Features
 
-### Step 1: Create GitHub Repository
+1. **Design & Aesthetic**:
+   - Modern, editorial quantitative aesthetic with Dark and Light mode options.
+   - Clean typography using *Plus Jakarta Sans*, *Newsreader*, and *JetBrains Mono*.
+   - Responsive across mobile, tablet, and widescreen desktops.
+
+2. **Interactive Decision Engines (Simulators)**:
+   - **Probabilistic Demand Forecaster & Safety Stock Engine**: Interactive time series with P10/P50/P90 prediction bands, promotional shock parameters, lead-time variance, and dynamic safety stock calculation.
+   - **Supply Chain Optimization & Cost Frontier Simulator**: Visualizes the convex inventory holding cost vs order setup and shortage penalty curves with real-time optimal batch size ($Q^*$) calculations.
+
+3. **Client-Focused Conversion Architecture**:
+   - Structured consulting service offerings (Demand Forecasting, Multi-Echelon Inventory, Mixed-Integer Linear Programming, Decision APIs).
+   - Filterable Selected Works & Case Studies with interactive modal drawers showing mathematical formulations and business deliverables.
+   - 4-step consulting workflow (*Discovery → Mathematical Modeling → Backtesting → Deployment*).
+   - Academic publications & Medium technical articles showcase.
+   - Inquiry modal and one-click email copying.
+
+4. **Zero-Build & Fast**:
+   - Built with modern HTML5, CSS, and pure vanilla JavaScript.
+   - Zero compilation or build step required.
+   - 100% compatible with GitHub Pages.
+
+---
+
+## 🚀 How to Test Locally
+
+You can test the website immediately on your computer using Python's built-in HTTP server:
+
 ```bash
-# On GitHub, create new repository: yourusername.github.io
-# Example: ashfaque-tk.github.io
+# Navigate to the project directory
+cd /home/ashfaque/.gemini/antigravity/scratch/portfolio-website
+
+# Start local server
+python3 -m http.server 8000
 ```
 
-### Step 2: Add Your Profile Photo (IMPORTANT)
+Then open your browser at: `http://localhost:8000`
 
-**Before pushing, add your profile photo:**
+---
 
-1. Save a professional square photo as: `assets/images/profile.jpg`
-2. Photo should be 500x500px or larger
-3. The CSS will crop it to a circle
+## 📦 How to Deploy to Your GitHub Pages (`ashfaque-tk.github.io`)
 
-**Don't have a photo ready?** See `assets/images/README.md` for how to temporarily hide the photo section.
+Because this project is built as a static web application without heavy dependencies, deploying it to your existing GitHub Pages repository is as simple as copying the files:
 
-### Step 3: Update Your Info
-
-**Edit `_config.yml`:**
-```yaml
-author:
-  name: Your Name
-  title: Your Title
-  location: Your City, Country
-  email: your@email.com
-  github: your-username
-  linkedin: your-linkedin-id
-  medium: your-medium-handle
+### Step 1: Clone or Open your `ashfaque-tk.github.io` repository
+```bash
+git clone https://github.com/ashfaque-tk/ashfaque-tk.github.io.git my-site
+cd my-site
 ```
 
-### Step 4: Clone and Push
+### Step 2: Copy the portfolio files into the repository root
 ```bash
-# Clone this repository or download files
-git init
+# Copy all files from the scratch project directory
+cp -r /home/ashfaque/.gemini/antigravity/scratch/portfolio-website/* .
+```
+
+### Step 3: Commit and Push to GitHub
+```bash
 git add .
-git commit -m "Initial portfolio v2"
-git branch -M main
-git remote add origin https://github.com/yourusername/yourusername.github.io.git
-git push -u origin main
+git commit -m "Deploy modern aesthetic portfolio website with interactive simulators"
+git push origin main
 ```
 
-### Step 5: Enable GitHub Pages
-1. Go to repository **Settings** → **Pages**
-2. Source: `main` branch, `/ (root)` folder
-3. Click **Save**
-
-**Live in 2-3 minutes:** `https://yourusername.github.io`
+Within 1–2 minutes, GitHub Pages will automatically serve your new site at **`https://ashfaque-tk.github.io/`**.
 
 ---
 
-## Customization Guide
-
-**📖 See [CUSTOMIZATION.md](CUSTOMIZATION.md) for detailed instructions on:**
-- Adding your profile photo
-- Changing colors and styling
-- Modifying navigation
-- Adjusting sidebar width
-- Adding Font Awesome icons
-- Common layout questions
-
----
-
-## File Structure
+## 📁 File Structure
 
 ```
-portfolio-v2/
-├── _config.yml              # Site configuration (EDIT YOUR INFO HERE)
-├── _layouts/
-│   └── default.html         # Custom layout with sidebar + horizontal nav
-├── assets/
-│   ├── css/
-│   │   └── style.scss       # Custom styling
-│   └── images/
-│       ├── profile.jpg      # YOUR PHOTO GOES HERE
-│       └── README.md        # Photo instructions
-├── index.md                 # Homepage (About Me)
-├── projects.md              # Projects page
-├── cv.md                    # CV/Resume page
-├── writing.md               # Blog/writing page
-├── CUSTOMIZATION.md         # Detailed customization guide
-└── README.md                # This file
+portfolio-website/
+├── index.html              # Main semantic HTML structure & sections
+├── css/
+│   └── styles.css          # Custom styling, dark/light themes, typography, modals
+├── js/
+│   ├── app.js              # Theme manager, project filters, modals, clipboard
+│   └── simulators.js       # Pure vanilla Canvas simulation engines (Forecasting & Optimization)
+└── README.md               # Documentation & deployment guide
 ```
-
----
-
-## Customization Guide
-
-### 1. Update Your Info (REQUIRED)
-
-**Edit `_config.yml`:**
-```yaml
-title: Your Name
-description: Your tagline
-author:
-  name: Your Name
-  email: your@email.com
-  github: your-github-username
-  linkedin: your-linkedin-id
-  medium: your-medium-handle
-```
-
-### 2. Update Homepage (`index.md`)
-
-- Edit "Key themes in my work" section
-- Update project list (as you complete them)
-- Modify "About" section to match your story
-
-### 3. Add Projects (`projects.md`)
-
-For each new project:
-```markdown
-### Project Name
-*Brief description*
-
-**Problem:** What problem does it solve?
-
-**Approach:**
-- Key technical decisions
-- Methods used
-- Results achieved
-
-**Impact:** Quantified business results
-
-**Tech:** Tools and libraries used  
-**Code:** [GitHub link] | **Blog:** [Medium link]
-```
-
-### 4. Update CV (`cv.md`)
-
-- Add new skills as you learn them
-- Update work experience section
-- Add new projects (keep top 3-4 most impressive)
-- Update education if needed
-
-### 5. Add Blog Posts (`writing.md`)
-
-For each post:
-```markdown
-### Post Title
-*Month Year*
-
-Brief description of what the post covers.
-
-[Read on Medium](link) | **Topics:** tags, tags, tags
-```
-
----
-
-## Adding Pages
-
-Create new `.md` file in root:
-```markdown
----
-layout: default
-title: Page Title
----
-
-# Page Content
-
-Your content here...
-```
-
-Link from navigation (edit `_layouts/default.html`) or from other pages.
-
----
-
-## Local Testing (Optional)
-
-**Install Jekyll:**
-```bash
-gem install jekyll bundler
-```
-
-**Create Gemfile:**
-```bash
-echo 'source "https://rubygems.org"
-gem "github-pages", group: :jekyll_plugins' > Gemfile
-```
-
-**Run locally:**
-```bash
-bundle install
-bundle exec jekyll serve
-```
-
-Visit: `http://localhost:4000`
-
----
-
-## Styling Customization
-
-**Colors, fonts, spacing:** Edit `assets/css/style.scss`
-
-**Common customizations:**
-- Link color: Search for `#2980b9` and replace
-- Heading color: Search for `#2c3e50` and replace
-- Font size: Modify `font: 16px/1.6` in body section
-- Spacing: Adjust margins in heading sections
-
----
-
-## When to Upgrade
-
-**Keep this GitHub Pages version until:**
-- You have 3-4 completed projects
-- You're actively job hunting
-- You have regular blog posts
-
-**Then consider upgrading to:**
-- Hugo Academic theme (more features, still free)
-- Custom Next.js site (full control, requires hosting)
-- Jekyll with custom theme (middle ground)
-
----
-
-## Tips for Success
-
-**Content Strategy:**
-1. Complete projects BEFORE listing them
-2. Write blog posts as you build projects
-3. Update CV after each project
-4. Add links when available (don't leave placeholder #)
-
-**SEO:**
-- Each page has descriptive title
-- Add meta descriptions in frontmatter
-- Link between pages naturally
-- Keep URLs clean and readable
-
-**Maintenance:**
-- Update every time you complete a project (every 2-3 weeks)
-- Add blog posts regularly (monthly minimum)
-- Keep CV section synced with resume
-- Remove "In Progress" when done
-
----
-
-## Layout Highlights
-
-**What Makes This Layout Work:**
-- ✅ Profile photo creates immediate personal connection
-- ✅ Horizontal navigation feels modern and intuitive
-- ✅ Sidebar keeps contact info always visible
-- ✅ Clean "About Me" homepage (like Maggie Wolff's)
-- ✅ No duplicate content (name appears once)
-- ✅ Professional hierarchy matches industry standards
-
-**Compared to Eugene Yan's style:**
-- More visual (photo + cleaner sidebar)
-- Simpler homepage (brief intro vs thematic organization)
-- Better for career changers (emphasis on person, not just projects)
-
----
-
-## Next Steps
-
-**Week 1:**
-1. Deploy this site
-2. Update all personal info
-3. Test all pages
-
-**Weeks 2-4:**
-1. Complete Project 1 (Demand Forecasting)
-2. Update projects.md with results
-3. Write blog post about it
-4. Add to writing.md
-
-**Repeat for each project.**
-
----
-
-## Support
-
-**Issues?**
-- Check GitHub Pages is enabled in Settings
-- Verify `_config.yml` has no syntax errors
-- Test locally with `bundle exec jekyll serve`
-- Check file permissions (should be public)
-
-**Questions?**
-- GitHub Pages docs: https://docs.github.com/en/pages
-- Jekyll docs: https://jekyllrb.com/docs/
-
----
-
-**License:** MIT - Use freely, attribution appreciated
-
-**Credits:** Inspired by Eugene Yan and Maggie Wolff's excellent portfolios
