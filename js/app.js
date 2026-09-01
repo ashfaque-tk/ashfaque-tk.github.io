@@ -1,6 +1,6 @@
 /**
  * Ashfaque Thonikkadavan Portfolio - Main Application Logic
- * Manages Theme toggling, Case study filters, Modals, Clipboard actions, and Navigation.
+ * Grounded in actual research, technical publications, and core capabilities.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (themeIcon) {
       if (theme === 'dark') {
-        // Moon to Sun icon
         themeIcon.innerHTML = `
           <svg class="w-5 h-5 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
@@ -39,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Re-render simulator canvas with new palette
     if (window.renderSimulators) {
       window.renderSimulators();
     }
@@ -57,87 +55,106 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // 2. Case Studies Data & Interactive Modal
+  // 2. Real Works, Blogs & Research Data
   // =========================================================================
   const caseStudiesData = {
-    'retail-hierarchical': {
-      title: 'Multi-Echelon Hierarchical Demand Forecasting',
-      category: 'Demand Forecasting',
-      badge: 'Time Series & ML',
-      tagline: 'Coherent probabilistic forecast reconciliation across 10,000+ SKUs and nationwide distribution centers.',
-      clientContext: 'An enterprise omni-channel retail distribution network faced high forecast variance across store-level SKUs and aggregate regional distribution centers.',
-      formulation: `Hierarchical Reconciliation: \\hat{y}_t = S (S^T W^{-1} S)^{-1} S^T W^{-1} \\tilde{y}_t
-Where S is the structural aggregation matrix and W is the covariance matrix of base forecast errors.`,
+    'tfidf-vs-embeddings': {
+      title: 'Why TF-IDF Still Beats Embeddings on Imbalanced Text Classification',
+      category: 'Data Science & NLP',
+      badge: 'Medium Article & Benchmarks',
+      tagline: 'An empirical evaluation comparing sparse lexical representations with dense transformer embeddings under heavy class imbalance.',
+      clientContext: 'Published technical study exploring the performance, training overhead, and inference latency trade-offs between TF-IDF + linear models versus pretrained sentence embeddings on skewed datasets.',
+      formulation: `\\text{TF-IDF}(t, d, D) = \\text{TF}(t, d) \\times \\log\\left(\\frac{1 + |D|}{1 + |\\{d \\in D : t \\in d\\}|}\\right) + 1
+Evaluated alongside cosine similarity and linear classifier hyperplanes for minority classes.`,
       methodology: [
-        'Built a bottom-up and top-down MinT (Minimum Trace) reconciliation pipeline combining LightGBM, CatBoost, and DeepAR temporal models.',
-        'Engineered promotional uplift features incorporating calendar holidays, lead-lag promotional effects, and price elasticities.',
-        'Quantified uncertainty with asymmetric pinball loss functions to generate probabilistic quantiles (P10, P50, P90).'
+        'Benchmarked TF-IDF + Linear SVM/Logistic Regression against transformer embeddings across varying degrees of class imbalance.',
+        'Analyzed why sparse, high-dimensional n-gram representations often retain high-signal discriminative words that dense embeddings blur in low-sample regimes.',
+        'Evaluated F1-score, Precision-Recall AUC, and compute latency for real-time inference requirements.'
       ],
       deliverables: [
-        'Automated Python/PyTorch batch forecasting pipeline scheduled via Airflow.',
-        'Interactive Streamlit executive dashboard for exception handling and forecast override tracking.',
-        'Production REST API containerized with Docker.'
+        'Full empirical study published on Medium.',
+        'Open-source Jupyter notebooks with reproducible evaluation pipelines.',
+        'Practical decision framework for choosing between lightweight baselines and heavy embeddings.'
       ],
-      techStack: ['Python', 'PyTorch Forecasting', 'LightGBM', 'Scikit-learn', 'PostgreSQL', 'FastAPI']
+      techStack: ['Python', 'Scikit-learn', 'Sentence Transformers', 'Pandas', 'Matplotlib', 'Jupyter']
     },
-    'inventory-milp': {
-      title: 'Stochastic Inventory Optimization & Multi-Facility Reordering',
-      category: 'Optimization (OR/MILP)',
-      badge: 'Mixed-Integer Programming',
-      tagline: 'Dynamic (s, S) policy parameterization with mixed-integer linear programming under non-stationary demand.',
-      clientContext: 'A precision component supplier with volatile lead times and high customer penalties needed to eliminate recurring stockouts without ballooning warehouse holding costs.',
-      formulation: `\\min \\sum_{t=1}^T \\sum_{i \\in I} \\left( h_i I_{i,t}^+ + p_i I_{i,t}^- + K_i Y_{i,t} + c_i X_{i,t} \\right)
-\\text{s.t.} \\quad I_{i,t} = I_{i,t-1} + X_{i,t - L_i} - D_{i,t}, \\quad X_{i,t} \\le M Y_{i,t}, \\quad Y_{i,t} \\in \\{0, 1\\}`,
+    'imbalanced-sentiment': {
+      title: 'Sentiment Analysis on Imbalanced Datasets: Strategies & Augmentation',
+      category: 'Data Science & NLP',
+      badge: 'Medium Series',
+      tagline: 'A comprehensive multi-part guide on handling class imbalance, threshold tuning, and data augmentation in text classification.',
+      clientContext: 'Authored a multi-part series addressing the real-world friction of classification models failing to detect critical minority-class instances.',
+      formulation: `\\text{Cost-Sensitive Loss: } \\mathcal{L} = - \\sum_{i=1}^N w_{y_i} \\log(P(y_i | x_i)) \\quad \\text{where } w_c \\propto \\frac{1}{N_c}`,
       methodology: [
-        'Formulated a Mixed-Integer Linear Program (MILP) taking into account supplier minimum order quantities (MOQ), volume tier discounts, and lead time variance.',
-        'Solved multi-period stochastic lot-sizing problems using Branch-and-Cut algorithms in Gurobi and open-source CBC / HiGHS solvers.',
-        'Implemented Monte Carlo stress-testing across 500 supply disruption scenarios.'
+        'Explored baseline challenges of naive classification with skewed sentiment distributions.',
+        'Implemented and compared downsampling, SMOTE, class-weight calibration, and text augmentation techniques.',
+        'Demonstrated effective threshold-moving strategies on validation curves to maximize minority class recall without destroying precision.'
       ],
       deliverables: [
-        'Mathematical formulation document and reproducible PuLP/Pyomo optimization models.',
-        'Automated replenishment recommendation engine feeding daily orders to ERP.',
-        'Scenario simulation toolkit for testing supplier lead time shocks.'
+        'Multi-part tutorial series published on Medium.',
+        'Clean, documented GitHub repository with complete experimental code.',
+        'Reusable evaluation helper functions for imbalanced metrics (PR-AUC, Balanced Accuracy).'
       ],
-      techStack: ['Python', 'Gurobi', 'PuLP / HiGHS', 'Pyomo', 'Pandas', 'Monte Carlo Simulation']
+      techStack: ['Python', 'Scikit-learn', 'NLP', 'Imbalanced-Learn', 'NumPy']
     },
-    'spintronics-simulation': {
-      title: 'Physics-Informed Numerical Simulation & Magnonic Mode Modeling',
-      category: 'Research & ML',
-      badge: 'PhD Research / IPCMS',
-      tagline: 'Finite-element numerical methods & eigenfrequency predictive modeling in curved magnetic nanostructures.',
-      clientContext: 'Academic & Industrial physics research at IPCMS (Strasbourg) investigating spin-wave dynamics in topologically complex geometries (Möbius nanostrips).',
+    'spintronics-fem': {
+      title: 'Finite-Element Modal Methods for Spin-Wave Dynamics in Curved Nanostructures',
+      category: 'Scientific Research',
+      badge: 'PhD Research (IPCMS Strasbourg)',
+      tagline: 'Computational modeling and numerical eigenvalue solvers for spin-wave dynamics in topologically complex geometries (npj Spintronics).',
+      clientContext: 'Doctoral research at IPCMS (Université de Strasbourg) investigating magnetic excitations and geometric curvature effects in nanoscale Möbius strips and curved films.',
       formulation: `\\frac{\\partial \\mathbf{m}}{\\partial t} = -\\gamma \\mathbf{m} \\times \\mathbf{H}_{\\text{eff}} + \\alpha \\mathbf{m} \\times \\frac{\\partial \\mathbf{m}}{\\partial t}
-Landau-Lifshitz-Gilbert (LLG) Equation discretized over unstructured tetrahedral meshes.`,
+Landau-Lifshitz-Gilbert (LLG) dynamics formulated over 3D finite-element meshes.`,
       methodology: [
-        'Developed custom finite-element frequency-domain modal solvers that accelerate resonance mode predictions compared to brute-force time-domain integration.',
-        'Implemented mesh generation algorithms and numerical solvers for boundary-value partial differential equations (PDEs).',
-        'Authored peer-reviewed research publications in top international journals (npj Spintronics, ACS).'
+        'Developed finite-element frequency-domain modal methods to directly compute eigenfrequencies and spatial profiles of magnetic modes.',
+        'Modeled geometric phase shifts and boundary effects resulting from non-trivial topology (Möbius geometry).',
+        'Compared frequency-domain modal predictions with full time-domain micromagnetic simulations for validation.'
       ],
       deliverables: [
-        'Scientific publications in peer-reviewed physics journals.',
-        'High-performance C++/Python numerical simulation codebase.',
-        'Open reproducible datasets and analysis scripts.'
+        'Peer-reviewed journal publication in npj Spintronics and preprints on arXiv.',
+        'High-performance numerical simulation code and mesh generation pipelines.',
+        'Doctoral dissertation defended at Université de Strasbourg (IPCMS).'
       ],
-      techStack: ['C++', 'Python', 'NumPy/SciPy', 'Finite Element Analysis', 'LLG Solvers']
+      techStack: ['C++', 'Python', 'Finite Element Analysis (FEA)', 'NumPy/SciPy', 'Numerical PDEs']
     },
-    'nlp-imbalanced': {
-      title: 'Machine Learning on Highly Imbalanced Text Datasets',
-      category: 'Applied ML',
-      badge: 'Data Science & NLP',
-      tagline: 'Advanced text classification, embedding comparisons, and synthetic sampling strategies for skewed datasets.',
-      clientContext: 'Published technical articles and open-source benchmarks on solving severe class imbalance in real-world classification pipelines.',
-      formulation: `\\mathcal{L}_{\\text{Focal}} = -\\alpha_t (1 - p_t)^\\gamma \\log(p_t)
-Focal loss and cost-sensitive weighting applied to sparse feature representations.`,
+    'demand-forecasting-model': {
+      title: 'Probabilistic Time-Series Forecasting & Uncertainty Quantification',
+      category: 'Forecasting',
+      badge: 'Forecasting & Time Series',
+      tagline: 'Probabilistic forecasting models generating prediction intervals (P10/P50/P90) for non-stationary demand signals.',
+      clientContext: 'Forecasting workflow applying statistical and machine learning models to demand time-series with seasonality, calendar features, and uncertainty bounds.',
+      formulation: `\\mathcal{L}_{q}(y, \\hat{y}) = \\max\\left(q(y - \\hat{y}), (1 - q)(\\hat{y} - y)\\right)
+Quantile loss optimization across target percentiles q \\in \\{0.1, 0.5, 0.9\\}.`,
       methodology: [
-        'Systematically benchmarked classical TF-IDF + Support Vector Machines (SVM) against dense transformer embeddings under heavy 95:5 class skew.',
-        'Evaluated synthetic minority over-sampling (SMOTE) and contextual text augmentation.',
-        'Published practical, practitioner-focused technical guides on Medium.'
+        'Engineered temporal feature pipelines: calendar lags, rolling window aggregations, holiday indicators, and seasonal decomposition.',
+        'Trained gradient boosted trees (LightGBM) with pinball loss and compared against statistical baselines (Exponential Smoothing, ARIMA).',
+        'Computed confidence intervals to inform downstream safety stock sizing.'
       ],
       deliverables: [
-        'Medium technical series with open-source GitHub code repositories.',
-        'Benchmarking scripts and diagnostic evaluation toolkits.'
+        'Modular Python forecasting scripts and pipeline templates.',
+        'Backtesting framework using rolling-origin cross-validation.',
+        'Interactive simulation dashboard illustrating confidence bounds.'
       ],
-      techStack: ['Python', 'Scikit-learn', 'HuggingFace', 'PyTorch', 'NLP', 'Jupyter']
+      techStack: ['Python', 'LightGBM', 'Statsmodels', 'Scikit-learn', 'Pandas', 'Matplotlib']
+    },
+    'inventory-optimization': {
+      title: 'Stochastic Inventory Policy & Cost Frontier Modeling',
+      category: 'Optimization',
+      badge: 'Operations Research',
+      tagline: 'Mathematical modeling of (s, S) replenishment policies and safety stock sizing under demand and lead-time variance.',
+      clientContext: 'Operations research model analyzing the cost trade-offs between inventory holding expenses, ordering setup costs, and stockout risk.',
+      formulation: `\\text{SS} = z_{\\text{SL}} \\cdot \\sqrt{\\bar{L} \\sigma_D^2 + \\bar{D}^2 \\sigma_L^2} \\quad \\Big| \\quad \\text{ROP} = \\bar{D} \\cdot \\bar{L} + \\text{SS}`,
+      methodology: [
+        'Formulated inventory policy equations incorporating both demand volatility and supplier lead-time uncertainty.',
+        'Constructed Pareto cost frontiers illustrating the nonlinear holding cost penalty of moving from 90% to 99% service levels.',
+        'Simulated replenishment scenarios across historical distributions to stress-test policy stability.'
+      ],
+      deliverables: [
+        'Python simulation scripts for inventory policy parameter tuning.',
+        'Interactive web-based cost curve calculator.',
+        'Clear documentation on formula derivation and parameter sensitivity.'
+      ],
+      techStack: ['Python', 'SciPy', 'PuLP', 'NumPy', 'Matplotlib']
     }
   };
 
@@ -156,7 +173,6 @@ Focal loss and cost-sensitive weighting applied to sparse feature representation
         const category = card.getAttribute('data-category');
         if (filter === 'all' || category === filter) {
           card.style.display = 'block';
-          card.classList.add('animate-fadeIn');
         } else {
           card.style.display = 'none';
         }
@@ -286,23 +302,22 @@ Focal loss and cost-sensitive weighting applied to sparse feature representation
       const timeline = document.getElementById('inqTimeline').value;
       const details = document.getElementById('inqDetails').value.trim();
 
-      const subject = encodeURIComponent(`[Consulting Inquiry] ${service} - ${org || name}`);
+      const subject = encodeURIComponent(`[Freelance / Consulting Inquiry] ${service} - ${org || name}`);
       const body = encodeURIComponent(
         `Hi Ashfaque,\n\n` +
         `Name: ${name}\n` +
         `Organization: ${org || 'N/A'}\n` +
         `Email: ${email}\n` +
-        `Project Area: ${service}\n` +
-        `Expected Timeline: ${timeline}\n\n` +
-        `Project Overview / Problem Description:\n${details}\n\n` +
-        `Looking forward to hearing from you!`
+        `Area of Interest: ${service}\n` +
+        `Timeline: ${timeline}\n\n` +
+        `Project / Problem Description:\n${details}\n\n` +
+        `Looking forward to connecting!`
       );
 
-      // Primary email
       const mailtoUrl = `mailto:ashfaquetk.dev@gmail.com?subject=${subject}&body=${body}`;
       window.location.href = mailtoUrl;
 
-      showToast('Opening your email client with pre-filled inquiry...');
+      showToast('Opening your email client with inquiry template...');
       closeInquiryModal();
     });
   }
@@ -330,7 +345,6 @@ Focal loss and cost-sensitive weighting applied to sparse feature representation
       navigator.clipboard.writeText(emailToCopy).then(() => {
         showToast(`Copied ${emailToCopy} to clipboard!`);
       }).catch(() => {
-        // Fallback
         showToast(`Email: ${emailToCopy}`);
       });
     });
@@ -347,7 +361,6 @@ Focal loss and cost-sensitive weighting applied to sparse feature representation
       mobileNavMenu.classList.toggle('hidden');
     });
 
-    // Close mobile nav when clicking a link
     mobileNavMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mobileNavMenu.classList.add('hidden');
@@ -355,7 +368,7 @@ Focal loss and cost-sensitive weighting applied to sparse feature representation
     });
   }
 
-  // Smooth scroll offset adjustment for fixed navbar
+  // Smooth scroll offset adjustment
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       const targetId = this.getAttribute('href');
