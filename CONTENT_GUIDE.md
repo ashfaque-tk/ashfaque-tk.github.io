@@ -1,82 +1,45 @@
-# 📝 Website Content Editing Guide
+# 📝 Website Content & M5 Data Guide
 
-Your website is now **100% data-driven**. You can edit, add, or remove any project, blog post, service, or bio detail by editing a single file: **[`js/config.js`](file:///home/ashfaque/.gemini/antigravity/scratch/portfolio-website/js/config.js)**.
-
-You never have to touch HTML or CSS to change your content!
+Your portfolio website is **100% data-driven**. You can edit everything by opening **[`js/config.js`](file:///home/ashfaque/.gemini/antigravity/scratch/portfolio-website/js/config.js)**.
 
 ---
 
-## 🚀 Quick Examples
+## 📊 How to Plug in Your Real M5 Dataset Numbers
 
-### 1. How to Add a New Project / Blog Post
-Open `js/config.js`, scroll to the `projects` section, and copy-paste this block:
+In `js/config.js`, find the `forecastDataConfig` section:
 
 ```javascript
-{
-  id: "my-new-project-id",                 // Unique ID (lowercase, no spaces)
-  title: "Your Project Title Here",
-  category: "forecasting",                 // 'forecasting', 'optimization', or 'research'
-  badge: "Kaggle / Project",               // Badge text shown on card
-  type: "Demand Forecasting",              // Small footer type
-  tech: "Python • LightGBM • Statsmodels", // Tech stack line
-  summary: "A 2-sentence summary of the problem, dataset, and results achieved.",
-  mathSnippet: "L_q(y, ŷ) = max(q(y - ŷ), (1 - q)(ŷ - y))", // Optional formula (or leave empty "")
-  linkText: "View Code on GitHub",
-  linkUrl: "https://github.com/ashfaque-tk/your-repo",
-  
-  // Detailed popup modal when someone clicks "View Details"
-  modal: {
-    tagline: "Short 1-line impact statement.",
-    context: "Detailed explanation of the problem, dataset, and business challenge.",
-    formulation: "Mathematical equations, loss functions, or optimization constraints.",
-    methodology: [
-      "Step 1: Data preprocessing and feature engineering.",
-      "Step 2: Model training and hyperparameter tuning.",
-      "Step 3: Evaluation using backtesting metrics."
-    ],
-    deliverables: [
-      "Automated Python inference script.",
-      "Documented Jupyter notebook with charts.",
-      "Reusable evaluation functions."
-    ],
-    techStack: ["Python", "LightGBM", "Pandas", "Scikit-learn"]
+forecastDataConfig: {
+  useCustomData: true, // 👈 CHANGE TO TRUE when you are ready to show your M5 data!
+  customData: {
+    skuName: "FOODS_3_090_CA_1 (Walmart M5)",
+    leadTimeDays: 7,
+    serviceLevelPercent: 95,
+
+    // Paste your 30-day historical actuals array:
+    historical: [105, 112, 108, 120, 132, 125, ...],
+
+    // Paste your LightGBM quantile predictions:
+    forecastP10: [170, 172, 171, 174, ...],
+    forecastP50: [196, 198, 197, 201, ...],
+    forecastP90: [222, 225, 224, 229, ...]
   }
 }
 ```
 
-### 2. How to Update Your Bio or Social Links
-In `js/config.js`, simply edit the `profile` object:
-
-```javascript
-profile: {
-  name: "Ashfaque Thonikkadavan",
-  role: "Demand Forecaster & Optimization Scientist",
-  tagline: "Your custom bio text...",
-  email: "ashfaquetk.dev@gmail.com",
-  availability: "Available for Freelance Projects & Consulting",
-  
-  socials: {
-    github: "https://github.com/ashfaque-tk",
-    medium: "https://medium.com/@ashfaquetk",
-    scholar: "https://scholar.google.com"
-  }
-}
-```
-
-### 3. How to Add or Edit a Service Offering
-In `js/config.js`, edit the `services` array:
-
-```javascript
-{
-  id: "custom-forecasting",
-  title: "Custom Time Series Models",
-  icon: "chart", // choose from: 'chart', 'inventory', 'optimization', or 'code'
-  description: "What you do for clients and how it helps their business...",
-  tags: ["Time Series", "LightGBM", "Feature Engineering"]
-}
-```
+- When `useCustomData: true`, the website will **directly graph your real model outputs** and calculate dynamic safety stock and reorder points from your actual numbers.
+- When `useCustomData: false`, it allows visitors to play with the interactive sliders.
 
 ---
 
-## ⚡ How Changes Show Up
-Whenever you edit `js/config.js`, simply refresh your browser (or push to GitHub) — the website will automatically regenerate all cards, badges, filters, and modal popups!
+## 📂 Layout Flow of Your Portfolio
+
+The website now follows the standard layout used by top quantitative scientists and industry consultants:
+
+1. **Executive Bio & Background**: PhD credentials, focus on Demand Forecasting, Mathematical Optimization, and Applied ML.
+2. **Core Services / Capabilities**: Clear cards for Forecasting, Inventory Policies, Mathematical Programming, and ML.
+3. **Selected Works & Case Studies**: Filterable project cards (M5 Forecaster, TF-IDF vs Embeddings, Sentiment Analysis, Spintronics FEM) with mathematical formulas and popup modals.
+4. **Research & Publications**: Peer-reviewed academic papers & Medium articles.
+5. **Interactive Demonstration Sandbox**: Clean modular section for forecasting & inventory cost curve visualization.
+6. **Collaboration Process**: 4 clear steps showing how you work with clients.
+7. **Contact / Hire Me CTA**: One-click email copying and direct project inquiry modal.

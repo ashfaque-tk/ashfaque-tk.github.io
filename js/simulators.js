@@ -1,18 +1,22 @@
 /**
- * Interactive Simulation Engine for Ashfaque's Portfolio
- * 1. Probabilistic Demand Forecasting & Safety Stock Simulator
- * 2. Supply Chain Optimization & Cost Frontier Simulator
+ * =========================================================================
+ * SIMULATION & VISUALIZATION ENGINE
+ * =========================================================================
+ * Supports both:
+ * 1. Custom Data Mode (Directly rendering your M5 predictions from config.js)
+ * 2. Interactive Parameter Sandbox (Sliders for what-if scenarios)
+ * =========================================================================
  */
 
 (function () {
   'use strict';
 
-  // --- Helper Functions ---
   function getDevicePixelRatio() {
     return window.devicePixelRatio || 1;
   }
 
   function setupCanvas(canvas) {
+    if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
     const dpr = getDevicePixelRatio();
     canvas.width = rect.width * dpr;
@@ -34,17 +38,14 @@
       lineForecast: '#38bdf8',
       bandOuter: isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.09)',
       bandInner: isDark ? 'rgba(56, 189, 248, 0.22)' : 'rgba(2, 132, 199, 0.18)',
-      pointDot: '#38bdf8',
       optimalPoint: '#10b981',
-      costCurve: isDark ? '#818cf8' : '#4f46e5',
-      stockoutCurve: isDark ? '#f43f5e' : '#e11d48'
+      costCurve: isDark ? '#818cf8' : '#4f46e5'
     };
   }
 
-  // Standard normal quantile approximation for service level z-score
+  // Inverse normal CDF approximation
   function getZScore(serviceLevel) {
     const sl = serviceLevel / 100;
-    // Rational approximation for inverse normal CDF
     const a1 = -3.969683028665376e+01, a2 = 2.209460984245205e+02, a3 = -2.759285104469687e+02;
     const a4 = 1.383577518672690e+02, a5 = -3.066479806614716e+01, a6 = 2.506628277459239e+00;
     const b1 = -5.447609879822406e+01, b2 = 1.615858368580409e+02, b3 = -1.556989798598866e+02;
@@ -73,7 +74,7 @@
   }
 
   // =========================================================================
-  // SIMULATOR 1: Probabilistic Demand Forecasting & Safety Stock
+  // 1. Demand Forecast & Safety Stock Renderer
   // =========================================================================
   const forecastCanvas = document.getElementById('forecastCanvas');
   const sliderVolatility = document.getElementById('sliderVolatility');
@@ -82,106 +83,108 @@
   const sliderServiceLevel = document.getElementById('sliderServiceLevel');
   const sliderLeadTime = document.getElementById('sliderLeadTime');
 
-  // Value Display Elements
   const valVolatility = document.getElementById('valVolatility');
   const valTrend = document.getElementById('valTrend');
   const valPromo = document.getElementById('valPromo');
   const valServiceLevel = document.getElementById('valServiceLevel');
   const valLeadTime = document.getElementById('valLeadTime');
 
-  // KPI Output Badges
   const kpiExpectedDemand = document.getElementById('kpiExpectedDemand');
   const kpiSafetyStock = document.getElementById('kpiSafetyStock');
   const kpiReorderPoint = document.getElementById('kpiReorderPoint');
   const kpiServiceLevelZ = document.getElementById('kpiServiceLevelZ');
 
-  // Static Seed Data for reproducible historical baseline
   const historicalBaseline = [
-    120, 125, 118, 130, 142, 135, 128, 132, 139, 148,
-    145, 138, 150, 155, 162, 158, 152, 160, 168, 175,
-    170, 165, 172, 180, 192, 188, 182, 190, 198, 205
+    115, 122, 118, 128, 138, 132, 126, 130, 137, 145,
+    142, 135, 146, 151, 158, 154, 148, 156, 164, 171,
+    166, 161, 168, 176, 188, 184, 178, 186, 194, 201
   ];
 
-  function renderForecastSimulator() {
+  function renderForecastChart() {
     if (!forecastCanvas) return;
-    const { ctx, width, height } = setupCanvas(forecastCanvas);
+    const canvasSetup = setupCanvas(forecastCanvas);
+    if (!canvasSetup) return;
+    const { ctx, width, height } = canvasSetup;
     const colors = getThemeColors();
 
-    const volatility = parseFloat(sliderVolatility.value);
-    const trend = parseFloat(sliderTrend.value);
-    const promo = parseFloat(sliderPromo.value);
-    const serviceLevel = parseFloat(sliderServiceLevel.value);
-    const leadTime = parseFloat(sliderLeadTime.value);
+    const config = (typeof SITE_CONFIG !== 'undefined' && SITE_CONFIG.forecastDataConfig) ? SITE_CONFIG.forecastDataConfig : null;
+    const useCustom = config && config.useCustomData && config.customData;
 
-    // Update text labels
-    if (valVolatility) valVolatility.textContent = `${volatility}%`;
-    if (valTrend) valTrend.textContent = `${trend > 0 ? '+' : ''}${trend}%/mo`;
-    if (valPromo) valPromo.textContent = `${promo > 0 ? '+' : ''}${promo}%`;
-    if (valServiceLevel) valServiceLevel.textContent = `${serviceLevel}%`;
-    if (valLeadTime) valLeadTime.textContent = `${leadTime} days`;
+    let histData = [];
+    let forecastP10 = [];
+    let forecastP50 = [];
+    let forecastP90 = [];
+    let leadTime = 7;
+    let serviceLevel = 95;
 
-    // Compute synthetic data points
-    const histLen = historicalBaseline.length;
-    const forecastLen = 30;
-    const totalPoints = histLen + forecastLen;
+    if (useCustom) {
+      // Use Custom Data directly from config.js
+      const cd = config.customData;
+      histData = cd.historical || historicalBaseline;
+      forecastP10 = cd.forecastP10;
+      forecastP50 = cd.forecastP50;
+      forecastP90 = cd.forecastP90;
+      leadTime = cd.leadTimeDays || 7;
+      serviceLevel = cd.serviceLevelPercent || 95;
+    } else {
+      // Interactive Mode with Sliders
+      const volatility = sliderVolatility ? parseFloat(sliderVolatility.value) : 18;
+      const trend = sliderTrend ? parseFloat(sliderTrend.value) : 8;
+      const promo = sliderPromo ? parseFloat(sliderPromo.value) : 25;
+      serviceLevel = sliderServiceLevel ? parseFloat(sliderServiceLevel.value) : 95;
+      leadTime = sliderLeadTime ? parseFloat(sliderLeadTime.value) : 7;
 
-    const histData = historicalBaseline.map((base, idx) => {
-      const noise = Math.sin(idx * 0.8) * (volatility * 0.6);
-      return Math.max(10, Math.round(base + noise));
-    });
+      if (valVolatility) valVolatility.textContent = `${volatility}%`;
+      if (valTrend) valTrend.textContent = `${trend > 0 ? '+' : ''}${trend}%/mo`;
+      if (valPromo) valPromo.textContent = `${promo > 0 ? '+' : ''}${promo}%`;
+      if (valServiceLevel) valServiceLevel.textContent = `${serviceLevel}%`;
+      if (valLeadTime) valLeadTime.textContent = `${leadTime} days`;
 
-    const lastHistVal = histData[histLen - 1];
-    const forecastP50 = [];
-    const forecastP90 = [];
-    const forecastP10 = [];
-    const forecastP95 = [];
-    const forecastP05 = [];
+      histData = historicalBaseline.map((base, idx) => {
+        const noise = Math.sin(idx * 0.8) * (volatility * 0.6);
+        return Math.max(10, Math.round(base + noise));
+      });
 
-    const zScore = Math.max(0.5, getZScore(serviceLevel));
-    const dailySigma = (lastHistVal * (volatility / 100)) / Math.sqrt(30);
+      const lastVal = histData[histData.length - 1];
+      const dailySigma = (lastVal * (volatility / 100)) / Math.sqrt(30);
 
-    let totalForecastDemand = 0;
+      for (let i = 1; i <= 30; i++) {
+        const trendComp = lastVal * (1 + (trend / 100) * (i / 30));
+        const seasonComp = Math.sin((i / 7) * Math.PI * 2) * (lastVal * 0.08);
+        const promoMult = (i >= 12 && i <= 18) ? (1 + (promo / 100)) : 1.0;
+        const expected = (trendComp + seasonComp) * promoMult;
+        const uncertainty = dailySigma * Math.sqrt(i) * 1.5;
 
-    for (let i = 1; i <= forecastLen; i++) {
-      const trendComponent = lastHistVal * (1 + (trend / 100) * (i / 30));
-      const seasonality = Math.sin((i / 7) * Math.PI * 2) * (lastHistVal * 0.08);
-      // Promotional uplift spike around day 12-18
-      const promoMultiplier = (i >= 12 && i <= 18) ? (1 + (promo / 100)) : 1.0;
-      
-      const expected = (trendComponent + seasonality) * promoMultiplier;
-      totalForecastDemand += expected;
-
-      const horizonUncertainty = dailySigma * Math.sqrt(i) * 1.5;
-      
-      forecastP50.push(expected);
-      forecastP90.push(expected + 1.28 * horizonUncertainty);
-      forecastP10.push(Math.max(10, expected - 1.28 * horizonUncertainty));
-      forecastP95.push(expected + 1.645 * horizonUncertainty);
-      forecastP05.push(Math.max(5, expected - 1.645 * horizonUncertainty));
+        forecastP50.push(expected);
+        forecastP90.push(expected + 1.28 * uncertainty);
+        forecastP10.push(Math.max(10, expected - 1.28 * uncertainty));
+      }
     }
 
-    // Safety Stock & Reorder Point Calculations
-    const avgDailyDemand = totalForecastDemand / forecastLen;
-    const leadTimeSigma = dailySigma * Math.sqrt(leadTime);
-    const safetyStock = Math.round(zScore * leadTimeSigma);
+    const histLen = histData.length;
+    const forecastLen = forecastP50.length;
+    const totalPoints = histLen + forecastLen;
+    const lastHistVal = histData[histLen - 1];
+
+    // Compute Safety Stock & Reorder Points
+    const zScore = Math.max(0.5, getZScore(serviceLevel));
+    const totalForecast = forecastP50.reduce((a, b) => a + b, 0);
+    const avgDailyDemand = totalForecast / forecastLen;
+    const dailySpreadSigma = forecastP90.reduce((acc, val, i) => acc + (val - forecastP10[i]), 0) / (forecastLen * 2.56);
+    const safetyStock = Math.round(zScore * dailySpreadSigma * Math.sqrt(leadTime));
     const reorderPoint = Math.round((avgDailyDemand * leadTime) + safetyStock);
 
-    if (kpiExpectedDemand) kpiExpectedDemand.textContent = `${Math.round(totalForecastDemand).toLocaleString()} units`;
+    if (kpiExpectedDemand) kpiExpectedDemand.textContent = `${Math.round(totalForecast).toLocaleString()} units`;
     if (kpiSafetyStock) kpiSafetyStock.textContent = `${safetyStock.toLocaleString()} units`;
     if (kpiReorderPoint) kpiReorderPoint.textContent = `${reorderPoint.toLocaleString()} units`;
     if (kpiServiceLevelZ) kpiServiceLevelZ.textContent = `z = ${zScore.toFixed(2)}`;
 
-    // Draw Chart on Canvas
-    const padding = { top: 30, right: 35, bottom: 40, left: 55 };
+    // Draw Chart
+    const padding = { top: 25, right: 30, bottom: 35, left: 55 };
     const chartW = width - padding.left - padding.right;
     const chartH = height - padding.top - padding.bottom;
 
-    // Find min and max for scaling
-    const allVals = [
-      ...histData,
-      ...forecastP95,
-      ...forecastP05
-    ];
+    const allVals = [...histData, ...forecastP90, ...forecastP10];
     const maxVal = Math.max(...allVals) * 1.1;
     const minVal = Math.max(0, Math.min(...allVals) * 0.85);
 
@@ -193,31 +196,28 @@
       return padding.top + chartH - ((val - minVal) / (maxVal - minVal)) * chartH;
     }
 
-    // Clear Canvas
     ctx.clearRect(0, 0, width, height);
 
-    // Draw Background Grid
+    // Grid lines
     ctx.lineWidth = 1;
     ctx.strokeStyle = colors.grid;
-    const yTicks = 5;
-    for (let i = 0; i <= yTicks; i++) {
-      const yVal = minVal + (i / yTicks) * (maxVal - minVal);
+    for (let i = 0; i <= 4; i++) {
+      const yVal = minVal + (i / 4) * (maxVal - minVal);
       const y = getY(yVal);
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
       ctx.lineTo(width - padding.right, y);
       ctx.stroke();
 
-      // Y-axis labels
       ctx.fillStyle = colors.text;
-      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.font = '10px "JetBrains Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(Math.round(yVal), padding.left - 10, y + 4);
     }
 
-    // X-axis demarcation (Historical vs Forecast Split)
+    // Split Line
     const splitX = getX(histLen - 1);
-    ctx.setLineDash([4, 4]);
+    ctx.setLineDash([3, 3]);
     ctx.strokeStyle = colors.isDark ? '#475569' : '#cbd5e1';
     ctx.beginPath();
     ctx.moveTo(splitX, padding.top);
@@ -225,29 +225,16 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Labels for zones
-    ctx.font = '600 11px "Plus Jakarta Sans", sans-serif';
+    // Zone labels
+    ctx.font = '600 10px "Plus Jakarta Sans", sans-serif';
     ctx.fillStyle = colors.text;
     ctx.textAlign = 'right';
-    ctx.fillText('HISTORICAL (30D)', splitX - 10, padding.top + 16);
+    ctx.fillText('HISTORICAL ACTUALS', splitX - 10, padding.top + 14);
     ctx.textAlign = 'left';
     ctx.fillStyle = colors.lineForecast;
-    ctx.fillText('PROBABILISTIC FORECAST (T+30D)', splitX + 10, padding.top + 16);
+    ctx.fillText('FORECAST QUANTILE (P10 - P90)', splitX + 10, padding.top + 14);
 
-    // Draw Outer Prediction Interval (P05 - P95)
-    ctx.beginPath();
-    ctx.moveTo(splitX, getY(lastHistVal));
-    for (let i = 0; i < forecastLen; i++) {
-      ctx.lineTo(getX(histLen + i), getY(forecastP95[i]));
-    }
-    for (let i = forecastLen - 1; i >= 0; i--) {
-      ctx.lineTo(getX(histLen + i), getY(forecastP05[i]));
-    }
-    ctx.closePath();
-    ctx.fillStyle = colors.bandOuter;
-    ctx.fill();
-
-    // Draw Inner Prediction Interval (P10 - P90)
+    // Confidence Band
     ctx.beginPath();
     ctx.moveTo(splitX, getY(lastHistVal));
     for (let i = 0; i < forecastLen; i++) {
@@ -260,8 +247,8 @@
     ctx.fillStyle = colors.bandInner;
     ctx.fill();
 
-    // Draw Historical Actuals Line
-    ctx.lineWidth = 2.2;
+    // Historical line
+    ctx.lineWidth = 2;
     ctx.strokeStyle = colors.lineHist;
     ctx.beginPath();
     for (let i = 0; i < histLen; i++) {
@@ -272,8 +259,8 @@
     }
     ctx.stroke();
 
-    // Draw Forecast Median (P50) Line
-    ctx.lineWidth = 2.5;
+    // Forecast P50 line
+    ctx.lineWidth = 2.2;
     ctx.strokeStyle = colors.lineForecast;
     ctx.beginPath();
     ctx.moveTo(splitX, getY(lastHistVal));
@@ -282,43 +269,18 @@
     }
     ctx.stroke();
 
-    // Draw split marker node
+    // Node Marker
     ctx.beginPath();
-    ctx.arc(splitX, getY(lastHistVal), 4.5, 0, Math.PI * 2);
+    ctx.arc(splitX, getY(lastHistVal), 4, 0, Math.PI * 2);
     ctx.fillStyle = colors.lineForecast;
     ctx.fill();
     ctx.strokeStyle = colors.bg;
     ctx.lineWidth = 2;
     ctx.stroke();
-
-    // Promotion Marker Callout if promo > 0
-    if (promo > 0) {
-      const promoX = getX(histLen + 14);
-      const promoY = getY(forecastP50[14]);
-      ctx.beginPath();
-      ctx.arc(promoX, promoY, 4, 0, Math.PI * 2);
-      ctx.fillStyle = '#f59e0b';
-      ctx.fill();
-
-      ctx.fillStyle = '#f59e0b';
-      ctx.font = '10px "JetBrains Mono", monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Promo Lift (+${promo}%)`, promoX, promoY - 12);
-    }
-
-    // X-axis Bottom Labels
-    ctx.fillStyle = colors.text;
-    ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText('Day 1', padding.left, height - padding.bottom + 20);
-    ctx.textAlign = 'center';
-    ctx.fillText('Day 30 (Today)', splitX, height - padding.bottom + 20);
-    ctx.textAlign = 'right';
-    ctx.fillText('Day 60 (Horizon)', width - padding.right, height - padding.bottom + 20);
   }
 
   // =========================================================================
-  // SIMULATOR 2: Supply Chain Optimization & Cost Frontier
+  // 2. Cost Frontier Optimization Renderer
   // =========================================================================
   const optCanvas = document.getElementById('optCanvas');
   const sliderDemandRate = document.getElementById('sliderDemandRate');
@@ -336,54 +298,47 @@
   const kpiFillRate = document.getElementById('kpiFillRate');
   const kpiOrderCycle = document.getElementById('kpiOrderCycle');
 
-  function renderOptimizationSimulator() {
+  function renderOptimizationChart() {
     if (!optCanvas) return;
-    const { ctx, width, height } = setupCanvas(optCanvas);
+    const canvasSetup = setupCanvas(optCanvas);
+    if (!canvasSetup) return;
+    const { ctx, width, height } = canvasSetup;
     const colors = getThemeColors();
 
-    const D = parseFloat(sliderDemandRate.value); // Annual Demand
-    const S = parseFloat(sliderOrderCost.value);  // Order Setup Cost ($/order)
-    const H = parseFloat(sliderHoldingCost.value);// Annual Holding Cost ($/unit/year)
-    const P = parseFloat(sliderPenaltyCost.value);// Stockout penalty ($/unit)
+    const D = sliderDemandRate ? parseFloat(sliderDemandRate.value) : 12000;
+    const S = sliderOrderCost ? parseFloat(sliderOrderCost.value) : 120;
+    const H = sliderHoldingCost ? parseFloat(sliderHoldingCost.value) : 3.50;
+    const P = sliderPenaltyCost ? parseFloat(sliderPenaltyCost.value) : 15;
 
     if (valDemandRate) valDemandRate.textContent = `${D.toLocaleString()} units/yr`;
     if (valOrderCost) valOrderCost.textContent = `$${S} / order`;
     if (valHoldingCost) valHoldingCost.textContent = `$${H.toFixed(2)} / unit`;
     if (valPenaltyCost) valPenaltyCost.textContent = `$${P} / unit`;
 
-    // Economic Order Quantity (EOQ with planned shortage penalty adjustment)
-    // EOQ formula: Q* = sqrt((2*D*S)/H) * sqrt((P + H) / P)
     const eoqBase = Math.sqrt((2 * D * S) / H);
     const shortageFactor = Math.sqrt((P + H) / P);
     const optimalQ = Math.round(eoqBase * shortageFactor);
+    const numOrders = D / optimalQ;
+    const cycleDays = Math.round(365 / numOrders);
     
-    // Optimal order cycle time in days
-    const numOrdersPerYear = D / optimalQ;
-    const cycleDays = Math.round(365 / numOrdersPerYear);
-    
-    // Minimized Total Cost
-    const totalOrderingCost = (D / optimalQ) * S;
-    const avgInventory = (optimalQ * P) / (2 * (P + H));
-    const totalHoldingCost = avgInventory * H;
-    const expectedStockoutUnits = Math.round((optimalQ * H) / (2 * (P + H)));
-    const totalPenaltyCost = (D / optimalQ) * expectedStockoutUnits * P;
-    const minTotalCost = Math.round(totalOrderingCost + totalHoldingCost + totalPenaltyCost);
-    const optimalFillRate = ((1 - (expectedStockoutUnits / optimalQ)) * 100).toFixed(1);
+    const totalOrderCost = (D / optimalQ) * S;
+    const totalHoldCost = ((optimalQ * P) / (2 * (P + H))) * H;
+    const totalPenalty = (D / optimalQ) * ((optimalQ * H) / (2 * (P + H))) * P;
+    const minCost = Math.round(totalOrderCost + totalHoldCost + totalPenalty);
+    const fillRate = ((1 - ((optimalQ * H) / (2 * (P + H) * optimalQ))) * 100).toFixed(1);
 
     if (kpiOptimalBatch) kpiOptimalBatch.textContent = `${optimalQ.toLocaleString()} units`;
-    if (kpiAnnualCost) kpiAnnualCost.textContent = `$${minTotalCost.toLocaleString()}`;
-    if (kpiFillRate) kpiFillRate.textContent = `${optimalFillRate}%`;
-    if (kpiOrderCycle) kpiOrderCycle.textContent = `${cycleDays} days (${numOrdersPerYear.toFixed(1)}x/yr)`;
+    if (kpiAnnualCost) kpiAnnualCost.textContent = `$${minCost.toLocaleString()}`;
+    if (kpiFillRate) kpiFillRate.textContent = `${fillRate}%`;
+    if (kpiOrderCycle) kpiOrderCycle.textContent = `${cycleDays} days`;
 
-    // Draw Cost Curves on Canvas
-    const padding = { top: 30, right: 35, bottom: 45, left: 65 };
+    const padding = { top: 25, right: 30, bottom: 40, left: 60 };
     const chartW = width - padding.left - padding.right;
     const chartH = height - padding.top - padding.bottom;
 
-    // Generate curve points for Q ranging from 0.2*optimalQ to 2.5*optimalQ
     const qMin = Math.max(10, Math.round(optimalQ * 0.25));
     const qMax = Math.round(optimalQ * 2.5);
-    const steps = 60;
+    const steps = 50;
 
     const curveData = [];
     for (let i = 0; i <= steps; i++) {
@@ -396,14 +351,13 @@
     }
 
     const maxCost = Math.max(...curveData.map(d => d.cTotal)) * 1.08;
-    const minCost = 0;
 
     function getX(qVal) {
       return padding.left + ((qVal - qMin) / (qMax - qMin)) * chartW;
     }
 
     function getY(cVal) {
-      return padding.top + chartH - ((cVal - minCost) / (maxCost - minCost)) * chartH;
+      return padding.top + chartH - (cVal / maxCost) * chartH;
     }
 
     ctx.clearRect(0, 0, width, height);
@@ -411,9 +365,8 @@
     // Grid lines
     ctx.lineWidth = 1;
     ctx.strokeStyle = colors.grid;
-    const yTicks = 5;
-    for (let i = 0; i <= yTicks; i++) {
-      const costVal = minCost + (i / yTicks) * (maxCost - minCost);
+    for (let i = 0; i <= 4; i++) {
+      const costVal = (i / 4) * maxCost;
       const y = getY(costVal);
       ctx.beginPath();
       ctx.moveTo(padding.left, y);
@@ -421,38 +374,13 @@
       ctx.stroke();
 
       ctx.fillStyle = colors.text;
-      ctx.font = '11px "JetBrains Mono", monospace';
+      ctx.font = '10px "JetBrains Mono", monospace';
       ctx.textAlign = 'right';
       ctx.fillText(`$${Math.round(costVal).toLocaleString()}`, padding.left - 10, y + 4);
     }
 
-    // Draw Ordering Cost Curve (Dash)
-    ctx.setLineDash([3, 3]);
-    ctx.lineWidth = 1.6;
-    ctx.strokeStyle = colors.isDark ? '#94a3b8' : '#64748b';
-    ctx.beginPath();
-    curveData.forEach((pt, idx) => {
-      const x = getX(pt.q);
-      const y = getY(pt.cOrder);
-      if (idx === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-
-    // Draw Holding Cost Curve (Dash)
-    ctx.strokeStyle = colors.isDark ? '#38bdf8' : '#0284c7';
-    ctx.beginPath();
-    curveData.forEach((pt, idx) => {
-      const x = getX(pt.q);
-      const y = getY(pt.cHold);
-      if (idx === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Draw Total Cost Curve (Bold Convex Frontier)
-    ctx.lineWidth = 2.8;
+    // Total Cost Curve
+    ctx.lineWidth = 2.5;
     ctx.strokeStyle = colors.costCurve;
     ctx.beginPath();
     curveData.forEach((pt, idx) => {
@@ -463,11 +391,11 @@
     });
     ctx.stroke();
 
-    // Optimal Operating Point Demarcation
+    // Optimal Point Demarcation
     const optX = getX(optimalQ);
-    const optY = getY(minTotalCost);
+    const optY = getY(minCost);
 
-    ctx.setLineDash([4, 4]);
+    ctx.setLineDash([3, 3]);
     ctx.strokeStyle = colors.optimalPoint;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
@@ -476,72 +404,30 @@
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Optimal Point Node
     ctx.beginPath();
-    ctx.arc(optX, optY, 6, 0, Math.PI * 2);
+    ctx.arc(optX, optY, 5, 0, Math.PI * 2);
     ctx.fillStyle = colors.optimalPoint;
     ctx.fill();
     ctx.strokeStyle = colors.bg;
-    ctx.lineWidth = 2.5;
+    ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Callout Label on Optimal Point
     ctx.fillStyle = colors.optimalPoint;
-    ctx.font = '600 11px "JetBrains Mono", monospace';
+    ctx.font = '600 10px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText(`Optimal Q* = ${optimalQ.toLocaleString()}`, optX, optY - 14);
-
-    // Legend
-    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
-    ctx.textAlign = 'left';
-    
-    // Total Cost legend
-    ctx.fillStyle = colors.costCurve;
-    ctx.fillRect(padding.left + 10, padding.top + 10, 12, 3);
-    ctx.fillStyle = colors.textActive;
-    ctx.fillText('Total Cost Frontier', padding.left + 28, padding.top + 14);
-
-    // Holding legend
-    ctx.fillStyle = colors.isDark ? '#38bdf8' : '#0284c7';
-    ctx.fillRect(padding.left + 160, padding.top + 10, 12, 3);
-    ctx.fillStyle = colors.text;
-    ctx.fillText('Inventory Holding', padding.left + 178, padding.top + 14);
-
-    // Order Cost legend
-    ctx.fillStyle = colors.isDark ? '#94a3b8' : '#64748b';
-    ctx.fillRect(padding.left + 290, padding.top + 10, 12, 3);
-    ctx.fillStyle = colors.text;
-    ctx.fillText('Ordering Setup', padding.left + 308, padding.top + 14);
-
-    // X-axis Bottom Labels
-    ctx.fillStyle = colors.text;
-    ctx.font = '10px "JetBrains Mono", monospace';
-    ctx.textAlign = 'left';
-    ctx.fillText(`Q = ${qMin}`, padding.left, height - padding.bottom + 22);
-    ctx.textAlign = 'center';
-    ctx.fillText(`Order Batch Size (Units)`, padding.left + chartW / 2, height - padding.bottom + 25);
-    ctx.textAlign = 'right';
-    ctx.fillText(`Q = ${qMax}`, width - padding.right, height - padding.bottom + 22);
+    ctx.fillText(`Optimal Q* = ${optimalQ.toLocaleString()}`, optX, optY - 12);
   }
 
-  // =========================================================================
-  // Attach Event Listeners
-  // =========================================================================
-  const forecastSliders = [sliderVolatility, sliderTrend, sliderPromo, sliderServiceLevel, sliderLeadTime];
-  forecastSliders.forEach(slider => {
-    if (slider) {
-      slider.addEventListener('input', renderForecastSimulator);
-    }
+  // Attach slider event listeners
+  [sliderVolatility, sliderTrend, sliderPromo, sliderServiceLevel, sliderLeadTime].forEach(s => {
+    if (s) s.addEventListener('input', renderForecastChart);
   });
 
-  const optSliders = [sliderDemandRate, sliderOrderCost, sliderHoldingCost, sliderPenaltyCost];
-  optSliders.forEach(slider => {
-    if (slider) {
-      slider.addEventListener('input', renderOptimizationSimulator);
-    }
+  [sliderDemandRate, sliderOrderCost, sliderHoldingCost, sliderPenaltyCost].forEach(s => {
+    if (s) s.addEventListener('input', renderOptimizationChart);
   });
 
-  // Simulator Tab Switching
+  // Simulator Tab Switcher
   const simTabForecast = document.getElementById('simTabForecast');
   const simTabOpt = document.getElementById('simTabOpt');
   const panelForecast = document.getElementById('panelForecast');
@@ -553,7 +439,7 @@
       simTabOpt.classList.remove('active');
       panelForecast.classList.remove('hidden');
       panelOpt.classList.add('hidden');
-      setTimeout(renderForecastSimulator, 20);
+      setTimeout(renderForecastChart, 20);
     });
 
     simTabOpt.addEventListener('click', () => {
@@ -561,28 +447,26 @@
       simTabForecast.classList.remove('active');
       panelOpt.classList.remove('hidden');
       panelForecast.classList.add('hidden');
-      setTimeout(renderOptimizationSimulator, 20);
+      setTimeout(renderOptimizationChart, 20);
     });
   }
 
-  // Resize Handler with debounce
-  let resizeTimeout;
+  // Window Resize
+  let resizeTimer;
   window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      renderForecastSimulator();
-      renderOptimizationSimulator();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      renderForecastChart();
+      renderOptimizationChart();
     }, 100);
   });
 
-  // Expose global render hooks
   window.renderSimulators = function () {
-    renderForecastSimulator();
-    renderOptimizationSimulator();
+    renderForecastChart();
+    renderOptimizationChart();
   };
 
-  // Initial render when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(window.renderSimulators, 50);
+    setTimeout(window.renderSimulators, 100);
   });
 })();

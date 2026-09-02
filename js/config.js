@@ -2,10 +2,8 @@
  * =========================================================================
  * SITE CONFIGURATION & CONTENT DATA
  * =========================================================================
- * Edit this single file to update your bio, projects, Medium blogs, services,
- * research papers, links, and contact information!
- * 
- * No need to touch HTML or CSS when adding or editing content.
+ * Single source of truth for all content on your website.
+ * Edit this file to update text, projects, blogs, services, or plug in your M5 data.
  * =========================================================================
  */
 
@@ -20,13 +18,13 @@ const SITE_CONFIG = {
     tagline: "Applying computational physics, mathematical modeling, and machine learning to solve practical demand forecasting, inventory policy, and optimization problems.",
     location: "Strasbourg, France",
     email: "ashfaquetk.dev@gmail.com",
-    availability: "Available for Freelance Projects & Consulting",
+    availability: "Available for Freelance Projects & Full-Time Opportunities",
     
     // Quick highlight badges displayed in the Hero section
     badges: [
       "📍 Strasbourg, France",
-      "🎓 PhD in Physics (IPCMS)",
-      "📈 Time Series & Demand Forecasting",
+      "🎓 PhD in Condensed Matter Physics (IPCMS)",
+      "📈 Demand Forecasting & Time Series",
       "⚡ Mathematical Optimization (SciPy / PuLP)",
       "✍️ Technical Writer on Medium"
     ],
@@ -47,38 +45,66 @@ const SITE_CONFIG = {
     {
       id: "forecasting",
       title: "Demand Forecasting & Time Series Models",
-      icon: "chart", // 'chart', 'inventory', 'optimization', 'code'
-      description: "Developing custom statistical and ML forecasting pipelines that capture seasonal patterns, calendar shifts, and provide prediction intervals (P10/P50/P90) rather than naive point forecasts.",
+      icon: "chart",
+      description: "Developing statistical and ML forecasting pipelines (LightGBM, ARIMA, Exponential Smoothing) that capture seasonal patterns and output probabilistic prediction intervals (P10/P50/P90).",
       tags: ["Time Series", "Quantile Loss", "LightGBM", "Feature Engineering"]
     },
     {
       id: "inventory",
       title: "Inventory Policy & Safety Stock Modeling",
       icon: "inventory",
-      description: "Calibrating safety stock equations and (s, S) reorder policies based on empirical demand and lead-time volatility, helping you quantify stockout risk and holding cost trade-offs.",
-      tags: ["Safety Stock", "Reorder Points", "Lead-Time Uncertainty", "(s, S) Policies"]
+      description: "Calibrating dynamic safety stock equations and (s, S) replenishment policies based on empirical demand and lead-time variance to minimize stockout risk.",
+      tags: ["Safety Stock", "Reorder Points", "Lead-Time Variance", "(s, S) Policies"]
     },
     {
       id: "optimization",
       title: "Mathematical Optimization & Operations Research",
       icon: "optimization",
-      description: "Translating business constraints into clean mathematical optimization models (linear programming, integer programming, parameter tuning) using Python, SciPy, and PuLP.",
+      description: "Translating operational constraints into linear and integer programming formulations using Python, SciPy, and PuLP for cost minimization and resource allocation.",
       tags: ["Linear Programming", "PuLP / SciPy", "Constraint Modeling", "Cost Frontiers"]
     },
     {
       id: "ml-nlp",
       title: "Applied Machine Learning & NLP Pipelines",
       icon: "code",
-      description: "Building reliable data processing, feature extraction, text classification, and predictive modeling pipelines in Python, with special attention to imbalanced datasets and metric selection.",
-      tags: ["Python / Scikit-learn", "NLP", "Imbalanced Learning", "Evaluation Metrics"]
+      description: "Building reproducible data science and classification pipelines in Python, with special focus on imbalanced datasets, evaluation metrics, and feature representations.",
+      tags: ["Python / Scikit-learn", "NLP", "Imbalanced Learning", "Evaluation Benchmarks"]
     }
   ],
 
   // -----------------------------------------------------------------------
   // 3. Projects, Articles & Selected Works
   // -----------------------------------------------------------------------
-  // Categories: 'forecasting', 'optimization', 'research'
   projects: [
+    {
+      id: "m5-demand-forecast",
+      title: "Probabilistic Demand Forecasting on Walmart M5 Data",
+      category: "forecasting",
+      badge: "Featured Project",
+      type: "Demand Forecasting",
+      tech: "Python • LightGBM • Statsmodels",
+      summary: "End-to-end forecasting pipeline generating P10/P50/P90 quantile predictions with seasonal lags, calendar event shifts, and dynamic safety stock calibration.",
+      mathSnippet: "L_q(y, ŷ) = max(q(y - ŷ), (1 - q)(ŷ - y)) for q ∈ {0.1, 0.5, 0.9}",
+      linkText: "View Formulation & Details",
+      linkUrl: "#",
+      
+      modal: {
+        tagline: "Probabilistic forecasting models generating prediction intervals (P10/P50/P90) on retail sales data.",
+        context: "Automated pipeline trained on historical sales to provide probabilistic demand bounds rather than vulnerable single-point averages.",
+        formulation: "Quantile Loss: L_q(y, y_hat) = max(q * (y - y_hat), (1 - q) * (y_hat - y))\nSafety Stock: SS = z_SL * sqrt(L * sigma_d^2 + d_bar^2 * sigma_L^2)",
+        methodology: [
+          "Engineered temporal feature pipelines: calendar lags (7, 14, 28 days), rolling mean/std, holiday indicators, and SNAP benefit flags.",
+          "Trained LightGBM Quantile Regressors for P10, P50, and P90 demand bounds.",
+          "Derived dynamic safety stock and Reorder Points (ROP) directly from forecast quantile spread."
+        ],
+        deliverables: [
+          "Modular Python forecasting scripts and pipeline templates.",
+          "Backtesting framework using rolling-origin cross-validation.",
+          "Interactive simulation dashboard illustrating confidence bounds."
+        ],
+        techStack: ["Python", "LightGBM", "Statsmodels", "Scikit-learn", "Pandas", "Matplotlib"]
+      }
+    },
     {
       id: "tfidf-vs-embeddings",
       title: "Why TF-IDF Still Beats Embeddings on Imbalanced Text",
@@ -88,10 +114,9 @@ const SITE_CONFIG = {
       tech: "Python • Scikit-learn",
       summary: "An empirical evaluation comparing sparse lexical representations with dense sentence embeddings under heavy class imbalance, highlighting sample efficiency and inference latency.",
       mathSnippet: "TF-IDF(t, d, D) = TF(t, d) × log((1 + |D|) / (1 + |{d ∈ D : t ∈ d}|)) + 1",
-      linkText: "Read Article & Code",
+      linkText: "Read Article on Medium",
       linkUrl: "https://medium.com/@ashfaquetk",
       
-      // Modal Details
       modal: {
         tagline: "An empirical evaluation comparing sparse lexical representations with dense transformer embeddings under heavy class imbalance.",
         context: "Published technical study exploring the performance, training overhead, and inference latency trade-offs between TF-IDF + linear models versus pretrained sentence embeddings on skewed datasets.",
@@ -139,64 +164,6 @@ const SITE_CONFIG = {
       }
     },
     {
-      id: "spintronics-fem",
-      title: "Finite-Element Modal Methods for Spin-Wave Dynamics",
-      category: "research",
-      badge: "PhD Research (IPCMS)",
-      type: "Computational Physics",
-      tech: "C++ • Python • FEA",
-      summary: "Doctoral research at IPCMS: developing numerical eigenvalue solvers to model spin-wave dynamics and geometric phase effects in curved magnetic nanostructures.",
-      mathSnippet: "∂m/∂t = -γ (m × H_eff) + α (m × ∂m/∂t)",
-      linkText: "View on Google Scholar",
-      linkUrl: "https://scholar.google.com",
-      
-      modal: {
-        tagline: "Computational modeling and numerical eigenvalue solvers for spin-wave dynamics in topologically complex geometries (npj Spintronics).",
-        context: "Doctoral research at IPCMS (Université de Strasbourg) investigating magnetic excitations and geometric curvature effects in nanoscale Möbius strips and curved films.",
-        formulation: "dm/dt = -gamma * (m x H_eff) + alpha * (m x dm/dt)\nLandau-Lifshitz-Gilbert (LLG) dynamics formulated over 3D finite-element meshes.",
-        methodology: [
-          "Developed finite-element frequency-domain modal methods to directly compute eigenfrequencies and spatial profiles of magnetic modes.",
-          "Modeled geometric phase shifts and boundary effects resulting from non-trivial topology (Möbius geometry).",
-          "Compared frequency-domain modal predictions with full time-domain micromagnetic simulations for validation."
-        ],
-        deliverables: [
-          "Peer-reviewed journal publication in npj Spintronics and preprints on arXiv.",
-          "High-performance numerical simulation code and mesh generation pipelines.",
-          "Doctoral dissertation defended at Université de Strasbourg (IPCMS)."
-        ],
-        techStack: ["C++", "Python", "Finite Element Analysis (FEA)", "NumPy/SciPy", "Numerical PDEs"]
-      }
-    },
-    {
-      id: "m5-demand-forecast",
-      title: "Probabilistic Demand Forecasting on Walmart M5 Data",
-      category: "forecasting",
-      badge: "Time Series Project",
-      type: "Demand Forecasting",
-      tech: "Python • LightGBM • Statsmodels",
-      summary: "End-to-end forecasting pipeline generating P10/P50/P90 quantile predictions with seasonal lags, calendar event shifts, and dynamic safety stock calibration.",
-      mathSnippet: "L_q(y, ŷ) = max(q(y - ŷ), (1 - q)(ŷ - y)) for q ∈ {0.1, 0.5, 0.9}",
-      linkText: "View Formulation & Code",
-      linkUrl: "#",
-      
-      modal: {
-        tagline: "Probabilistic forecasting models generating prediction intervals (P10/P50/P90) on retail sales data.",
-        context: "Automated pipeline trained on historical sales to provide probabilistic demand bounds rather than vulnerable single-point averages.",
-        formulation: "Quantile Loss: L_q(y, y_hat) = max(q * (y - y_hat), (1 - q) * (y_hat - y))\nSafety Stock: SS = z_SL * sqrt(L * sigma_d^2 + d_bar^2 * sigma_L^2)",
-        methodology: [
-          "Engineered temporal feature pipelines: calendar lags (7, 14, 28 days), rolling mean/std, holiday indicators, and SNAP benefit flags.",
-          "Trained LightGBM Quantile Regressors for P10, P50, and P90 demand bounds.",
-          "Derived dynamic safety stock and Reorder Points (ROP) directly from forecast quantile spread."
-        ],
-        deliverables: [
-          "Modular Python forecasting scripts and pipeline templates.",
-          "Backtesting framework using rolling-origin cross-validation.",
-          "Interactive simulation dashboard illustrating confidence bounds."
-        ],
-        techStack: ["Python", "LightGBM", "Statsmodels", "Scikit-learn", "Pandas", "Matplotlib"]
-      }
-    },
-    {
       id: "inventory-cost-opt",
       title: "Stochastic Inventory Policy & Cost Frontier Modeling",
       category: "optimization",
@@ -223,6 +190,35 @@ const SITE_CONFIG = {
           "Clear documentation on formula derivation and parameter sensitivity."
         ],
         techStack: ["Python", "SciPy", "PuLP", "NumPy", "Matplotlib"]
+      }
+    },
+    {
+      id: "spintronics-fem",
+      title: "Finite-Element Modal Methods for Spin-Wave Dynamics",
+      category: "research",
+      badge: "PhD Research (IPCMS)",
+      type: "Computational Physics",
+      tech: "C++ • Python • FEA",
+      summary: "Doctoral research at IPCMS: developing numerical eigenvalue solvers to model spin-wave dynamics and geometric phase effects in curved magnetic nanostructures.",
+      mathSnippet: "∂m/∂t = -γ (m × H_eff) + α (m × ∂m/∂t)",
+      linkText: "View on Google Scholar",
+      linkUrl: "https://scholar.google.com",
+      
+      modal: {
+        tagline: "Computational modeling and numerical eigenvalue solvers for spin-wave dynamics in topologically complex geometries (npj Spintronics).",
+        context: "Doctoral research at IPCMS (Université de Strasbourg) investigating magnetic excitations and geometric curvature effects in nanoscale Möbius strips and curved films.",
+        formulation: "dm/dt = -gamma * (m x H_eff) + alpha * (m x dm/dt)\nLandau-Lifshitz-Gilbert (LLG) dynamics formulated over 3D finite-element meshes.",
+        methodology: [
+          "Developed finite-element frequency-domain modal methods to directly compute eigenfrequencies and spatial profiles of magnetic modes.",
+          "Modeled geometric phase shifts and boundary effects resulting from non-trivial topology (Möbius geometry).",
+          "Compared frequency-domain modal predictions with full time-domain micromagnetic simulations for validation."
+        ],
+        deliverables: [
+          "Peer-reviewed journal publication in npj Spintronics and preprints on arXiv.",
+          "High-performance numerical simulation code and mesh generation pipelines.",
+          "Doctoral dissertation defended at Université de Strasbourg (IPCMS)."
+        ],
+        techStack: ["C++", "Python", "Finite Element Analysis (FEA)", "NumPy/SciPy", "Numerical PDEs"]
       }
     }
   ],
@@ -270,7 +266,43 @@ const SITE_CONFIG = {
   },
 
   // -----------------------------------------------------------------------
-  // 5. "How We Work" Collaboration Steps
+  // 5. Plug-and-Play Forecast Data & Interactive Lab
+  // -----------------------------------------------------------------------
+  // When you have your real M5 model outputs, set useCustomData: true
+  // and paste your actual numbers below!
+  forecastDataConfig: {
+    useCustomData: false, // Set to TRUE to show your real M5 numbers, or FALSE for interactive sliders
+    customData: {
+      skuName: "FOODS_3_090_CA_1 (Walmart M5)",
+      leadTimeDays: 7,
+      serviceLevelPercent: 95,
+      // 30 days historical actuals
+      historical: [
+        105, 112, 108, 120, 132, 125, 118, 122, 129, 138,
+        135, 128, 140, 145, 152, 148, 142, 150, 158, 165,
+        160, 155, 162, 170, 182, 178, 172, 180, 188, 195
+      ],
+      // 30 days forecast quantiles (from LightGBM / Python model)
+      forecastP10: [
+        170, 172, 171, 174, 178, 176, 173, 175, 178, 182,
+        180, 177, 183, 185, 188, 186, 184, 187, 190, 193,
+        191, 189, 192, 195, 199, 197, 194, 198, 201, 204
+      ],
+      forecastP50: [
+        196, 198, 197, 201, 207, 204, 200, 203, 208, 214,
+        211, 207, 215, 218, 223, 220, 217, 222, 227, 232,
+        229, 226, 231, 236, 243, 240, 236, 242, 247, 252
+      ],
+      forecastP90: [
+        222, 225, 224, 229, 237, 233, 228, 232, 239, 247,
+        243, 238, 248, 252, 259, 255, 251, 258, 265, 272,
+        268, 264, 271, 278, 288, 284, 279, 287, 294, 301
+      ]
+    }
+  },
+
+  // -----------------------------------------------------------------------
+  // 6. Collaboration Process Steps
   // -----------------------------------------------------------------------
   workSteps: [
     {
