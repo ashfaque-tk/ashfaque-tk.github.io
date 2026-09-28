@@ -37,10 +37,78 @@
     line-height:1.62;
     font-feature-settings:"kern" 1;
     -webkit-font-smoothing:antialiased;
-    padding:56px 24px 96px;
+    padding:0 24px 96px;
   }
 
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
   .sheet{max-width:880px;margin:0 auto}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:60;
+    background:rgba(250,250,250,.88);
+    -webkit-backdrop-filter:saturate(150%) blur(8px);
+    backdrop-filter:saturate(150%) blur(8px);
+    border-bottom:1px solid var(--rule);
+    margin-bottom:0;
+  }
+  .topbar-inner{
+    max-width:880px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;gap:18px;
+    padding:15px 0;
+  }
+  .brand{
+    font-size:15px;font-weight:600;letter-spacing:-.012em;
+    color:var(--muted);text-decoration:none;white-space:nowrap;
+    transition:color .15s;
+  }
+  .brand:hover{color:var(--ink)}
+  .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:flex-end}
+  .nav a{
+    font-size:13.5px;color:var(--ink-2);text-decoration:none;
+    padding:2px 0;border-bottom:1px solid transparent;
+    transition:color .15s,border-color .15s;
+  }
+  .nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  .nav a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:60px 0 8px}
+  .hero-eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--faint);margin-bottom:20px;
+  }
+  .hero h1{
+    font-size:clamp(26px,4.6vw,38px);line-height:1.18;letter-spacing:-.028em;
+    font-weight:600;max-width:19ch;
+  }
+  .hero-sub{
+    font-size:16.5px;line-height:1.6;color:var(--ink-2);
+    margin-top:20px;max-width:62ch;
+  }
+  .hero-meta{
+    font-family:var(--mono);font-size:12px;color:var(--muted);
+    margin-top:26px;padding-bottom:30px;
+    border-bottom:1px solid var(--rule-strong);
+    display:flex;flex-wrap:wrap;gap:6px 0;align-items:baseline;
+  }
+  .hero-meta a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+  .hero-meta a:hover{border-bottom-color:var(--accent)}
+  .sep{color:var(--rule-strong);padding:0 10px}
+  .print-only{display:none}
+  .doc-label{font-family:var(--mono);font-size:7.4pt;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+
+  .skip{position:absolute;left:-9999px;top:0}
+  .skip:focus{
+    left:12px;top:10px;z-index:80;background:var(--ink);color:#fff;
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:8px 12px;text-decoration:none;
+  }
+
+  section[id],.hero{scroll-margin-top:76px}
+
 
   /* ---------- Toolbar ---------- */
   .toolbar{
@@ -56,42 +124,6 @@
   .btn:hover{border-color:var(--ink);color:var(--ink)}
   .btn-primary{background:var(--ink);color:#fff;border-color:var(--ink)}
   .btn-primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-
-  /* ---------- Header ---------- */
-  header{border-bottom:1px solid var(--rule-strong);padding-bottom:28px}
-
-  .eyebrow{
-    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--faint);margin-bottom:18px;
-  }
-
-  h1{
-    font-size:clamp(30px,5.4vw,44px);
-    line-height:1.08;
-    letter-spacing:-.028em;
-    font-weight:700;
-  }
-
-  .positioning{
-    font-size:clamp(16px,2.4vw,19px);
-    line-height:1.45;
-    color:var(--ink-2);
-    margin-top:14px;
-    max-width:62ch;
-    font-weight:400;
-  }
-
-  .contact{
-    font-family:var(--mono);
-    font-size:12.5px;
-    color:var(--muted);
-    margin-top:22px;
-    display:flex;flex-wrap:wrap;gap:6px 0;
-    align-items:baseline;
-  }
-  .contact a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
-  .contact a:hover{border-bottom-color:var(--accent)}
-  .sep{color:var(--rule-strong);padding:0 10px}
 
   /* ---------- Sections ---------- */
   section{margin-top:52px}
@@ -200,6 +232,22 @@
   .case-body dd{color:var(--ink-2);margin-bottom:11px;max-width:64ch}
   .case-body dd:last-child{margin-bottom:0}
 
+  /* ---------- Figure ---------- */
+  .fig{margin:22px 0 0}
+  .fig img{
+    display:block;width:100%;height:auto;
+    border:1px solid var(--rule);background:#fff;
+  }
+  .fig figcaption{
+    font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--faint);
+    margin-top:10px;letter-spacing:.01em;
+  }
+  .fig figcaption b{color:var(--muted);font-weight:500}
+
+  @media (min-width:1080px){
+    .fig{margin-left:-84px;margin-right:-84px}
+  }
+
   /* ---------- Metrics ---------- */
   .metrics{
     display:grid;grid-template-columns:repeat(4,1fr);
@@ -273,6 +321,10 @@
   @media screen and (max-width:760px){
     body{padding:32px 18px 64px;font-size:14.5px}
     .toolbar{margin-bottom:22px}
+    .topbar-inner{flex-direction:column;align-items:flex-start;gap:10px;padding:13px 0}
+    .nav{gap:16px;justify-content:flex-start}
+    .hero{padding:36px 0 4px}
+    .hero-meta{padding-bottom:24px;margin-top:20px}
     .services,.steps{grid-template-columns:1fr}
     .service{border-right:0;border-bottom:1px solid var(--rule);padding:20px 0}
     .service + .service{padding-left:0}
@@ -301,15 +353,21 @@
       padding:0;
     }
     .sheet{max-width:none}
-    .no-print{display:none !important}
-    h1{font-size:23pt}
-    .positioning{font-size:11pt;margin-top:8px}
-    .contact{font-size:8.2pt;margin-top:12px}
+    .no-print,.nav,.skip{display:none !important}
+    .print-only{display:block}
+    .topbar{position:static;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+    .topbar-inner{padding:0 0 7pt;border-bottom:.5pt solid #D4D4D4}
+    .brand{font-size:12.5pt;color:#111;letter-spacing:-.02em}
+    .hero{padding:11pt 0 0}
+    .hero-eyebrow{font-size:7.2pt;margin-bottom:6pt}
+    h1{font-size:17pt;line-height:1.22;max-width:none}
+    .hero-sub{font-size:9pt;margin-top:7pt;max-width:none;color:#3D3D3D}
+    .hero-meta{font-size:8pt;margin-top:8pt;padding-bottom:7pt}
     section{margin-top:15pt}
     .s-head{margin-bottom:8pt}
-    h2,.s-num,.s-note,.eyebrow{font-size:7.2pt}
+    h2,.s-num,.s-note,.hero-eyebrow{font-size:7.2pt}
     .lede{font-size:9pt}
-    .lede,.s-head,header{break-inside:avoid}
+    .lede,.s-head,header,.topbar,.hero,.fig{break-inside:avoid}
     .case,.entry,.step,.service,.m,.closing{break-inside:avoid}
     .case{break-inside:auto;padding:8pt 0 9pt}
     .case-head,.case .context,.case-body dt{break-after:avoid}
@@ -321,6 +379,9 @@
     .case-body dt{font-size:6.8pt}
     .case-body dd{font-size:8.9pt;margin-bottom:3pt}
     .m{padding:11px 13px 10px}
+    .fig{margin:9pt 0 0}
+    .fig img{border-width:.5pt}
+    .fig figcaption{font-size:6.6pt;margin-top:5pt;line-height:1.45}
     .stack{gap:8px 28px}
     .tag{font-size:6.8pt;padding:2px 6px}
     .m .v{font-size:13pt}
@@ -355,34 +416,49 @@
 <div class="sheet">
 
   <!-- ================= HEADER ================= -->
-  <header>
-    <div class="eyebrow">Curriculum Vitae &nbsp;/&nbsp; 2026</div>
-    <h1>Ashfaque Thonikkadavan</h1>
-    <p class="positioning">
-      Forecasting &amp; optimization consultant. I build models that turn uncertain
-      demand into concrete decisions — inventory levels, replenishment, staffing and
-      resource allocation.
-    </p>
-    <div class="contact">
-      <a href="mailto:ashfaquesalmantk@gmail.com">ashfaquesalmantk@gmail.com</a>
-      <span class="sep">/</span>
-      <span>+33 7 80 81 68 32</span>
-      <span class="sep">/</span>
-      <span>Strasbourg, France</span>
-      <span class="sep">/</span>
-      <a href="https://www.linkedin.com/in/tk-ashfaque" target="_blank" rel="noopener">LinkedIn</a>
-      <span class="sep">/</span>
-      <a href="https://github.com/ashfaque-tk" target="_blank" rel="noopener">GitHub</a>
-      <span class="sep">/</span>
-      <a href="https://medium.com/@cmtwskb" target="_blank" rel="noopener">Writing</a>
+  <a class="skip no-print" href="#work">Skip to content</a>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top">Ashfaque Thonikkadavan</a>
+      <span class="print-only doc-label">Curriculum Vitae</span>
+      <nav class="nav" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#approach">Approach</a>
+        <a href="#writing">Writing</a>
+        <a href="#connect">Connect</a>
+      </nav>
     </div>
-  </header>
+  </div>
+
+  <main id="top">
+    <div class="hero">
+      <div class="hero-eyebrow">Forecasting &amp; Optimization</div>
+      <h1>I turn uncertain demand into better planning, inventory and allocation decisions.</h1>
+      <p class="hero-sub">
+        I build data-driven systems that connect prediction to the decision it is meant to
+        improve &mdash; then report the result in cost, service level or allocation terms.
+      </p>
+      <div class="hero-meta">
+        <span>Strasbourg, France</span>
+        <span class="sep">/</span>
+        <a href="mailto:ashfaquesalmantk@gmail.com">ashfaquesalmantk@gmail.com</a>
+        <span class="sep">/</span>
+        <a href="https://www.linkedin.com/in/tk-ashfaque" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="sep">/</span>
+        <a href="https://github.com/ashfaque-tk" target="_blank" rel="noopener">GitHub</a>
+        <span class="sep">/</span>
+        <a href="assets/cv.pdf">CV (PDF)</a>
+      </div>
+    </div>
+  </main>
 
   <!-- ================= PROFILE ================= -->
-  <section>
+  <section id="about">
     <div class="s-head">
       <span class="s-num">01</span>
-      <h2>Profile</h2>
+      <h2>About</h2>
     </div>
     <p class="lede">
       A <strong>PhD-trained researcher</strong> working in applied forecasting and operations
@@ -419,10 +495,10 @@
   </section>
 
   <!-- ================= HOW I WORK ================= -->
-  <section>
+  <section id="approach">
     <div class="s-head">
       <span class="s-num">03</span>
-      <h2>How I work</h2>
+      <h2>Approach</h2>
     </div>
     <div class="steps">
       <div class="step">
@@ -449,10 +525,10 @@
   </section>
 
   <!-- ================= SELECTED WORK ================= -->
-  <section>
+  <section id="work">
     <div class="s-head">
       <span class="s-num">04</span>
-      <h2>Selected work</h2>
+      <h2>Work</h2>
       <span class="s-note">Three representative systems</span>
     </div>
 
@@ -496,6 +572,18 @@
           <div class="l">MAE units / SKU / day</div>
         </div>
       </div>
+
+      <figure class="fig">
+        <img src="assets/m5-holdout.png" width="2285" height="686"
+             alt="Left: aggregate daily demand against the selected LightGBM forecast across the 28-day holdout for 300 SKUs. Right: total inventory cost for all six candidate models, with LightGBM lowest at $16,479 against $18,081 for the seasonal moving average."
+             loading="lazy" decoding="async">
+        <figcaption>
+          <b>Blind holdout, store CA_1.</b> Left: realised daily demand across 300 SKUs against the
+          selected forecast. Right: every candidate replayed through one identical replenishment
+          policy, so the cost spread is the forecast's doing &mdash; $16,479 for LightGBM against
+          $18,081 for the seasonal moving average.
+        </figcaption>
+      </figure>
     </article>
 
     <!-- Case 2 -->
@@ -638,10 +726,10 @@
     </div>  </section>
 
   <!-- ================= PUBLICATIONS ================= -->
-  <section>
+  <section id="writing">
     <div class="s-head">
       <span class="s-num">07</span>
-      <h2>Publication &amp; writing</h2>
+      <h2>Writing</h2>
     </div>
     <ul class="ticks">
       <li><b>Rotating spin wave modes in nanoscale M&ouml;bius strips.</b> <em>NPJ Spintronics</em>, 4(4), 2026. &nbsp;<a href="https://doi.org/10.1038/s44306-025-00118-8" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none">doi.org/10.1038/s44306-025-00118-8</a></li>
@@ -670,9 +758,9 @@
   </section>
 
   <!-- ================= CLOSING ================= -->
-  <section>
+  <section id="connect">
     <div class="closing">
-      <h2>Working together</h2>
+      <h2>Connect</h2>
       <p>
         I take on a few engagements at a time &mdash; usually a forecasting or optimisation
         problem where the data already exists and the impact is measurable. A first conversation
