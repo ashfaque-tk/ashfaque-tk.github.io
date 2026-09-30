@@ -35,6 +35,50 @@
     --scrollbar-thumb-hover: #475569;
     --footer-bg: rgba(2, 6, 23, 0.98);
     --footer-border: rgba(255, 255, 255, 0.05);
+
+    /* Projects grid + modal */
+    --pg-accent-soft: rgba(99, 102, 241, 0.06);
+    --pg-accent-line: rgba(99, 102, 241, 0.14);
+    --pg-accent-line-hover: rgba(99, 102, 241, 0.3);
+    --pg-shadow-card: none;
+    --pg-shadow-hover: 0 20px 52px rgba(0, 0, 0, 0.38), 0 0 0 1px rgba(99, 102, 241, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --pg-shadow-icon: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --pg-shadow-icon-hover: 0 8px 22px rgba(99, 102, 241, 0.25);
+    --pg-shadow-modal: 0 32px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(99, 102, 241, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    --pg-modal-scrim: rgba(2, 6, 23, 0.82);
+    --pg-card-scrim: linear-gradient(155deg, rgba(4, 8, 22, 0.38) 0%, rgba(4, 8, 22, 0.62) 100%);
+    --pg-card-scrim-hover: linear-gradient(
+      155deg,
+      rgba(4, 8, 22, 0.26) 0%,
+      rgba(4, 8, 22, 0.5) 100%
+    );
+    --pg-card-bg-filter: none;
+    --pg-card-bg-filter-hover: none;
+    --pg-card-blur: blur(24px) saturate(2.1) brightness(0.44) grayscale(0.25);
+    --pg-card-blur-hover: blur(18px) saturate(2.5) brightness(0.56) grayscale(0.25);
+    --pg-card-has-bg-bg: transparent;
+    --pg-on-scrim-strong: #e2e8f0;
+    --pg-on-scrim: rgba(203, 213, 225, 0.82);
+    --pg-on-scrim-dim: rgba(148, 163, 184, 0.55);
+    --pg-icon-filter: invert(1) brightness(0.85);
+    --pg-footer-bg: rgba(0, 0, 0, 0.1);
+    --pg-footer-bg-hover: rgba(99, 102, 241, 0.06);
+    --pg-on-scrim-footer: rgba(0, 0, 0, 0.32);
+    --pg-on-scrim-border: rgba(255, 255, 255, 0.1);
+    /* Expertise cards */
+    --ex-card-bg: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.68));
+    --ex-card-border: rgba(99, 102, 241, 0.18);
+    --ex-card-border-hover: rgba(99, 102, 241, 0.48);
+    --ex-card-shadow: 0 20px 54px rgba(2, 6, 23, 0.34);
+    --ex-glow-1: rgba(56, 189, 248, 0.16);
+    --ex-glow-2: rgba(52, 211, 153, 0.12);
+    --ex-icon-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(52, 211, 153, 0.08)), rgba(15, 23, 42, 0.78);
+    --ex-icon-border: rgba(56, 189, 248, 0.2);
+    --ex-icon-border-hover: rgba(52, 211, 153, 0.38);
+    --ex-icon-color: #7dd3fc;
+    --ex-icon-color-hover: #a7f3d0;
   }
 
   [data-theme="light"] {
@@ -42,7 +86,7 @@
     --bg: #f8fafc;
     --bg-card: rgba(255, 255, 255, 0.85);
     --bg-card-solid: #ffffff;
-    --bg-section: rgba(241, 245, 249, 0.8);
+    --bg-section: #ffffff;
     --bg-nav: rgba(248, 250, 252, 0.92);
     --bg-overlay: rgba(248, 250, 252, 0.98);
     --bg-input: rgba(241, 245, 249, 0.8);
@@ -62,6 +106,124 @@
     --scrollbar-thumb-hover: #64748b;
     --footer-bg: rgba(241, 245, 249, 0.98);
     --footer-border: rgba(0, 0, 0, 0.07);
+
+    /* Projects grid + modal: cover screenshots are light (white backgrounds), so no
+       invert is needed. brightness MUST stay >= 1: at 0.72 the white art rendered as
+       mid-grey (~183 luminance), which read as a dull rgb block. saturate is kept low
+       because football-squad-op.png is yellow-dominant (30% chromatic) and at full
+       saturation it read as a green/brown cast behind the card text. Mirrors the dark
+       theme, which desaturates via grayscale(0.25). */
+    --pg-accent-soft: rgba(99, 102, 241, 0.05);
+    --pg-accent-line: rgba(99, 102, 241, 0.12);
+    --pg-accent-line-hover: rgba(99, 102, 241, 0.3);
+    --pg-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.07);
+    --pg-shadow-hover: 0 20px 52px rgba(30, 41, 59, 0.16), 0 0 0 1px rgba(99, 102, 241, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    --pg-shadow-icon: 0 3px 10px rgba(15, 23, 42, 0.1);
+    --pg-shadow-icon-hover: 0 8px 22px rgba(79, 70, 229, 0.22);
+    --pg-shadow-modal: 0 32px 80px rgba(15, 23, 42, 0.24), 0 0 0 1px rgba(99, 102, 241, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    --pg-modal-scrim: rgba(15, 23, 42, 0.5);
+    --pg-card-scrim: none;
+    --pg-card-scrim-hover: none;
+    --pg-card-bg-filter: none;
+    --pg-card-bg-filter-hover: none;
+    --pg-card-blur: blur(12px) saturate(0.2) brightness(1.06);
+    --pg-card-blur-hover: blur(8px) saturate(0.35) brightness(1.08);
+    --pg-card-has-bg-bg: rgba(255, 255, 255, 0.75);
+    --pg-on-scrim-strong: #0f172a;
+    --pg-on-scrim: rgba(30, 41, 59, 0.78);
+    --pg-on-scrim-dim: rgba(71, 85, 105, 0.65);
+    --pg-icon-filter: none;
+    --pg-footer-bg: rgba(255, 255, 255, 0.45);
+    --pg-footer-bg-hover: rgba(99, 102, 241, 0.08);
+    --pg-on-scrim-footer: rgba(255, 255, 255, 0.72);
+    --pg-on-scrim-border: rgba(15, 23, 42, 0.08);
+    /* Expertise cards */
+    --ex-card-bg: var(--bg-card);
+    --ex-card-border: rgba(99, 102, 241, 0.14);
+    --ex-card-border-hover: rgba(99, 102, 241, 0.34);
+    --ex-card-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+    --ex-glow-1: rgba(99, 102, 241, 0.1);
+    --ex-glow-2: rgba(52, 211, 153, 0.06);
+    --ex-icon-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(52, 211, 153, 0.06)), rgba(241, 245, 249, 0.9);
+    --ex-icon-border: rgba(99, 102, 241, 0.2);
+    --ex-icon-border-hover: rgba(16, 185, 129, 0.38);
+    --ex-icon-color: var(--accent);
+    --ex-icon-color-hover: #059669;
+  }
+
+  [data-theme="minimal"] {
+    color-scheme: light;
+    --bg: #fafaf9;
+    --bg-card: #ffffff;
+    --bg-card-solid: #ffffff;
+    --bg-section: #f5f5f4;
+    --bg-nav: rgba(250, 250, 249, 0.9);
+    --bg-overlay: rgba(250, 250, 249, 0.98);
+    --bg-input: #f5f5f4;
+    --bg-surface: #efefee;
+    --text: #1c1917;
+    --text-muted: #57534e;
+    --text-dim: #78716c;
+    --text-dimmer: #a8a29e;
+    --border: rgba(28, 25, 23, 0.08);
+    --border-hover: rgba(28, 25, 23, 0.28);
+    --accent: #2f2e2b;
+    --accent-blue: #4a4a47;
+    --neon: #b45309;
+    --neon-glow: rgba(180, 83, 9, 0.12);
+    --scrollbar-track: #f5f5f4;
+    --scrollbar-thumb: #d6d3d1;
+    --scrollbar-thumb-hover: #a8a29e;
+    --footer-bg: #f5f5f4;
+    --footer-border: rgba(28, 25, 23, 0.08);
+
+    /* Projects grid + modal: cover images are washed out to a pale texture. */
+    --pg-accent-soft: rgba(28, 25, 23, 0.04);
+    --pg-accent-line: rgba(28, 25, 23, 0.1);
+    --pg-accent-line-hover: rgba(28, 25, 23, 0.22);
+    --pg-shadow-card: 0 1px 2px rgba(28, 25, 23, 0.05);
+    --pg-shadow-hover: 0 12px 32px rgba(28, 25, 23, 0.08), 0 0 0 1px rgba(28, 25, 23, 0.08);
+    --pg-shadow-icon: 0 1px 3px rgba(28, 25, 23, 0.08);
+    --pg-shadow-icon-hover: 0 8px 20px rgba(28, 25, 23, 0.1);
+    --pg-shadow-modal: 0 32px 80px rgba(28, 25, 23, 0.18), 0 0 0 1px rgba(28, 25, 23, 0.06);
+    --pg-modal-scrim: rgba(28, 25, 23, 0.32);
+    --pg-card-scrim: linear-gradient(
+      155deg,
+      rgba(250, 250, 249, 0.7) 0%,
+      rgba(250, 250, 249, 0.9) 100%
+    );
+    --pg-card-scrim-hover: linear-gradient(
+      155deg,
+      rgba(250, 250, 249, 0.55) 0%,
+      rgba(250, 250, 249, 0.82) 100%
+    );
+    --pg-card-bg-filter: grayscale(1) brightness(1.5);
+    --pg-card-bg-filter-hover: grayscale(1) brightness(1.6);
+    --pg-card-blur: blur(30px) grayscale(1) brightness(1.7);
+    --pg-card-blur-hover: blur(26px) grayscale(1) brightness(1.8);
+    --pg-card-has-bg-bg: rgba(250, 250, 249, 0.4);
+    --pg-on-scrim-strong: #1c1917;
+    --pg-on-scrim: rgba(28, 25, 23, 0.75);
+    --pg-on-scrim-dim: rgba(28, 25, 23, 0.5);
+    --pg-icon-filter: none;
+    --pg-footer-bg: rgba(250, 250, 249, 0.6);
+    --pg-footer-bg-hover: rgba(28, 25, 23, 0.05);
+    --pg-on-scrim-footer: rgba(250, 250, 249, 0.75);
+    --pg-on-scrim-border: rgba(28, 25, 23, 0.08);
+    /* Expertise cards */
+    --ex-card-bg: #ffffff;
+    --ex-card-border: rgba(28, 25, 23, 0.08);
+    --ex-card-border-hover: rgba(28, 25, 23, 0.2);
+    --ex-card-shadow: 0 12px 32px rgba(28, 25, 23, 0.07);
+    --ex-glow-1: rgba(28, 25, 23, 0.03);
+    --ex-glow-2: rgba(180, 83, 9, 0.04);
+    --ex-icon-bg: linear-gradient(135deg, rgba(28, 25, 23, 0.05), rgba(28, 25, 23, 0.02)), #f5f5f4;
+    --ex-icon-border: rgba(28, 25, 23, 0.1);
+    --ex-icon-border-hover: rgba(180, 83, 9, 0.28);
+    --ex-icon-color: #2f2e2b;
+    --ex-icon-color-hover: #b45309;
   }
 
   body {
@@ -72,9 +234,6 @@
       radial-gradient(ellipse at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 60%),
       radial-gradient(ellipse at 100% 100%, rgba(14, 165, 233, 0.15) 0%, transparent 60%);
     background-attachment: fixed;
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
   }
 
   .sr-only {
@@ -195,9 +354,6 @@
     border-radius: 0.5rem;
     font-weight: 600;
     color: #fff;
-    transition:
-      box-shadow 0.3s ease,
-      transform 0.3s ease;
   }
   .btn-primary:focus-visible {
     outline: 2px solid #fff;
@@ -217,10 +373,6 @@
     border-radius: 0.5rem;
     font-weight: 600;
     color: var(--text);
-    transition:
-      border-color 0.3s ease,
-      background 0.3s ease,
-      transform 0.3s ease;
   }
   .btn-secondary:focus-visible {
     outline: 2px solid var(--accent);
@@ -242,10 +394,6 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     border-radius: 0.75rem;
     padding: 1.5rem;
-    transition:
-      border-color 0.3s,
-      box-shadow 0.3s,
-      transform 0.3s;
   }
 
   .card:hover {
@@ -263,9 +411,6 @@
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
-    transition:
-      background 0.3s ease,
-      border-color 0.3s ease;
   }
 
   .nav-link {
@@ -302,9 +447,6 @@
     .reveal {
       opacity: 0;
       transform: translateY(24px);
-      transition:
-        opacity 0.6s ease,
-        transform 0.6s ease;
     }
 
     .reveal.visible {
@@ -407,11 +549,6 @@ body.page-hidden * {
     padding-top: 3rem;
     padding-bottom: 3rem;
   }
-  .hero-badge-icon,
-  .pf-badge,
-  .pf-counter {
-    display: none !important;
-  }
 }
 
 @media (min-width: 640px) and (max-width: 767px) {
@@ -435,23 +572,11 @@ body.page-hidden * {
 }
 
 [data-theme="light"] #hero-canvas-wrapper {
-  filter: brightness(24);
+  display: none;
 }
 
 [data-theme="light"] #about {
   background-color: #fcfcfc;
-}
-
-[data-theme="light"] #projects {
-  background-color: #dbdfee;
-}
-
-[data-theme="light"] .text-slate-300 {
-  color: rgb(80, 80, 102);
-}
-
-[data-theme="light"] .text-white {
-  color: rgb(106, 106, 106);
 }
 
 [data-theme="light"] .cert-in-progress {
@@ -459,12 +584,26 @@ body.page-hidden * {
   box-shadow: 0 8px 32px #00000040;
 }
 
-[data-theme="light"] .text-backdrop h1 {
-  color: var(--bg-input);
+/* Tailwind slate utilities are hardcoded dark-theme values, so they disappear on
+   the two light themes. Map them onto the palette variables instead of editing
+   every call site (Hero, Contact, Certifications, Footer). */
+[data-theme='light'] .text-slate-300,
+[data-theme='light'] .text-slate-400,
+[data-theme='minimal'] .text-slate-300,
+[data-theme='minimal'] .text-slate-400 {
+  color: var(--text);
 }
-
-[data-theme="light"] p.text-base.text-slate-400.text-backdrop {
-  color: var(--bg-nav);
+[data-theme='light'] .text-slate-400,
+[data-theme='minimal'] .text-slate-400 {
+  color: var(--text-muted);
+}
+[data-theme='light'] .text-slate-500,
+[data-theme='minimal'] .text-slate-500 {
+  color: var(--text-dim);
+}
+[data-theme='light'] .text-white,
+[data-theme='minimal'] .text-white {
+  color: var(--text);
 }
 
 /* ===== PRINT / RESUME ===== */
@@ -505,4 +644,72 @@ body.page-hidden * {
   astro-dev-toolbar {
     display: none !important;
   }
+}
+
+/* ===== MINIMAL THEME OVERRIDES ===== */
+
+[data-theme='minimal'] body {
+  background-image: none;
+}
+
+[data-theme='minimal'] .gradient-text {
+  background: none;
+  -webkit-text-fill-color: #1c1917;
+  color: #1c1917;
+  animation: none;
+}
+
+[data-theme='minimal'] .section-title {
+  background: none;
+  -webkit-text-fill-color: #1c1917;
+  color: #1c1917;
+}
+
+[data-theme='minimal'] .btn-primary {
+  background: #1c1917;
+}
+
+[data-theme='minimal'] .btn-secondary {
+  background: transparent;
+  border-color: rgba(28, 25, 23, 0.2);
+  color: #1c1917;
+}
+
+[data-theme='minimal'] .btn-secondary:hover {
+  background: rgba(28, 25, 23, 0.05);
+  border-color: rgba(28, 25, 23, 0.4);
+}
+
+[data-theme='minimal'] .hero-social-link,
+[data-theme='minimal'] .hero-social-link:hover {
+  color: #57534e;
+}
+
+[data-theme='minimal'] #about {
+  background-color: transparent;
+}
+
+[data-theme='minimal'] .tag {
+  background: rgba(28, 25, 23, 0.04);
+  border-color: rgba(28, 25, 23, 0.1);
+  color: #57534e;
+}
+
+[data-theme='minimal'] .card {
+  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.04);
+}
+
+/* the dark panel behind the name/bio is removed entirely in Hero.astro,
+   so no per-theme override is needed here */
+
+/* the particle-grid canvas is a dark-mode effect; remove it rather than dim it */
+[data-theme='minimal'] #hero-canvas-wrapper,
+[data-theme='light'] #hero-canvas-wrapper {
+  display: none;
+}
+
+/* drop the coloured blurred orbs and drifting spotlights on minimal */
+[data-theme='minimal'] .hero-orb,
+[data-theme='minimal'] .spotlight-bg {
+  display: none;
 }

@@ -1,24 +1,98 @@
 ---
 import projectsFile from '../data/projects.json';
-import { augmentProjectsWithImages, type ProjectEntry } from '../lib/fetchGitHub';
-import { withBase } from '../lib/assetPath';
+import { augmentProjectsWithImages, type ProjectEntry, type ProjectSection } from '../lib/fetchGitHub';
+import { withBase, withBaseList } from '../lib/assetPath';
+import { icons } from '../lib/icons';
 
 interface Props {
   featuredOnly?: boolean;
 }
 const { featuredOnly = false } = Astro.props;
 
-const allProjectsData = await augmentProjectsWithImages(projectsFile.items as ProjectEntry[]);
-const displayProjects = featuredOnly
-  ? allProjectsData.filter((p) => p.sliderImage)
-  : allProjectsData;
+type Entry = ProjectEntry & { covers: string[]; images: string[] };
 
-import { icons } from '../lib/icons';
+const augmented = (await augmentProjectsWithImages(
+  projectsFile.items as unknown as ProjectEntry[]
+)) as ProjectEntry[];
 
-const categoryFilters = [...new Set(allProjectsData.map((p) => p.category))].map((cat) => ({
-  label: cat.replace(/\b\w/g, (c) => c.toUpperCase()),
-  value: cat,
+/** `cover` may be one path or a list; the card uses the first as its backdrop. */
+const entries: Entry[] = augmented.map((p) => ({
+  ...p,
+  covers: withBaseList(
+    (Array.isArray(p.cover) && p.cover.length ? p.cover : p.cover) ||
+      p.backgroundImage ||
+      p.featuredImage
+  ),
+  images: withBaseList(p.images),
 }));
+
+const allProjectsData = featuredOnly ? entries.filter((p) => p.covers.length) : entries;
+
+/** Normalises one write-up block. `image` is an optional figure rendered under the text. */
+function norm(section: ProjectSection | undefined) {
+  const s = section ?? {};
+  return {
+    text: (s.text ?? '').trim(),
+    items: (s.items ?? []).map((i) => i.trim()).filter(Boolean),
+    image: s.image ? withBase(s.image) : '',
+  };
+}
+
+const hasContent = (s: { text: string; items: string[]; image: string }) =>
+  Boolean(s.text || s.items.length || s.image);
+
+type ModalLink = { label: string; href: string; icon: string; primary: boolean };
+
+/** Builds the modal payload: a fixed Problem -> optional Solution -> optional Decisions -> Results flow. */
+function toModal(entry: Entry) {
+  // Problem and Results always carry a fixed heading. Optional sections only appear
+  // when projects.json supplies both an explicit title and some content.
+  const fixed = [
+    { heading: 'The Problem', ...norm(entry.problem) },
+    { heading: 'The Results', ...norm(entry.results) },
+  ].filter(hasContent);
+  const optional = [entry.solution, entry.decisions]
+    .map((s) => ({ heading: s?.title?.trim() ?? '', ...norm(s) }))
+    .filter((s) => s.heading && hasContent(s));
+
+  const problem = fixed[0];
+  const results = fixed[1];
+  const sections = [
+    ...(problem ? [problem] : []),
+    ...optional,
+    ...(results ? [results] : []),
+  ];
+
+  const code = entry.links?.code ?? entry.githubRepo;
+  const links: ModalLink[] = [];
+  if (code) links.push({ label: 'Code', href: code, icon: 'code-bracket', primary: false });
+  if (entry.links?.read)
+    links.push({ label: 'Read', href: entry.links.read, icon: 'book-open', primary: false });
+  if (entry.links?.app)
+    links.push({
+      label: 'Dashboard',
+      href: entry.links.app,
+      icon: 'arrow-right-circle',
+      primary: true,
+    });
+  // Fallback for entries that still only carry a single `link`.
+  if (!links.length && entry.link)
+    links.push({ label: 'Open', href: entry.link, icon: 'arrow-right-circle', primary: true });
+
+  return { sections, links };
+}
+
+const projects = allProjectsData.map((p, i) => ({
+  ...p,
+  id: `project-${i}`,
+  cover: p.covers[0] ?? '',
+  images: p.images,
+  ...toModal(p),
+}));
+
+const categoryFilters = [
+  ...new Set(allProjectsData.map((p) => p.category).filter(Boolean)),
+].map((cat) => ({ label: cat.replace(/\b\w/g, (c) => c.toUpperCase()), value: cat }));
 
 const filters = [
   { label: 'Featured', value: 'featured' },
@@ -26,30 +100,25 @@ const filters = [
   ...categoryFilters,
 ];
 
-const projectsJson = JSON.stringify(
-  allProjectsData.map((p) => ({
-    ...p,
-    sliderImage:   p.sliderImage   ? withBase(p.sliderImage)   : p.sliderImage,
-    backgroundImage: p.backgroundImage ? withBase(p.backgroundImage) : p.backgroundImage,
-  }))
-);
+const projectsJson = JSON.stringify(projects);
+const iconPaths = JSON.stringify(icons);
 ---
 
-<section id="projects" class="py-24 bg-slate-900/30" style="scroll-margin-top: 80px;">
+<section
+  id="projects"
+  class="py-24"
+  style="scroll-margin-top: 80px; background: #ffffff;"
+>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-10 reveal">
       <p class="text-sm font-semibold tracking-widest text-highlight uppercase mb-3">My work</p>
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold section-title">Featured Projects</h2>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-2 mb-10 reveal" style="transition-delay:0.1s;">
+    <div class="flex flex-wrap justify-center gap-2 mb-10 reveal" style="transition-delay: 0.1s;">
       {
         filters.map((f) => (
-          <button
-            class="filter-btn"
-            data-filter={f.value}
-            aria-pressed={f.value === 'featured' ? 'true' : 'false'}
-          >
+          <button class="filter-btn" data-filter={f.value} aria-pressed={f.value === 'featured' ? 'true' : 'false'}>
             {f.label}
             <span class="filter-count" data-count={f.value} />
           </button>
@@ -62,24 +131,25 @@ const projectsJson = JSON.stringify(
       class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
     >
       {
-        displayProjects.map((project, i) => (
+        projects.map((project, i) => (
           <div
-            class={`project-card reveal${project.backgroundImage ? ' has-bg' : ''}`}
+            class={`project-card reveal${project.cover ? ' has-bg' : ''}`}
             data-category={project.category}
-            data-featured={(project as any).featured ? 'true' : 'false'}
+            data-featured={String(Boolean(project.featured))}
+            data-id={project.id}
             data-index={i}
             style={`transition-delay: ${(i % 3) * 0.07}s;`}
             role="button"
             tabindex="0"
             aria-label={`Open details for ${project.title}`}
           >
-            {(project as any).colorIcon && (
+            {project.colorIcon && (
               <div class="float-icon-wrap" aria-hidden="true">
                 <img
                   src={withBase(
-                    (project as any).colorIcon.includes(':')
-                      ? `/images/icons/${(project as any).colorIcon.replace(':', '/')}.svg`
-                      : (project as any).colorIcon
+                    project.colorIcon.includes(':')
+                      ? `/images/icons/${project.colorIcon.replace(':', '/')}.svg`
+                      : project.colorIcon
                   )}
                   alt=""
                   class="float-icon"
@@ -90,34 +160,19 @@ const projectsJson = JSON.stringify(
               </div>
             )}
 
-            <div class={`project-card-inner${project.backgroundImage ? ' has-bg-img' : ''}`}>
-              {project.backgroundImage && (
+            <div class="project-card-inner">
+              {project.cover && (
                 <div class="card-bg-img" aria-hidden="true">
-                  <img
-                    src={withBase(project.backgroundImage!)}
-                    alt=""
-                    loading="lazy"
-                    width="600"
-                    height="400"
-                  />
+                  <img src={project.cover} alt="" loading="lazy" width="600" height="400" />
                 </div>
               )}
 
-              <div class="card-glow" aria-hidden="true" />
-
               <div class="p-5 flex flex-col flex-1 relative z-10">
-                <div class="flex items-start justify-between gap-3 mb-3">
-                  <p class="text-xs font-bold text-highlight uppercase tracking-widest leading-tight">
-                    {project.company}
-                  </p>
-                </div>
-
-                <h3 class="project-title text-lg font-bold mb-2 leading-snug">{project.title}</h3>
-
-                <p class="card-desc text-slate-400 text-sm leading-relaxed flex-1 mb-4">
-                  {project.description}
+                <p class="text-xs font-bold text-highlight uppercase tracking-widest leading-tight mb-3">
+                  {project.company}
                 </p>
-
+                <h3 class="project-title text-lg font-bold mb-2 leading-snug">{project.title}</h3>
+                <p class="card-desc text-sm leading-relaxed flex-1 mb-4">{project.summary}</p>
                 <div class="flex flex-wrap gap-1.5">
                   {project.tags.map((tag) => (
                     <span class="tag">{tag}</span>
@@ -126,7 +181,6 @@ const projectsJson = JSON.stringify(
               </div>
 
               <div class="project-footer relative z-10">
-                <div class="footer-shimmer" aria-hidden="true" />
                 <span class="category-badge">{project.category}</span>
                 {project.icon && icons[project.icon] && (
                   <div class="card-icon shrink-0">
@@ -142,7 +196,7 @@ const projectsJson = JSON.stringify(
                   </div>
                 )}
                 <span class="view-hint">
-                  <span class="view-hint-text">Click for link to project</span>
+                  <span class="view-hint-text">View details</span>
                   <svg
                     class="view-hint-arrow"
                     fill="none"
@@ -181,84 +235,80 @@ const projectsJson = JSON.stringify(
   <div class="modal-container" id="modal-container">
     <button class="modal-close" id="modal-close" aria-label="Close">
       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"
+        ></path>
       </svg>
     </button>
 
-    <div class="modal-hero" id="modal-hero">
-      <div class="modal-hero-overlay"></div>
-      <div class="modal-hero-content">
-        <div id="modal-category-badge" class="modal-cat-badge"></div>
-        <h2 id="modal-title" class="modal-heading"></h2>
-        <p id="modal-company" class="modal-company"></p>
+    <div class="modal-header-block">
+      <div class="modal-eyebrow">
+        <span id="modal-category-badge" class="modal-cat-badge"></span>
+        <span id="modal-company" class="modal-company"></span>
       </div>
+      <h2 id="modal-title" class="modal-heading"></h2>
     </div>
 
-    <div class="modal-body">
-      <p id="modal-description" class="modal-description"></p>
+    <div class="modal-body-scroll" id="modal-sections"></div>
+
+    <div class="modal-section modal-section--tags">
+      <h3 class="section-subheading">Built with</h3>
       <div id="modal-tags" class="modal-tags"></div>
-
-      <div class="modal-cta-wrap">
-        <a id="modal-link" href="#" target="_blank" rel="noopener" class="modal-cta-link">
-          <img
-            src={withBase('/images/assets/icon--link.png')}
-            alt=""
-            width={18}
-            height={18}
-            class="modal-link-icon"
-          />
-          <span id="modal-link-text">View Project</span>
-          <svg class="modal-cta-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-            ></path>
-          </svg>
-        </a>
-        <p id="modal-no-link" class="modal-no-link hidden">Private / No public link available.</p>
-      </div>
     </div>
+
+    <div class="modal-footer-bar" id="modal-links"></div>
   </div>
 </div>
 
-<!-- define:vars injects the server-rendered JSON blob as a JS variable in this inline script.
-     is:inline is required alongside define:vars; without it Astro would bundle the script
-     and the injected variable would not be in scope. -->
-<script is:inline define:vars={{ projectsJson }}>
-  // @ts-nocheck
+<script is:inline define:vars={{ projectsJson, iconPaths }}>
   const projects = JSON.parse(projectsJson);
+  const ICONS = JSON.parse(iconPaths);
+  const $ = (id) => document.getElementById(id);
 
-  document.querySelectorAll('#projects .reveal').forEach((el) => {
+  /** Escapes HTML, then applies the tiny markdown subset used in projects.json. */
+  const md = (raw) =>
+    raw
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*]+?)\*(?!\*)/g, '$1<em>$2</em>')
+      .replace(/`(.+?)`/g, '<code>$1</code>');
+
+  const el = (tag, cls, html) => {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  };
+
+  document.querySelectorAll('#projects .reveal').forEach((node) => {
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add('visible');
+          node.classList.add('visible');
           io.disconnect();
         }
       },
       { threshold: 0.05 }
     );
-    io.observe(el);
+    io.observe(node);
   });
 
+  /* ---------- filters ---------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.project-card[data-category]');
-  const empty = document.getElementById('projects-empty');
+  const empty = $('projects-empty');
   let active = null;
 
-  document.querySelectorAll('.filter-count').forEach((el) => {
-    const cat = el.dataset.count;
-    let n;
-    if (cat === 'all') n = cards.length;
-    else if (cat === 'featured') n = [...cards].filter((c) => c.dataset.featured === 'true').length;
-    else n = [...cards].filter((c) => c.dataset.category === cat).length;
-    el.textContent = `${n}`;
+  document.querySelectorAll('.filter-count').forEach((node) => {
+    const cat = node.dataset.count;
+    const n =
+      cat === 'all'
+        ? cards.length
+        : cat === 'featured'
+          ? [...cards].filter((c) => c.dataset.featured === 'true').length
+          : [...cards].filter((c) => c.dataset.category === cat).length;
+    node.textContent = String(n);
   });
 
   function applyFilter(filter) {
@@ -271,18 +321,16 @@ const projectsJson = JSON.stringify(
     });
     let visible = 0;
     cards.forEach((card) => {
-      const matches =
+      const match =
         filter === 'all' ||
         (filter === 'featured' && card.dataset.featured === 'true') ||
         card.dataset.category === filter;
       card.classList.remove('pf-enter');
-      if (!matches) {
+      if (!match) {
         card.classList.add('pf-hidden');
       } else {
         card.classList.remove('pf-hidden');
         card.style.setProperty('--enter-delay', `${visible * 0.05}s`);
-        // Force a reflow so the browser registers the class removal before re-adding pf-enter.
-        // Without this, the CSS animation does not restart when re-showing an already-visible card.
         void card.offsetWidth;
         card.classList.add('pf-enter');
         visible++;
@@ -291,69 +339,85 @@ const projectsJson = JSON.stringify(
     if (empty) empty.classList.toggle('hidden', visible > 0);
   }
 
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
-  });
-
+  filterBtns.forEach((btn) => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
   applyFilter('featured');
-  document.querySelector('[data-filter="featured"]')?.classList.add('filter-active');
 
-  const modal = document.getElementById('project-modal');
-  const container = document.getElementById('modal-container');
-  const closeBtn = document.getElementById('modal-close');
-  const modalHero = document.getElementById('modal-hero');
-  const modalCat = document.getElementById('modal-category-badge');
-  const modalTitle = document.getElementById('modal-title');
-  const modalCo = document.getElementById('modal-company');
-  const modalDesc = document.getElementById('modal-description');
-  const modalTags = document.getElementById('modal-tags');
-  const modalLink = document.getElementById('modal-link');
-  const modalLinkTx = document.getElementById('modal-link-text');
-  const modalNoLink = document.getElementById('modal-no-link');
+  /* ---------- modal ---------- */
+  const modal = $('project-modal');
+  const container = $('modal-container');
+  const closeBtn = $('modal-close');
+  const sectionsHost = $('modal-sections');
+  const linksHost = $('modal-links');
+  let lastFocused = null;
 
-  function openModal(idx) {
-    const p = projects[idx];
+  function renderSection(section) {
+    const wrap = el('section', 'modal-section');
+    wrap.append(el('h3', 'section-subheading', md(section.heading)));
+    if (section.text) wrap.append(el('p', 'modal-prose', md(section.text)));
+    if (section.items.length) {
+      const ul = el('ul', 'modal-bullet-list');
+      section.items.forEach((item) => ul.append(el('li', null, md(item))));
+      wrap.append(ul);
+    }
+    if (section.image) {
+      const fig = el('figure', 'modal-figure');
+      const img = el('img', 'modal-figure-img');
+      img.src = section.image;
+      img.alt = `${section.heading} — figure`;
+      img.loading = 'lazy';
+      fig.append(img);
+      fig.append(el('figcaption', 'modal-figure-cap', 'Click to view full size'));
+      wrap.append(fig);
+    }
+    return wrap;
+  }
+
+  function renderLink(link) {
+    const a = el('a', `modal-btn${link.primary ? ' modal-btn--primary' : ''}`);
+    a.href = link.href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const path = ICONS[link.icon];
+    if (path) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '1.5');
+      svg.setAttribute('class', 'modal-btn-icon');
+      svg.innerHTML = path;
+      a.append(svg);
+    }
+    a.append(document.createTextNode(link.label));
+    return a;
+  }
+
+  function openModal(id) {
+    const p = projects.find((item) => item.id === id);
     if (!p) return;
+    lastFocused = document.activeElement;
 
-    const img = p.backgroundImage || null;
-    if (img) {
-      modalHero.style.backgroundImage = `url('${img}')`;
-      modalHero.style.display = '';
-    } else {
-      modalHero.style.backgroundImage = '';
-      modalHero.style.display = 'none';
-    }
+    $('modal-title').textContent = p.title;
+    $('modal-company').textContent = p.company || '';
+    $('modal-category-badge').textContent = p.category || '';
+    $('modal-category-badge').classList.toggle('hidden', !p.category);
 
-    modalCat.textContent = p.category;
-    modalTitle.textContent = p.title;
-    modalCo.textContent = p.company;
-    modalDesc.textContent = p.description;
+    sectionsHost.replaceChildren(...p.sections.map(renderSection));
 
-    modalTags.innerHTML = '';
-    for (const t of p.tags) {
-      const span = document.createElement('span');
-      span.className = 'tag';
-      span.textContent = t;
-      modalTags.appendChild(span);
-    }
+    $('modal-tags').replaceChildren(
+      ...p.tags.map((t) => {
+        const s = document.createElement('span');
+        s.className = 'tag';
+        s.textContent = t;
+        return s;
+      })
+    );
 
-    if (p.link) {
-      modalLink.href = p.link;
-      if (p.link.includes('github.com')) modalLinkTx.textContent = 'View on GitHub';
-      else if (p.link.includes('gitlab')) modalLinkTx.textContent = 'View on GitLab';
-      else if (p.link.includes('blog')) modalLinkTx.textContent = 'Read the Post';
-      else modalLinkTx.textContent = 'View Project';
-      modalLink.classList.remove('hidden');
-      modalNoLink.classList.add('hidden');
-    } else {
-      modalLink.classList.add('hidden');
-      modalNoLink.classList.remove('hidden');
-    }
+    linksHost.replaceChildren(...p.links.map(renderLink));
+    linksHost.classList.toggle('hidden', p.links.length === 0);
 
-    // The `hidden` attribute (not a CSS class) is used here because the modal-backdrop rule
-    // sets `display:none !important` on `[hidden]`, which gives correct AT (screen reader) semantics.
     modal.removeAttribute('hidden');
-    document.body.style.overflow = 'hidden'; // prevent page scroll while modal is open
+    document.body.style.overflow = 'hidden';
     void container.offsetWidth;
     modal.classList.add('modal-open');
     closeBtn.focus();
@@ -366,19 +430,24 @@ const projectsJson = JSON.stringify(
       modal.setAttribute('hidden', '');
       modal.classList.remove('modal-closing');
       document.body.style.overflow = '';
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
     }, 280);
   }
 
   cards.forEach((card) => {
-    card.addEventListener('click', () => {
-      openModal(parseInt(card.dataset.index, 10));
-    });
+    card.addEventListener('click', () => openModal(card.dataset.id));
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openModal(parseInt(card.dataset.index, 10));
+        openModal(card.dataset.id);
       }
     });
+  });
+
+  // Full-size figure: clicking a section image opens it in a new tab.
+  sectionsHost.addEventListener('click', (e) => {
+    const img = e.target.closest('.modal-figure-img');
+    if (img?.src) window.open(img.src, '_blank', 'noopener');
   });
 
   closeBtn.addEventListener('click', closeModal);
@@ -391,6 +460,7 @@ const projectsJson = JSON.stringify(
 </script>
 
 <style is:global>
+  /* ---------- filter pills ---------- */
   .filter-btn {
     display: inline-flex;
     align-items: center;
@@ -404,11 +474,6 @@ const projectsJson = JSON.stringify(
     background: var(--bg-section);
     border: 1px solid var(--border);
     cursor: pointer;
-    transition:
-      color 0.2s ease,
-      background 0.2s ease,
-      border-color 0.2s ease,
-      transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   .filter-btn:hover {
     color: var(--text-muted);
@@ -422,8 +487,8 @@ const projectsJson = JSON.stringify(
   }
   .filter-btn.filter-active {
     color: var(--accent);
-    background: rgba(99, 102, 241, 0.1);
-    border-color: rgba(99, 102, 241, 0.4);
+    background: var(--pg-accent-soft);
+    border-color: var(--pg-accent-line);
   }
   .filter-count {
     font-size: 0.65rem;
@@ -434,19 +499,17 @@ const projectsJson = JSON.stringify(
     padding: 0 0.35rem;
     min-width: 1.1rem;
     text-align: center;
-    transition:
-      color 0.2s ease,
-      background 0.2s ease;
   }
   .filter-btn.filter-active .filter-count {
     color: var(--accent);
-    background: rgba(99, 102, 241, 0.15);
+    background: var(--pg-accent-line);
   }
 
+  /* ---------- card ---------- */
   .project-card {
-    transition: opacity 0.2s ease;
     position: relative;
     cursor: pointer;
+    transition: opacity 0.2s ease;
   }
   .project-card:focus-visible .project-card-inner {
     outline: 2px solid var(--accent);
@@ -469,6 +532,38 @@ const projectsJson = JSON.stringify(
     }
   }
 
+  .project-card-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    box-shadow: var(--pg-shadow-card);
+    overflow: hidden;
+  }
+  .project-card:hover .project-card-inner {
+    transform: translateY(-5px);
+    border-color: var(--pg-accent-line);
+    box-shadow: var(--pg-shadow-hover);
+  }
+
+  .project-title {
+    color: var(--text);
+    transition: color 0.35s ease;
+  }
+  .project-card:hover .project-title {
+    color: var(--accent);
+  }
+  .card-desc {
+    color: var(--text-muted);
+  }
+  .card-icon {
+    color: var(--pg-accent-soft);
+    transition: color 0.35s ease;
+  }
+
   .float-icon-wrap {
     position: absolute;
     top: -14px;
@@ -479,61 +574,43 @@ const projectsJson = JSON.stringify(
     border-radius: 10px;
     background: var(--bg-card-solid);
     border: 1px solid var(--border);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--pg-shadow-icon);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 7px;
-    transition:
-      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-      box-shadow 0.35s ease,
-      border-color 0.35s ease;
   }
   .project-card:hover .float-icon-wrap {
     transform: translateY(-4px) scale(1.1);
     border-color: var(--border-hover);
-    box-shadow:
-      0 8px 28px rgba(0, 0, 0, 0.35),
-      0 0 18px rgba(99, 102, 241, 0.15);
+    box-shadow: var(--pg-shadow-icon-hover);
   }
   .float-icon {
     width: 100%;
     height: 100%;
     object-fit: contain;
     display: block;
-  }
-  .float-icon-mdi {
-    filter: invert(1) brightness(0.85);
+    filter: var(--pg-icon-filter);
   }
 
   .category-badge {
+    position: relative;
+    z-index: 1;
     font-size: 0.56rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    white-space: nowrap;
     color: var(--text-dim);
-    background: rgba(99, 102, 241, 0.05);
-    border: 1px solid rgba(99, 102, 241, 0.12);
-    opacity: 0.7;
+    background: var(--pg-accent-soft);
+    border: 1px solid var(--pg-accent-line);
     border-radius: 9999px;
     padding: 0.25rem 0.75rem;
-    position: relative;
-    z-index: 1;
-    white-space: nowrap;
-    transition:
-      color 0.3s ease,
-      background 0.3s ease,
-      border-color 0.3s ease,
-      opacity 0.3s ease;
   }
   .project-card:hover .category-badge {
     color: var(--text-muted);
-    background: rgba(99, 102, 241, 0.1);
-    border-color: rgba(99, 102, 241, 0.3);
-    opacity: 1;
-  }
-  .project-card.has-bg .category-badge {
-    color: rgba(226, 232, 240, 0.65);
+    background: var(--pg-accent-soft);
+    border-color: var(--pg-accent-line-hover);
   }
 
   .card-bg-img {
@@ -542,17 +619,22 @@ const projectsJson = JSON.stringify(
     z-index: 0;
     overflow: hidden;
     border-radius: inherit;
+    filter: var(--pg-card-bg-filter);
+    transition: filter 0.55s ease;
+  }
+  .project-card:hover .card-bg-img {
+    filter: var(--pg-card-bg-filter-hover);
   }
   .card-bg-img::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(155deg, rgba(4, 8, 22, 0.38) 0%, rgba(4, 8, 22, 0.62) 100%);
+    background: rgba(255, 255, 255, 0.85);
     transition: background 0.55s ease;
   }
   .project-card:hover .card-bg-img::after {
-    background: linear-gradient(155deg, rgba(4, 8, 22, 0.26) 0%, rgba(4, 8, 22, 0.5) 100%);
+    background: var(--pg-card-scrim-hover);
   }
   .card-bg-img img {
     position: absolute;
@@ -561,63 +643,29 @@ const projectsJson = JSON.stringify(
     height: 120%;
     object-fit: cover;
     object-position: center;
-    filter: blur(24px) saturate(2.1) brightness(0.44) grayscale(0.25);
+    filter: var(--pg-card-blur);
     transition: filter 0.55s ease;
   }
   .project-card:hover .card-bg-img img {
-    filter: blur(18px) saturate(2.5) brightness(0.56) grayscale(0.25);
+    filter: var(--pg-card-blur-hover);
   }
-
-  .project-card-inner {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    border-radius: 1rem;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    overflow: hidden;
-    transition:
-      transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      border-color 0.35s ease,
-      box-shadow 0.35s ease;
-  }
-  .project-card-inner.has-bg-img {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  .project-card:hover .project-card-inner {
-    transform: translateY(-5px);
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow:
-      0 20px 52px rgba(0, 0, 0, 0.38),
-      0 0 0 1px rgba(99, 102, 241, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  }
-
-  .project-title {
-    color: var(--text);
-    transition: color 0.35s ease;
-  }
-  .project-card:not(.has-bg):hover .project-title {
-    color: var(--accent);
+  /* With a cover image the card sits on the scrim, so text needs fixed colours. */
+  .project-card.has-bg .project-card-inner {
+    background: #ffffff;
   }
   .project-card.has-bg .project-title {
-    color: #e2e8f0;
+    color: var(--pg-on-scrim-strong);
+  }
+  .project-card.has-bg .card-desc,
+  .project-card.has-bg .category-badge,
+  .project-card.has-bg .view-hint {
+    color: var(--pg-on-scrim-dim);
   }
   .project-card.has-bg:hover .project-title {
     color: var(--accent);
   }
-
-  .project-card.has-bg .card-desc {
-    color: rgba(203, 213, 225, 0.82);
-  }
-
-  .card-glow {
-    display: none;
+  .project-card.has-bg:hover .view-hint {
+    color: var(--pg-on-scrim-strong);
   }
 
   .project-footer {
@@ -627,61 +675,35 @@ const projectsJson = JSON.stringify(
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--pg-footer-bg);
     gap: 0.75rem;
-    transition:
-      border-top-color 0.35s ease,
-      background 0.35s ease;
   }
   .project-card:hover .project-footer {
-    border-top-color: rgba(99, 102, 241, 0.22);
-    background: rgba(99, 102, 241, 0.06);
+    background: var(--pg-footer-bg-hover);
   }
   .project-card.has-bg .project-footer {
-    background: rgba(0, 0, 0, 0.32);
-    border-top-color: rgba(255, 255, 255, 0.1);
+    background: var(--pg-on-scrim-footer);
+    border-top-color: var(--pg-on-scrim-border);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
-  }
-  .project-card.has-bg:hover .project-footer {
-    background: rgba(99, 102, 241, 0.22);
-    border-top-color: rgba(99, 102, 241, 0.35);
-  }
-  .footer-shimmer {
-    display: none;
-  }
-
-  .card-icon {
-    color: rgba(99, 102, 241, 0.45);
-    transition: color 0.35s ease;
-  }
-  .project-card:hover .view-hint svg {
-    color: rgba(99, 102, 241, 0.85);
-    transform: rotate(-8deg) scale(1.15);
   }
 
   .view-hint {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--text-dimmer);
     margin-left: auto;
     position: relative;
     z-index: 1;
-    transition:
-      color 0.3s ease,
-      gap 0.35s ease;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-dimmer);
     user-select: none;
   }
   .view-hint-arrow {
     width: 0.8rem;
     height: 0.8rem;
     flex-shrink: 0;
-    transition:
-      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-      opacity 0.3s ease;
     opacity: 0.5;
   }
   .project-card:hover .view-hint {
@@ -692,19 +714,19 @@ const projectsJson = JSON.stringify(
     transform: translate(3px, -3px);
     opacity: 1;
   }
-  .project-card.has-bg .view-hint {
-    color: rgba(148, 163, 184, 0.55);
-  }
 
+  /* ---------- modal ---------- */
   .modal-backdrop {
     position: fixed;
     inset: 0;
     z-index: 10000;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding: 5vh 1rem 2rem;
-    background: rgba(2, 6, 23, 0.82);
+    padding: 1.5rem;
+    background: var(--pg-modal-scrim);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     overflow-y: auto;
     opacity: 0;
     pointer-events: none;
@@ -716,8 +738,6 @@ const projectsJson = JSON.stringify(
   .modal-backdrop.modal-open {
     opacity: 1;
     pointer-events: auto;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
   }
   .modal-backdrop.modal-closing {
     opacity: 0;
@@ -726,20 +746,18 @@ const projectsJson = JSON.stringify(
 
   .modal-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    /* Wide enough that figures are readable rather than letterboxed. */
     width: 100%;
-    max-width: 640px;
+    max-width: min(78rem, 100%);
+    max-height: 92vh;
     background: var(--bg-overlay);
     border: 1px solid var(--border);
     border-radius: 1.25rem;
-    box-shadow:
-      0 32px 80px rgba(0, 0, 0, 0.55),
-      0 0 0 1px rgba(99, 102, 241, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: var(--pg-shadow-modal);
     overflow: hidden;
     transform: translateY(28px) scale(0.97);
-    transition:
-      transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.28s ease;
     opacity: 0;
   }
   .modal-open .modal-container {
@@ -753,27 +771,23 @@ const projectsJson = JSON.stringify(
 
   .modal-close {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 20;
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.45);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #94a3b8;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
     cursor: pointer;
-    transition:
-      background 0.2s ease,
-      color 0.2s ease,
-      transform 0.25s ease;
   }
   .modal-close:hover {
-    background: rgba(99, 102, 241, 0.25);
-    color: #fff;
+    background: var(--pg-accent-soft);
+    color: var(--accent);
     transform: rotate(90deg);
   }
   .modal-close:focus-visible {
@@ -781,285 +795,172 @@ const projectsJson = JSON.stringify(
     outline-offset: 2px;
   }
 
-  .modal-hero {
-    position: relative;
-    height: 220px;
-    background-size: cover;
-    background-position: top center;
-    background-color: var(--bg-section);
-    flex-shrink: 0;
+  .modal-header-block {
+    padding: 1.75rem 2rem 1.25rem;
+    border-bottom: 1px solid var(--border);
   }
-  .modal-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.15) 0%,
-      rgba(15, 23, 42, 0.85) 80%,
-      rgba(15, 23, 42, 1) 100%
-    );
-  }
-  .modal-hero-content {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem 1.75rem 1.25rem;
-  }
-  .modal-cat-badge {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    background: rgba(99, 102, 241, 0.12);
-    border: 1px solid rgba(99, 102, 241, 0.25);
-    border-radius: 9999px;
-    padding: 0.2rem 0.65rem;
-    margin-bottom: 0.6rem;
+  .modal-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
   }
   .modal-heading {
-    font-size: 1.35rem;
+    font-size: clamp(1.35rem, 2.6vw, 1.9rem);
     font-weight: 800;
     line-height: 1.25;
+    margin: 0;
     color: var(--text);
-    margin: 0 0 0.3rem;
   }
-  .modal-company {
-    font-size: 0.72rem;
-    font-weight: 600;
+  .modal-cat-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent);
-    opacity: 0.75;
-    margin: 0;
+    background: var(--pg-accent-soft);
+    border: 1px solid var(--pg-accent-line);
+    padding: 0.25rem 0.65rem;
+    border-radius: 0.375rem;
+  }
+  .modal-company {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  .modal-body {
-    padding: 1.5rem 1.75rem 1.75rem;
+  .modal-body-scroll {
+    padding: 1.75rem 2rem 0.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
-  .modal-description {
-    font-size: 0.925rem;
+  .modal-section {
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-section--tags {
+    padding: 1.5rem 2rem 1.75rem;
+  }
+  .section-subheading {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--accent);
+    margin-bottom: 0.65rem;
+  }
+  .modal-prose {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 68ch;
+  }
+  .modal-prose strong {
+    color: var(--text);
+    font-weight: 650;
+  }
+  .modal-bullet-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.975rem;
     line-height: 1.65;
     color: var(--text-muted);
-    margin-bottom: 1.25rem;
+    max-width: 72ch;
   }
+  .modal-bullet-list strong {
+    color: var(--text);
+    font-weight: 650;
+  }
+  .modal-prose code,
+  .modal-bullet-list code {
+    font-family: monospace;
+    font-size: 0.9em;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    padding: 0.05em 0.3em;
+  }
+
+  .modal-figure {
+    margin: 1.1rem 0 0;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: var(--bg-section);
+  }
+  /* No max-height: figures render at their natural size so nothing is cropped. */
+  .modal-figure-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+  }
+  .modal-figure-cap {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+    border-top: 1px solid var(--border);
+  }
+
   .modal-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-bottom: 1.75rem;
   }
 
-  .modal-cta-wrap {
+  .modal-footer-bar {
+    padding: 1.25rem 2rem;
     border-top: 1px solid var(--border);
-    padding-top: 1.5rem;
-    text-align: center;
+    background: var(--bg-section);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
   }
-  .modal-cta-link {
+  .modal-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--accent);
-    text-decoration: none;
-    transition:
-      gap 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-      filter 0.25s ease;
-  }
-  .modal-cta-link:hover {
-    gap: 1rem;
-    filter: brightness(1.15);
-  }
-  .modal-cta-arrow {
-    width: 1.1rem;
-    height: 1.1rem;
-    flex-shrink: 0;
-    color: #38bdf8;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    -webkit-text-fill-color: initial;
-  }
-  .modal-cta-link:hover .modal-cta-arrow {
-    transform: translate(4px, -4px);
-  }
-  .modal-no-link {
-    font-size: 0.85rem;
-    font-style: italic;
-    color: var(--text-dim);
-  }
-
-  .modal-cta-wrap a {
-    display: inline-flex;
+    gap: 0.5rem;
+    padding: 0.625rem 1.15rem;
+    border-radius: 0.5rem;
+    background: var(--bg-card-solid);
+    border: 1px solid var(--border);
     color: var(--text);
+    font-weight: 600;
+    font-size: 0.875rem;
     text-decoration: none;
-    font-size: 1.5em;
-    position: relative;
-    padding: 0.3em;
-    margin-top: 0.2em;
   }
-  .modal-cta-wrap a:focus-visible {
+  .modal-btn:hover {
+    border-color: var(--border-hover);
+    background: var(--pg-accent-soft);
+    transform: translateY(-1px);
+  }
+  .modal-btn:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 3px;
-    border-radius: 0.25rem;
+    outline-offset: 2px;
   }
-  .modal-cta-wrap a:after {
-    display: block;
-    content: ' ';
-    width: 100%;
-    height: 0.2em;
-    background-color: var(--bg-overlay);
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: -0.2em;
-    opacity: 1;
-    transition:
-      height 0.2s cubic-bezier(0.81, 0.1, 0.68, 0.96),
-      bottom 0.2s cubic-bezier(0.81, 0.1, 0.68, 0.96);
-    pointer-events: none;
-    mix-blend-mode: difference;
-    border-radius: 0.1em;
+  .modal-btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
   }
-  .modal-cta-wrap a:hover::after {
-    bottom: 0;
-    height: 100%;
+  .modal-btn--primary:hover {
+    background: var(--accent);
+    color: #fff;
+    filter: brightness(1.12);
   }
-  .modal-cta-link {
-    padding: 0.5rem 1rem;
-  }
-
-  .modal-body .modal-cta-link img {
-    filter: saturate(2);
-    transform: scale(1.5);
-    margin-right: 10px;
-  }
-  .modal-cta-wrap a:hover img {
-    filter: saturate(10) invert(1);
-    transform: scale(1.8);
-  }
-
-  .project-footer .card-icon svg {
-    transition:
-      transform 300ms ease,
-      opacity 300ms ease;
-  }
-  .project-card-inner:hover .project-footer .card-icon svg {
-    transform: translateY(80px);
-    opacity: 0;
-  }
-
-  [data-theme='light'] .float-icon-mdi {
-    filter: none;
-  }
-
-  [data-theme='light'] .project-card.has-bg .card-bg-img::after {
-    display: none;
-  }
-  [data-theme='light'] .project-card.has-bg .card-bg-img {
-    filter: invert(0.88) saturate(1.4) brightness(1.1);
-  }
-  [data-theme='light'] .project-card.has-bg:hover .card-bg-img {
-    filter: invert(0.88) saturate(1.7) brightness(1.2);
-  }
-  [data-theme='light'] .project-card.has-bg .card-bg-img img {
-    filter: blur(24px) saturate(1.8) brightness(0.72);
-  }
-  [data-theme='light'] .project-card.has-bg:hover .card-bg-img img {
-    filter: blur(18px) saturate(2.1) brightness(0.82);
-  }
-
-  [data-theme='light'] .project-card-inner.has-bg-img {
-    background: rgba(255, 255, 255, 0.52);
-  }
-
-  [data-theme='light'] .project-card.has-bg .project-card-inner {
-    color: #1e293b;
-  }
-  [data-theme='light'] .project-card.has-bg h3 {
-    color: #0f172a;
-  }
-  [data-theme='light'] .project-card.has-bg p {
-    color: rgba(15, 23, 42, 0.75);
-  }
-  [data-theme='light'] .project-card.has-bg .project-title {
-    color: #0f172a;
-  }
-  [data-theme='light'] .project-card.has-bg:hover .project-title {
-    color: var(--accent);
-  }
-  [data-theme='light'] .project-card.has-bg .card-desc {
-    color: rgba(30, 41, 59, 0.78);
-  }
-  [data-theme='light'] .project-card.has-bg .category-badge {
-    color: rgba(15, 23, 42, 0.6);
-  }
-  [data-theme='light'] .project-card.has-bg .view-hint {
-    color: rgba(71, 85, 105, 0.65);
-  }
-
-  [data-theme='light'] .project-card:hover .project-card-inner {
-    box-shadow:
-      0 16px 40px rgba(0, 0, 0, 0.1),
-      0 0 0 1px rgba(109, 40, 217, 0.18);
-  }
-
-  [data-theme='light'] .project-footer {
-    background: rgba(255, 255, 255, 0.2);
-    border-top-color: rgba(0, 0, 0, 0.07);
-    color: var(--text-muted);
-  }
-  [data-theme='light'] .project-card:hover .project-footer {
-    background: rgba(109, 40, 217, 0.05);
-  }
-  [data-theme='light'] .project-card.has-bg .project-footer {
-    background: rgba(255, 255, 255, 0.55);
-    border-top-color: rgba(0, 0, 0, 0.08);
-  }
-  [data-theme='light'] .project-card.has-bg:hover .project-footer {
-    background: rgba(109, 40, 217, 0.08);
-  }
-
-  [data-theme='light'] .modal-backdrop {
-    background: rgba(241, 245, 249, 0.88);
-  }
-  [data-theme='light'] .modal-container {
-    box-shadow:
-      0 24px 60px rgba(0, 0, 0, 0.14),
-      0 0 0 1px rgba(109, 40, 217, 0.1);
-  }
-  [data-theme='light'] .modal-close {
-    background: rgba(255, 255, 255, 0.7);
-    border-color: rgba(0, 0, 0, 0.1);
-    color: #64748b;
-  }
-  [data-theme='light'] .modal-close:hover {
-    background: rgba(109, 40, 217, 0.15);
-    color: #6d28d9;
-  }
-  [data-theme='light'] .modal-hero {
-    background-color: #e2e8f0;
-  }
-  [data-theme='light'] .modal-hero-overlay {
-    background: linear-gradient(to bottom, #ffffff00, #0f172a4d 80%, #a8a8a875);
-  }
-  [data-theme='light'] .modal-hero-content {
-    color: #0f172a;
-  }
-  [data-theme='light'] .modal-cat-badge {
-    color: #ffffff;
-    background: #6d28d91f;
-    border-color: #f5f5f5d6;
-  }
-  [data-theme='light'] .modal-heading {
-    color: white;
-    text-shadow: 1px 1px 5px rgb(0 0 0);
-  }
-  [data-theme='light'] .modal-company {
-    color: #ffffff;
-    font-weight: 700;
-    opacity: 1;
-    text-decoration: underline;
+  .modal-btn-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
   }
 </style>

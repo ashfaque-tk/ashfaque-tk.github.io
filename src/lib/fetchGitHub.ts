@@ -157,20 +157,51 @@ function localPathFor(repoName: string, imageUrl: string): string {
   return `/images/projects/${repoName}.${ext}`;
 }
 
+/** One write-up block in the project modal. `image` is an optional figure shown under the text. */
+export interface ProjectSection {
+  title?: string;
+  text?: string;
+  items?: string[];
+  image?: string;
+}
+
+/** Outbound links rendered as separate buttons in the project modal. */
+export interface ProjectLinks {
+  /** Source repository. Also drives README image fetching. */
+  code?: string;
+  /** Long-form write-up (Medium, blog, ...). */
+  read?: string;
+  /** Live app / dashboard. */
+  app?: string;
+}
+
 export interface ProjectEntry {
   title: string;
   company: string;
   category: string;
-  description: string;
+  summary: string;
   tags: string[];
   icon: string;
   featuredImage?: string;
   sliderImage?: string;
   sliderOrder?: number;
+  /** Optional heading shown with the image in the hero carousel. */
+  slideHeading?: string;
+  cover?: string | string[];
+  /** Optional gallery of screenshots, used by the showcase layout. */
+  images?: string[];
   backgroundImage?: string;
-  link: string;
-  colorIcon?: string;
+  problem?: ProjectSection;
+  solution?: ProjectSection;
+  decisions?: ProjectSection;
+  results?: ProjectSection;
+  links?: ProjectLinks;
+  featured?: boolean;
+  resume?: boolean;
+  /** @deprecated kept for older entries; prefer links.code. */
   githubRepo?: string;
+  colorIcon?: string;
+  link?: string;
 }
 
 // Singleton promise: Astro evaluates Hero.astro and Projects.astro in the same build pass.
@@ -184,8 +215,13 @@ export async function augmentProjectsWithImages(projects: ProjectEntry[]): Promi
   return _buildResult;
 }
 
+/** Repo URL for a project: links.code, falling back to the deprecated top-level field. */
+function repoUrlOf(project: ProjectEntry): string | undefined {
+  return project.links?.code || project.githubRepo;
+}
+
 async function _doAugment(projects: ProjectEntry[]): Promise<ProjectEntry[]> {
-  const githubProjects = projects.filter((p) => p.githubRepo);
+  const githubProjects = projects.filter((p) => repoUrlOf(p));
   if (githubProjects.length === 0) return projects;
   if (!GITHUB_USER) return projects;
 
@@ -203,7 +239,7 @@ async function _doAugment(projects: ProjectEntry[]): Promise<ProjectEntry[]> {
   const repoMap = new Map(repos.map((r) => [r.name.toLowerCase(), r]));
 
   for (const project of githubProjects) {
-    const repoName = project.githubRepo!;
+    const repoName = repoUrlOf(project)!;
     const repoKey = repoName.toLowerCase();
     const repoInfo = repoMap.get(repoKey);
 
@@ -245,9 +281,10 @@ async function _doAugment(projects: ProjectEntry[]): Promise<ProjectEntry[]> {
 
 function applyCache(projects: ProjectEntry[], cache: Cache): ProjectEntry[] {
   return projects.map((project) => {
-    if (!project.githubRepo) return project;
+    const repoUrl = repoUrlOf(project);
+    if (!repoUrl) return project;
 
-    const entry = cache[project.githubRepo];
+    const entry = cache[repoUrl];
     if (!entry?.image) return project;
 
     // Prefer the locally downloaded copy; fall back to the remote URL if the

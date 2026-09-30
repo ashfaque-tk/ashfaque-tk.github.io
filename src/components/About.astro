@@ -1,193 +1,56 @@
 ---
 import personalData from '../data/personal.json';
+
+const p = personalData as unknown as Record<string, string | undefined>;
+
+/** Facts are pushed from personal.json so no row renders when an optional field is absent. */
+type Fact = { label: string; value: string; href?: string };
+const facts: Fact[] = [];
+const addFact = (label: string, value?: string, href?: string) => {
+  if (value) facts.push({ label, value, href });
+};
+
+addFact('Role', p.title);
+addFact('Location', p.location);
+if (p.yearsExperience) addFact('Experience', `${p.yearsExperience} years`);
+addFact('Education', p.education);
+addFact('Volunteer', p.volunteer);
+if (p.portfolioUrl)
+  addFact('Portfolio', p.portfolioUrl.replace(/^https?:\/\//, ''), p.portfolioUrl);
 ---
 
-<section id="about" class="py-24 bg-slate-900/30" style="scroll-margin-top: 80px;">
+<section id="about" class="py-24" style="scroll-margin-top: 80px;">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-12 reveal">
-        <p class="text-sm font-semibold tracking-widest text-highlight uppercase mb-3">
-          Get to know me
-        </p>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-0 section-title">About Me</h2>
+    <div class="about-shell">
+      <div class="about-head reveal">
+        <p class="about-eyebrow">Get to know me</p>
+        <h2 class="section-title about-heading">About Me</h2>
       </div>
 
-      <div class="card reveal" style="transition-delay: 0.15s;">
-        <p class="text-lg text-slate-300 leading-relaxed">
-          {personalData.aboutLong}
-        </p>
+      <article class="card about-card reveal">
+        <p class="about-prose">{p.aboutLong}</p>
 
-        <hr class="gradient-divider my-8" />
+        <hr class="about-rule" />
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="flex items-start gap-4">
-            <div
-              class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5"
-            >
-              <svg
-                class="w-5 h-5 text-accent"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Role</h3>
-              <p class="text-slate-400 text-sm">{personalData.title}</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div
-              class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5"
-            >
-              <svg
-                class="w-5 h-5 text-accent"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                ></path>
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Location</h3>
-              <p class="text-slate-400 text-sm">{personalData.location}</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div
-              class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5"
-            >
-              <svg
-                class="w-5 h-5 text-accent"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Experience</h3>
-              <p class="text-slate-400 text-sm">
-                {personalData.yearsExperience} Years of Experience
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-4">
-            <div
-              class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5"
-            >
-              <svg
-                class="w-5 h-5 text-accent"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-white font-semibold mb-1">Education</h3>
-              <p class="text-slate-400 text-sm">{personalData.education}</p>
-            </div>
-          </div>
-
+        <dl class="about-facts">
           {
-            personalData.volunteer && (
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <svg
-                    class="w-5 h-5 text-accent"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-white font-semibold mb-1">Volunteer</h3>
-                  <p class="text-slate-400 text-sm">{personalData.volunteer}</p>
-                </div>
+            facts.map((fact) => (
+              <div class="about-fact">
+                <dt class="about-fact-label">{fact.label}</dt>
+                <dd class="about-fact-value">
+                  {fact.href ? (
+                    <a href={fact.href} target="_blank" rel="noopener" class="about-fact-link">
+                      {fact.value}
+                    </a>
+                  ) : (
+                    fact.value
+                  )}
+                </dd>
               </div>
-            )
+            ))
           }
-
-          {
-            personalData.portfolioUrl && (
-              <div class="flex items-start gap-4">
-                <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <svg
-                    class="w-5 h-5 text-accent"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h3 class="text-white font-semibold mb-1">Portfolio</h3>
-                  <a
-                    href={personalData.portfolioUrl}
-                    target="_blank"
-                    rel="noopener"
-                    class="text-slate-400 text-sm hover:text-accent transition-colors"
-                  >
-                    {personalData.portfolioUrl.replace(/^https?:\/\//, '')}
-                  </a>
-                </div>
-              </div>
-            )
-          }
-        </div>
-      </div>
+        </dl>
+      </article>
     </div>
   </div>
 </section>
@@ -206,3 +69,84 @@ import personalData from '../data/personal.json';
     io.observe(el);
   });
 </script>
+
+<style>
+  .about-shell {
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .about-head {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .about-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+  }
+  .about-heading {
+    font-size: clamp(1.875rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .about-card {
+    padding: clamp(1.75rem, 4vw, 2.75rem);
+  }
+
+  /* One typographic column: the paragraph is the point, not the chrome. */
+  .about-prose {
+    font-size: clamp(1.05rem, 1.9vw, 1.175rem);
+    line-height: 1.75;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .about-rule {
+    height: 1px;
+    border: none;
+    margin: 2.25rem 0;
+    background: var(--border);
+  }
+
+  /* Label/value pairs read as a definition list rather than a pile of icon cards. */
+  .about-facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.5rem 2.5rem;
+    margin: 0;
+  }
+  .about-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+  .about-fact-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-dimmer);
+  }
+  .about-fact-value {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text);
+    text-wrap: pretty;
+  }
+  .about-fact-link {
+    color: inherit;
+    text-decoration-color: var(--pg-accent-line-hover);
+    text-underline-offset: 0.2em;
+    transition: color 0.2s ease;
+  }
+  .about-fact-link:hover {
+    color: var(--accent);
+  }
+</style>

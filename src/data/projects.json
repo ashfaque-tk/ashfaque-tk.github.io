@@ -2,86 +2,76 @@
   "layout": "grid",
   "items": [
     {
-      "title": "Open Source Portfolio Template",
+      "title": "Demand Forecasting & Inventory Optimization",
+      "company": "Personal Project",
+      "category": "",
       "featured": true,
       "resume": true,
-      "company": "Community",
-      "category": "webdev",
-      "description": "The template you're looking at right now. Built with Astro, fully data-driven, and designed to be claimed by anyone. Fork it, fill it, ship it. All placeholder content is waiting for yours.",
-      "tags": ["Astro", "TypeScript", "Tailwind CSS", "Open Source", "Template"],
+      "tags": [
+        "Time-Series Forecast",
+        "Inventory Optimization",
+        "Intermittent demand",
+        "LGBM",
+        "Streamlit"
+      ],
       "icon": "command-line",
-      "sliderImage": "/images/projects/use-astro2.jpg",
-      "sliderOrder": 1,
-      "backgroundImage": "/images/projects/use-astro3.jpg",
-      "images": [
-        "/images/projects/use-astro1.jpg",
-        "/images/projects/use-astro2.jpg",
-        "/images/projects/use-astro3.jpg"
+      "cover": [
+        "/images/projects/sku-profiles.png",
+        "/images/projects/m5-holdout.png"
       ],
-      "link": "",
-      "colorIcon": "devicon:astro",
-      "githubRepo": "portfolio-template"
+      "slideHeading": "Forecast -> Decisions",
+      "summary": "A LightGBM demand forecast that cut inventory cost 8.9% against a seasonal moving-average baseline while holding a 90.4% service level.",
+      "problem": {
+        "text": "Standard demand forecasting breaks down on **intermittent demand**, which represents 74% of the product catalogue. A model tuned only for high-volume SKUs overstocks slow movers and burns holding cost, while a model tuned for them under-forecasts the winners.",
+        "image": "/images/projects/demand_classes.png"
+      },
+      "solution": {
+        "title": "The Solution",
+        "text": "A recursive LightGBM forecaster with per-SKU feature engineering, wrapped in a safety-stock policy sized from forecast variance rather than a fixed buffer."
+      },
+      "decisions": {
+        "title": "Solution Overview",
+        "items": [
+          "** Multi-horizon direct forecasting with leakage free lags and rolling features, calander effects such as promotions, holidays etc."
+        ]
+      },
+      "results": {
+        "text": "Across a 28-day blind holdout the forecast reduced total inventory cost by **$1,601 (8.9%)** versus the seasonal moving-average baseline, while maintaining a **90.4% service level**.",
+        "image": "/images/projects/m5-holdout.png"
+      },
+      "links": {
+        "code": "https://github.com/ashfaque-tk/retail-demand-forecast/",
+        "app": "https://demand-forecast-inventory.streamlit.app/"
+      }
     },
     {
-      "title": "3D Environment Study",
+      "title": "Constraint Allocation",
+      "company": "Personal Project",
+      "category": "",
       "featured": true,
       "resume": true,
-      "company": "Personal Work",
-      "category": "blender",
-      "description": "A series of Blender scenes exploring lighting, texture, and atmosphere — no narrative, just craft. Rendered in Cycles, post-processed in Photoshop, shared as a study in patience and iteration.",
-      "tags": ["Blender", "3D Modeling", "Lighting", "Cycles Render", "Photoshop"],
-      "icon": "cpu-chip",
-      "sliderImage": "/images/projects/blender-mockup2.jpg",
-      "sliderOrder": 2,
-      "backgroundImage": "/images/projects/blender-mockup1.jpg",
-      "images": [
-        "/images/projects/blender-mockup1.jpg",
-        "/images/projects/blender-mockup2.jpg",
-        "/images/projects/blender-mockup3.jpg"
+      "tags": [
+        "Operation Research",
+        "Mixed Integer Linear Programming"
       ],
-      "link": "",
-      "colorIcon": "devicon:blender",
-      "githubRepo": ""
-    },
-    {
-      "title": "Personal Design System",
-      "featured": true,
-      "company": "Side Project",
-      "category": "design",
-      "description": "A living component library built for personal and freelance use. Design tokens, reusable components, and documentation that travel from project to project — no starting from scratch every time.",
-      "tags": ["Figma", "CSS", "TypeScript", "Design Systems", "Component Library"],
-      "icon": "document-text",
-      "sliderImage": "/images/projects/design-library3.jpg",
-      "sliderOrder": 4,
-      "backgroundImage": "/images/projects/design-library2.jpg",
-      "images": [
-        "/images/projects/design-library1.jpg",
-        "/images/projects/design-library2.jpg",
-        "/images/projects/design-library3.jpg"
-      ],
-      "link": "",
-      "colorIcon": "devicon:figma",
-      "githubRepo": "design-system"
-    },
-    {
-      "title": "Photography Workflow App",
-      "resume": true,
-      "company": "Side Project",
-      "category": "appdev",
-      "description": "A lightweight local web app for managing shoot intake, selects, and client delivery — replacing a patchwork of folders, spreadsheets, and emails with a single tool built for the way I work.",
-      "tags": ["React", "SQLite", "Photography", "Workflow", "Node.js"],
-      "icon": "eye",
-      "sliderImage": "/images/projects/web-app2.jpg",
-      "sliderOrder": 3,
-      "backgroundImage": "/images/projects/web-app3.jpg",
-      "images": [
-        "/images/projects/web-app1.jpg",
-        "/images/projects/web-app2.jpg",
-        "/images/projects/web-app3.jpg"
-      ],
-      "link": "",
-      "colorIcon": "devicon:react",
-      "githubRepo": "photo-workflow"
+      "icon": "command-line",
+      "cover": "/images/projects/football-squad-op.png",
+      "slideHeading": "Budget-constrained squad allocation",
+      "summary": "A MILP squad builder that returns a provably optimal lineup, and reports infeasibility instead of quietly returning a bad team.",
+      "problem": {
+        "text": "Budget, formation balance, positional versatility, and players already decided on \u2014 each constraint is simple alone, and contradictory together. Scoring candidates by hand finds something *plausible*. It never finds the best one, and it cannot tell you when no valid squad exists.",
+        "image": "/images/projects/football-squad-op.png"
+      },
+      "solution": {
+        "title": "The Solution",
+        "text": "Formulated as a mixed-integer linear program so the solver returns the best available squad under the constraints, and an unsatisfiable scenario is reported as infeasible rather than silently degraded."
+      },
+      "results": {
+        "text": "The returned squad is provably optimal for the given budget and formation. Scenarios that cannot be satisfied are surfaced as infeasible instead of returning a suboptimal team."
+      },
+      "links": {
+        "app": "https://squad-optimizer.streamlit.app/"
+      }
     }
   ]
 }

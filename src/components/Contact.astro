@@ -15,9 +15,12 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
     <div class="max-w-4xl mx-auto">
       <div class="text-center mb-12 reveal">
         <p class="text-sm font-semibold tracking-widest text-highlight uppercase mb-3">
-          Contact me
+          Get in touch
         </p>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold section-title">Let's talk.</h2>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold section-title mb-4">How can I help?</h2>
+        <p class="text-base sm:text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
+          Share a few details about your project, data, or technical goals to start the conversation.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -109,7 +112,8 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
                 </svg>
               </div>
               <div>
@@ -144,8 +148,6 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
         <div class="card reveal" style="transition-delay: 0.2s;">
           <form id="contact-form" class="space-y-4" novalidate>
             <input type="hidden" name="access_key" value={siteData.web3formsKey} />
-            <!-- Honeypot: hidden from users but bots fill it in.
-                 Web3Forms rejects any submission where this field is checked. -->
             <input
               type="checkbox"
               name="botcheck"
@@ -153,12 +155,13 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
               style="display:none;"
               aria-hidden="true"
             />
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <div class="grid grid-cols-1 gap-4">
               <div>
                 <label
                   for="name"
                   class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
-                  >Name</label
+                  >Name *</label
                 >
                 <input
                   type="text"
@@ -167,14 +170,15 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
                   autocomplete="name"
                   required
                   class="w-full bg-slate-900/60 border border-slate-700/60 rounded-lg px-4 py-3 text-white text-sm focus:outline-hidden focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent/50 transition-colors placeholder:text-slate-600"
-                  placeholder="My name…"
+                  placeholder="Your name"
                 />
               </div>
+
               <div>
                 <label
                   for="email"
                   class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
-                  >Email</label
+                  >Email *</label
                 >
                 <input
                   type="email"
@@ -192,34 +196,17 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
 
             <div>
               <label
-                for="subject"
-                class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
-                >Subject</label
-              >
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                autocomplete="off"
-                required
-                class="w-full bg-slate-900/60 border border-slate-700/60 rounded-lg px-4 py-3 text-white text-sm focus:outline-hidden focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent/50 transition-colors placeholder:text-slate-600"
-                placeholder="Let us know…"
-              />
-            </div>
-
-            <div>
-              <label
                 for="message"
                 class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2"
-                >Message</label
+                >Tell me about your objectives *</label
               >
               <textarea
                 id="message"
                 name="message"
-                rows="5"
+                rows="6"
                 required
                 class="w-full bg-slate-900/60 border border-slate-700/60 rounded-lg px-4 py-3 text-white text-sm focus:outline-hidden focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent/50 transition-colors resize-none placeholder:text-slate-600"
-                placeholder="What would you like to tell us?"></textarea>
+                placeholder="Briefly describe your goals, forecasting needs, or project scope..."></textarea>
             </div>
 
             <div aria-live="polite" aria-atomic="true" id="form-status" class="sr-only"></div>
@@ -265,9 +252,6 @@ const socialLinks = getSocialLinks(personalData as unknown as Record<string, str
   const form = document.getElementById('contact-form') as HTMLFormElement | null;
   const status = document.getElementById('form-status') as HTMLElement | null;
   const button = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-  // Stash the button's original inner HTML before mutating it to "Sending…".
-  // Restored in the finally block so the button always returns to its original state,
-  // including any icon SVG, regardless of whether the request succeeded or failed.
   const BUTTON_HTML = button?.innerHTML ?? 'Send Message';
 
   function setStatus(msg: string, isError: boolean) {

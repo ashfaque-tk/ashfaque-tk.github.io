@@ -1,8 +1,14 @@
 ---
 import projectsFile from '../data/projects.json';
-import { withBase } from '../lib/assetPath';
+import { withBase, withBaseList } from '../lib/assetPath';
 import { icons } from '../lib/icons';
-const projectsData = projectsFile.items;
+import type { ProjectEntry } from '../lib/fetchGitHub';
+
+// Typed through ProjectEntry so `cover`/`links` resolve and legacy `link` stays optional.
+const projectsData = projectsFile.items as unknown as ProjectEntry[];
+
+/** `cover` may be one path or a list; showcase uses the first. */
+const firstCover = (p: ProjectEntry) => withBaseList(p.cover)[0] ?? '';
 ---
 
 <section id="projects" class="projects-section">
@@ -15,9 +21,11 @@ const projectsData = projectsFile.items;
     <div class="projects-list">
       {
         projectsData.map((project, index) => {
-          const hasImages = Boolean(project.backgroundImage && (project as any).images?.length);
-          const ctaLabel = project.link.includes('github.com') ? 'View on GitHub'
-            : project.link.includes('gitlab') ? 'View on GitLab'
+          const cover = firstCover(project);
+          const hasImages = Boolean(cover && (project as any).images?.length);
+          const ctaHref = project.links?.code ?? project.links?.app ?? project.link ?? '';
+          const ctaLabel = project.links?.code ? 'View on GitHub'
+            : project.links?.app ? 'View Project'
             : project.link ? 'View Project'
             : null;
 
@@ -28,7 +36,7 @@ const projectsData = projectsFile.items;
                   <>
                     <img
                       class="project-main-image"
-                      src={withBase(project.backgroundImage!)}
+                      src={cover}
                       alt={`${project.title} screenshot`}
                       loading="lazy"
                       width="900"
@@ -39,7 +47,7 @@ const projectsData = projectsFile.items;
                       {(project as any).images?.slice(0, 3).map((image: string, i: number) => (
                         <button
                           type="button"
-                          class={`project-shot-button ${image === project.backgroundImage ? 'active' : ''}`}
+                          class={`project-shot-button ${image === cover ? 'active' : ''}`}
                           data-gallery={String(index)}
                           data-image={withBase(image)}
                           aria-label={`Show ${project.title} screenshot ${i + 1}`}
@@ -64,7 +72,7 @@ const projectsData = projectsFile.items;
               <div class="project-copy">
                 {project.company && <p class="project-eyebrow">{project.company}</p>}
                 <h3>{project.title}</h3>
-                <p class="project-description">{project.description}</p>
+                <p class="project-description">{project.summary}</p>
 
                 <div class="project-tags">
                   {project.tags.map((tag) => (
@@ -73,7 +81,7 @@ const projectsData = projectsFile.items;
                 </div>
 
                 {ctaLabel && (
-                  <a href={project.link} target="_blank" rel="noopener" class="project-link">
+                  <a href={ctaHref} target="_blank" rel="noopener" class="project-link">
                     {ctaLabel}
                     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
                       <path

@@ -12,7 +12,16 @@
  * When BASE_URL is "/" (root deployment) the path is returned unchanged.
  */
 export function withBase(path: string): string {
-  if (!path || /^(https?:\/\/|\/\/|data:)/.test(path)) return path;
+  if (!path || typeof path !== 'string' || /^(https?:\/\/|\/\/|data:)/.test(path)) return path;
   const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   return base + path.replace(/^\//, '');
+}
+
+/**
+ * Cover art may be declared as a single path or a list of them. Collapses both
+ * into an array so callers never have to branch on the JSON shape.
+ */
+export function withBaseList(path: string | string[] | undefined): string[] {
+  if (!path) return [];
+  return (Array.isArray(path) ? path : [path]).filter(Boolean).map((p) => withBase(p));
 }

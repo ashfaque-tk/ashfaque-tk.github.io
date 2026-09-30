@@ -69,7 +69,7 @@ function safeJsonLd(obj: object): string {
 ---
 
 <!doctype html>
-<html lang="en" style="color-scheme: dark; background: #020617;" data-theme-key={siteData.themeStorageKey}>
+<html lang="en" style="background: #f8fafc;" data-theme-key={siteData.themeStorageKey}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,14 +139,13 @@ function safeJsonLd(obj: object): string {
         try {
           var key = document.documentElement.dataset.themeKey || 'portfolio-theme';
           var t = localStorage.getItem(key);
-          if (t === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            document.documentElement.style.background = '#f8fafc';
-            var m = document.getElementById('meta-theme-color');
-            if (m) m.setAttribute('content', '#f8fafc');
-          } else {
-            document.documentElement.style.background = '#020617';
-          }
+          var BG = { dark: '#020617', minimal: '#fafaf9', light: '#f8fafc' };
+          // Light is the default when nothing has been saved yet.
+          var theme = t === 'dark' || t === 'minimal' || t === 'light' ? t : 'light';
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.style.background = BG[theme];
+          var m = document.getElementById('meta-theme-color');
+          if (m) m.setAttribute('content', BG[theme]);
         } catch {}
       })();
     </script>
@@ -168,8 +167,8 @@ function safeJsonLd(obj: object): string {
           document.documentElement.removeAttribute('data-theme');
         });
         window.addEventListener('afterprint', function () {
-          if (savedTheme === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
+          if (savedTheme === 'light' || savedTheme === 'minimal') {
+            document.documentElement.setAttribute('data-theme', savedTheme);
           }
           savedTheme = null;
         });

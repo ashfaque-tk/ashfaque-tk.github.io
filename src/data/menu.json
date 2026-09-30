@@ -12,36 +12,16 @@
       "href": "#expertise",
       "desc": "What I focus on and how I work"
     },
-    {
-      "label": "Skills",
-      "shortLabel": "Skills",
-      "href": "#skills",
-      "desc": "Tools and technologies I use"
-    },
-    {
-      "label": "Portfolio",
-      "shortLabel": "Portfolio",
-      "href": "#portfolio",
-      "desc": "Client and commercial work"
-    },
+  
+
     {
       "label": "Projects",
       "shortLabel": "Projects",
       "href": "#projects",
       "desc": "Personal projects and experiments"
     },
-    {
-      "label": "Certifications",
-      "shortLabel": "Certs",
-      "href": "#certifications",
-      "desc": "Training, courses, and credentials"
-    },
-    {
-      "label": "Services",
-      "shortLabel": "Services",
-      "href": "#services",
-      "desc": "Sites and projects I run"
-    },
+
+   
     {
       "label": "Contact",
       "shortLabel": "Contact",

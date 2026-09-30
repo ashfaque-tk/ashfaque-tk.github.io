@@ -1,28 +1,28 @@
 {
   "items": [
     {
-      "key": "sysadmin",
-      "icon": "server-stack",
-      "title": "Design & Art Direction",
-      "description": "Visual identity, layout, typography, and the aesthetic decisions that make people stop and look twice. Whether print or screen, the goal is the same — work that holds up."
+      "key": "forecasting",
+      "icon": "chart-bar",
+      "title": "Demand Forecasting & Time Series",
+      "description": "End-to-end predictive pipelines engineered to convert raw transactional data into actionable operational signals. Specializing in recursive forecasting, backtesting, and production-ready ML architectures."
     },
     {
-      "key": "webdev",
-      "icon": "code-bracket-square",
-      "title": "Web Design & Development",
-      "description": "From wireframe to deployment — building sites and apps that look considered, perform well, and give visitors exactly what they came for."
+      "key": "optimization",
+      "icon": "cpu-chip",
+      "title": "Optimization & Decision Systems",
+      "description": "Formulating and solving complex constrained business problems using Mixed Integer Linear Programming (MILP). From inventory replenishment and allocation to roster and squad optimization."
     },
     {
-      "key": "freelance",
-      "icon": "user-circle",
-      "title": "Creative Freelance",
-      "description": "Independent project work in photography, video, 3D, illustration, or wherever the brief leads. Direct to work with, flexible, and invested in the outcome."
+      "key": "fullstack_analytics",
+      "icon": "rectangle-group",
+      "title": "Full-Stack Analytics & Dashboards",
+      "description": "Bridging raw model outputs and business decision-makers with production databases, automated APIs, and fast, intuitive custom web applications."
     },
     {
-      "key": "leadership",
-      "icon": "users",
-      "title": "Collaboration & Direction",
-      "description": "Working alongside teams, clients, and stakeholders to take a project from idea to shipped — clear communication, honest timelines, and work that actually gets done."
+      "key": "technical_writing",
+      "icon": "document-text",
+      "title": "Applied R&D & Technical Writing",
+      "description": "Translating complex mathematical concepts, scientific methodologies, and data science pipelines into clear technical documentation, blog posts, and modular software designs."
     }
   ]
 }
