@@ -106,20 +106,7 @@ function safeJsonLd(obj: object): string {
     {personalData.twitter && <meta name="twitter:creator" content={personalData.twitter} />}
 
     <!-- Favicon: GIF first so animated-capable browsers prefer it -->
-    <link rel="icon" type="image/gif"  href={`${base}images/favicons/favicon.gif`} />
-    <link rel="icon"                   href={`${base}images/favicons/favicon.ico`} sizes="any" />
-    <link rel="icon" type="image/png" sizes="96x96"  href={`${base}images/favicons/favicon-96x96.png`} />
-    <link rel="icon" type="image/png" sizes="32x32"  href={`${base}images/favicons/favicon-32x32.png`} />
-    <link rel="icon" type="image/png" sizes="16x16"  href={`${base}images/favicons/favicon-16x16.png`} />
-    <link rel="apple-touch-icon" sizes="180x180" href={`${base}images/favicons/apple-icon-180x180.png`} />
-    <link rel="apple-touch-icon" sizes="152x152" href={`${base}images/favicons/apple-icon-152x152.png`} />
-    <link rel="apple-touch-icon" sizes="144x144" href={`${base}images/favicons/apple-icon-144x144.png`} />
-    <link rel="apple-touch-icon" sizes="120x120" href={`${base}images/favicons/apple-icon-120x120.png`} />
-    <link rel="apple-touch-icon" sizes="114x114" href={`${base}images/favicons/apple-icon-114x114.png`} />
-    <link rel="apple-touch-icon" sizes="76x76"   href={`${base}images/favicons/apple-icon-76x76.png`} />
-    <link rel="apple-touch-icon" sizes="72x72"   href={`${base}images/favicons/apple-icon-72x72.png`} />
-    <link rel="apple-touch-icon" sizes="60x60"   href={`${base}images/favicons/apple-icon-60x60.png`} />
-    <link rel="apple-touch-icon" sizes="57x57"   href={`${base}images/favicons/apple-icon-57x57.png`} />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <link rel="manifest" href={`${base}manifest.json`} />
     <meta name="msapplication-config" content={`${base}browserconfig.xml`} />
     <meta name="generator" content={Astro.generator} />
